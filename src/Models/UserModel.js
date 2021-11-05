@@ -22,10 +22,10 @@ const userSchema = new Schema({
     type: Boolean,
     required: true,
   },
-  Flights: {
-    type: Schema.Types.ObjectId,
-    ref: "Flight",
-  },
+  // Flights: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "Flight",
+  // },
 });
 
 mongoose.models = {};

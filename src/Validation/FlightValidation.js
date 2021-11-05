@@ -1,4 +1,5 @@
 const Joi =require('joi')
+const { builtinModules } = require('module')
 
 const validateAddFlight = (req,res,next) =>{
     const schema = Joi.object({
@@ -24,3 +25,4 @@ const validateAddFlight = (req,res,next) =>{
 
       
 }
+modules.export ={validateAddFlight}
