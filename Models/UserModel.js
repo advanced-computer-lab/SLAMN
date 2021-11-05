@@ -23,7 +23,8 @@ const userSchema = new Schema({
     required: true,
   },
   Flights: {
-    type: Array,
+    type: Schema.Types.ObjectId,
+    ref: "Flight",
   },
 });
 
