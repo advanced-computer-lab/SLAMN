@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const connectDB = require("./database");
 const cors = require("cors");
-const admin = require("./Controllers/AdminController");
-const validateAddFlight = require("./Validation/FlightValidation");
+const admin = require("./api/Controllers/AdminController");
+const validateFlight = require("./api/Validation/FlightValidation");
 const port = 8000;
 const express = require("express");
 const app = express();
@@ -11,7 +11,17 @@ const app = express();
 const { appendFile } = require("fs");
 app.use(express.json());
 
-app.post("/addFlight", validateAddFlight.validateAddFlight, admin.createFlight);
+app.post("/addFlight", validateFlight.validateAddFlight, admin.createFlight);
+app.post(
+  "/searchFlight",
+  validateFlight.validateSearchFlight,
+  admin.searchFlight
+);
+app.post(
+  "/showavailableFlight",
+  validateFlight.validateShowAvailabeFlight,
+  admin.showAvailableFlight
+);
 
 app.listen(port);
 
