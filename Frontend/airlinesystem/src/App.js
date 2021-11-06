@@ -1,13 +1,16 @@
 import "./App.css";
-import Test from "../src/Pages/Test";
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Update from "./Page/Update";
+import TextBox from "./Componenets/General/TextBox";
 
 function App() {
   return (
     <BrowserRouter>
-      <NavBar />
-      <Switch>
-        <Route path="/" component={Test} exact />
-      </Switch>
+      <Routes>
+        <Route path="/update" component={Update} exact />
+        <Route path="/" component={Update} exact />
+      </Routes>
     </BrowserRouter>
   );
 }
