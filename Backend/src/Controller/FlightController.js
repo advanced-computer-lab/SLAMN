@@ -7,7 +7,7 @@ router
   .get(FlightServices.getFlights)
   .post(FlightValidation.validateAddFlight, FlightServices.createFlight);
 router
-  .route("/:id")
+  .route("/updateFlight")
   .put(FlightServices.updateFlight)
   .delete(FlightServices.deleteFlight);
 router

@@ -5,6 +5,7 @@ import Update from "./Page/Update";
 import TextBox from "./Componenets/General/TextBox";
 import AdminHome from "../src/Page/AdminHome";
 import CreateFlight from "./Page/CreateFlight";
+import Signin from "../src/Page/Signin";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/update" element={<Update />} />
           <Route path="/homeadmin" element={<AdminHome />} />
           <Route path="/addflight" element={<CreateFlight />} />
+          <Route path="/" element={<Signin />} />
         </Routes>
       </BrowserRouter>
     </div>
