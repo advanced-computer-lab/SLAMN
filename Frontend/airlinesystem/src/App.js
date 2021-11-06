@@ -1,12 +1,20 @@
 import "./App.css";
-import Update from "../src/Page/Update";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import React from "react";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
+import Update from "./Page/Update";
+import TextBox from "./Componenets/General/TextBox";
+import CreateFlight from "./Page/CreateFlight";
 
 function App() {
   return (
-    <Router>
-      <Route path="/" component={Update} exact />
-    </Router>
+    <div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Update />} />
+          <Route path="/addFlight" element={<CreateFlight />} />
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 

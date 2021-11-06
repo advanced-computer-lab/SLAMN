@@ -10,7 +10,11 @@ export default function TextBox(props) {
 
   return (
     <div>
-      <TextField variant="outlined" label={props.title} onChange={onChange} />
+      <TextField
+        variant="outlined"
+        label={props.title}
+        onChange={props.onChange}
+      />
     </div>
   );
 }
