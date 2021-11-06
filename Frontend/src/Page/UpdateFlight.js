@@ -58,7 +58,7 @@ const Update = () => {
     setOpen1(false);
 
     axios
-      .post("http://localhost:8000/updateFlight", {
+      .post("http://localhost:8000/flights/updateFlight", {
         FlightNumber: flightnumber,
         DepartureDate: deptime,
         ArrivalDate: arrtime,
@@ -114,7 +114,7 @@ const Update = () => {
         handleOpenagree={handleClose1agree}
         handleClose={handleClose1}
         className={classes.popup}
-        error="Are you sure you want to delete ?"
+        error="Are you sure you want to update ?"
         firstbutton="Agree"
         secondbutton="Disagree"
       />
