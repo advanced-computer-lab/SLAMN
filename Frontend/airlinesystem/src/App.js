@@ -1,14 +1,12 @@
 import "./App.css";
 import Test from "../src/Pages/Test";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 function App() {
   return (
-    <BrowserRouter>
-      <NavBar />
-      <Switch>
-        <Route path="/" component={Test} exact />
-      </Switch>
-    </BrowserRouter>
+    <Router>
+      <Route path="/" component={Test} exact />
+    </Router>
   );
 }
 
