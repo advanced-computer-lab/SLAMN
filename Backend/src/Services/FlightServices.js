@@ -57,7 +57,8 @@ const updateFlight = async (req, res) => {
   const ArrivalDate = req.body.ArrivalDate;
   const EconomySeats = req.body.EconomySeats;
   const BusinessSeats = req.body.BusinessSeats;
-  const Airport = req.body.Airport;
+  const ArivalAirport = req.body.ArivalAirport;
+  const DepAirport = req.body.DepAirport;
   Flights.updateOne(
     { _id: id },
     {
@@ -67,7 +68,8 @@ const updateFlight = async (req, res) => {
         ArrivalDate,
         EconomySeats,
         BusinessSeats,
-        Airport,
+        ArivalAirport,
+        DepAirport,
       },
     }
   )
