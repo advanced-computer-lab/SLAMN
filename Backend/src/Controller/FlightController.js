@@ -14,16 +14,16 @@ router
   .route("/deleteFlight")
   .post(FlightValidation.validateDeleteFlight, FlightServices.deleteFlight);
 
-app.post(
-  "/searchFlight",
-  validateFlight.validateSearchFlight,
-  admin.searchFlight
-);
-app.post(
-  "/showavailableFlight",
-  validateFlight.validateShowAvailabeFlight,
-  admin.showAvailableFlight
-);
+// app.post(
+//   "/searchFlight",
+//   validateFlight.validateSearchFlight,
+//   admin.searchFlight
+// );
+// app.post(
+//   "/showavailableFlight",
+//   validateFlight.validateShowAvailabeFlight,
+//   admin.showAvailableFlight
+// );
 router
   .route("/:id")
   .put(FlightServices.updateFlight)
