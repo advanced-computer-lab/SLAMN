@@ -1,9 +1,20 @@
 const Flights = require("../Models/FlightModel");
 
 const getFlights = async (req, res) => {
-  Flights.find()
-    .then((flights) => res.json(flights))
-    .catch((err) => res.status(400).json("Error:" + err));
+  try {
+    const data = await Flights.find({});
+    return res.json({
+      statusCode: 0,
+      message: "Success",
+      data: data,
+    });
+  } catch (exception) {
+    console.log(exception);
+    return res.json({
+      statusCode: 1,
+      error: "exception",
+    });
+  }
 };
 
 const createFlight = async (req, res) => {
@@ -13,6 +24,22 @@ const createFlight = async (req, res) => {
     return res.json({
       statusCode: 0,
       message: "Success",
+    });
+  } catch (exception) {
+    console.log(exception);
+    return res.json({
+      statusCode: 1,
+      error: "exception",
+    });
+  }
+};
+const searchFlight = async (req, res) => {
+  try {
+    const data = await Flights.find(req.body);
+    return res.json({
+      statusCode: 0,
+      message: "Success",
+      data: data,
     });
   } catch (exception) {
     console.log(exception);
