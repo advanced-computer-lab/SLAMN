@@ -51,7 +51,6 @@ const searchFlight = async (req, res) => {
 };
 
 const updateFlight = async (req, res) => {
-  const { id } = req.params;
   const FlightNumber = req.body.FlightNumber;
   const DepartureDate = req.body.DepartureDate;
   const ArrivalDate = req.body.ArrivalDate;
@@ -62,7 +61,7 @@ const updateFlight = async (req, res) => {
   const ArrivalTime = req.body.ArrivalTime;
   const DepartureTime = req.body.DepartureTime;
   Flights.updateOne(
-    { _id: id },
+    { FlightNumber: req.body.FlightNumber },
     {
       $set: {
         FlightNumber,

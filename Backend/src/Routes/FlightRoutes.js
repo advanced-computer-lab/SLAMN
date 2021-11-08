@@ -9,10 +9,11 @@ router
   .get(FlightServices.getFlights)
   .post(FlightValidation.validateAddFlight, FlightServices.createFlight);
 
+router.route("/updateFlight").post(FlightServices.updateFlight);
+
 router
-  .route("/:id")
-  .put(FlightServices.updateFlight)
-  .delete(FlightValidation.validateDeleteFlight, FlightServices.deleteFlight);
+  .route("/deleteFlight")
+  .post(FlightValidation.validateDeleteFlight, FlightServices.deleteFlight);
 
 router
   .route("/searchFlight")
