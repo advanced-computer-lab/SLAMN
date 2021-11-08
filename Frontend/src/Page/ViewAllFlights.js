@@ -1,7 +1,5 @@
-<<<<<<< HEAD
-import React from "react";
+//import React from "react";
 import List from "../Componenets/General/Lists";
-=======
 import React, { useEffect, useState } from "react";
 
 import ListItem from "@mui/material/ListItem";
@@ -27,7 +25,6 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "2vw !important",
   },
 }));
->>>>>>> 2d16537ba742840c6da14d0cfe90ff9fe6c56e43
 
 export default function ViewAllFlights() {
   const [flights, setFlights] = useState([]);
