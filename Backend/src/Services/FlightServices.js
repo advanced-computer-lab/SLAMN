@@ -1,9 +1,20 @@
 const Flights = require("../Models/FlightModel");
 
 const getFlights = async (req, res) => {
-  Flights.find()
-    .then((flights) => res.json(flights))
-    .catch((err) => res.status(400).json("Error:" + err));
+  try {
+    const data = await Flights.find({});
+    return res.json({
+      statusCode: 0,
+      message: "Success",
+      data: data,
+    });
+  } catch (exception) {
+    console.log(exception);
+    return res.json({
+      statusCode: 1,
+      error: "exception",
+    });
+  }
 };
 
 const createFlight = async (req, res) => {
@@ -13,6 +24,22 @@ const createFlight = async (req, res) => {
     return res.json({
       statusCode: 0,
       message: "Success",
+    });
+  } catch (exception) {
+    console.log(exception);
+    return res.json({
+      statusCode: 1,
+      error: "exception",
+    });
+  }
+};
+const searchFlight = async (req, res) => {
+  try {
+    const data = await Flights.find(req.body);
+    return res.json({
+      statusCode: 0,
+      message: "Success",
+      data: data,
     });
   } catch (exception) {
     console.log(exception);
@@ -50,63 +77,6 @@ const updateFlight = async (req, res) => {
     .then(() => res.json("Flight updated"))
     .catch((err) => res.status(400).json("Error:" + err));
 };
-const searchFlight = async (req, res) => {
-  try {
-    const data = await FlightModel.find(
-      req.body
-      // DepartureDate: req.body.DepartureDate,
-      // ArrivalDate: req.body.ArrivalDate,
-      // EconomySeats: req.body.EconomySeats,
-      // BusinessSeats: req.body.BusinessSeats,
-      // Airport: req.body.Airport,
-    );
-    return res.json({
-      statusCode: 0,
-      message: "Success",
-      data: data,
-    });
-  } catch (exception) {
-    console.log(exception);
-    return res.json({
-      statusCode: 1,
-      error: "exception",
-    });
-  }
-};
-const showAvailableFlight = async (req, res) => {
-  try {
-    const data = await FlightModel.find();
-    return res.json({
-      statusCode: 0,
-      message: "Success",
-      data: data,
-    });
-  } catch (exception) {
-    console.log(exception);
-    return res.json({
-      statusCode: 1,
-      error: "exception",
-    });
-  }
-};
-const deleteFlight = async (req, res) => {
-  try {
-    const flightToBeDeleted = await Flights.findOne({
-      FlightNumber:req.body.FlightNumber
-    })
-    console.log(flightToBeDeleted)
-    flightToBeDeleted.delete()
-    return res.json({
-      statusCode: 0,
-      message: 'Success',
-    })
-  } catch (exception) {
-    return res.json({
-      statusCode: 1,
-      error: 'Exception',
-    })
-  }
-}
 
 module.exports = {
   createFlight,
@@ -114,5 +84,4 @@ module.exports = {
   getFlights,
   deleteFlight,
   searchFlight,
-  showAvailableFlight,
 };

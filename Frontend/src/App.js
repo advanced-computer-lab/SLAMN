@@ -7,6 +7,7 @@ import AdminHome from "../src/Page/AdminHome";
 import CreateFlight from "./Page/CreateFlight";
 import Signin from "../src/Page/Signin";
 import DeleteFlight from "../src/Page/DeleteFight";
+import ViewAllFlights from "./Page/ViewAllFlights";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/addflight" element={<CreateFlight />} />
           <Route path="/deleteflight" element={<DeleteFlight />} />
           <Route path="/" element={<Signin />} />
+          <Route path="/viewallflights" element={<ViewAllFlights />} />
         </Routes>
       </BrowserRouter>
     </div>

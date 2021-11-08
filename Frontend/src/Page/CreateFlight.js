@@ -98,7 +98,7 @@ export default function CreateFlight() {
         </div>
       </div>
       <div className={classes.updatebutton}>
-        <Button title="Submit" onClick={handleClick} />
+        <Button title="Add" onClick={handleClick} />
       </div>
     </div>
   );

@@ -24,6 +24,16 @@ const validateAddFlight = (req, res, next) => {
 const validateDeleteFlight = (req, res, next) => {
   const schema = Joi.object({
     FlightNumber: Joi.number().required(),
+  });
+};
+const validateSearchFlight = (req, res, next) => {
+  const schema = Joi.object({
+    FlightNumber: Joi.number(),
+    DepartureDate: Joi.date(),
+    ArrivalDate: Joi.date(),
+    EconomySeats: Joi.number(),
+    BusinessSeats: Joi.number(),
+    Airport: Joi.string(),
   }).required();
 
   const isValid = schema.validate(req.body);
@@ -36,4 +46,8 @@ const validateDeleteFlight = (req, res, next) => {
   }
   return next();
 };
-module.exports = { validateAddFlight, validateDeleteFlight };
+module.exports = {
+  validateAddFlight,
+  validateDeleteFlight,
+  validateSearchFlight,
+};
