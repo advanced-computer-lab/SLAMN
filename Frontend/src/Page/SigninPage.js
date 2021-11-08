@@ -46,10 +46,14 @@ export default function SigninPage() {
           Email: email,
           Password: password,
         })
-        .then(function (response) {
-          console.log(response);
-          console.log("yalllllllllaa");
-        });
+        .then(
+          (response) => {
+            console.log(response);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     }
     // window.location = "/home";
   };

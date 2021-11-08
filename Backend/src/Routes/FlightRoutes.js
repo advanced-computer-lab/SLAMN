@@ -22,4 +22,6 @@ router
   .route("/signin")
   .post(UserValidation.validateSignin, UserServices.signIn);
 
+router.route("/getflights").post(FlightServices.getFlights);
+
 module.exports = router;

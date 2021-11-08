@@ -22,11 +22,13 @@ const useStyles = makeStyles({
 const Update = () => {
   const classes = useStyles();
   const [flightnumber, setflightnumber] = useState(0);
-  const [deptime, setdeptime] = useState("");
-  const [arrtime, setarrtime] = useState("");
+
   const [econseats, seteconseats] = useState(0);
   const [buissseats, setbuisseats] = useState(0);
-  const [airport, setairport] = useState("");
+  const [arrivalairport, setarrivalairport] = useState("");
+  const [departureair, setdepartureair] = useState("");
+  const [arrtime, setarrivaltime] = useState("");
+  const [deptime, setdeptime] = useState("");
   const [open1, setOpen1] = useState(false);
 
   const onChangeflight = (e) => {
@@ -36,7 +38,7 @@ const Update = () => {
     setdeptime(e.target.value);
   };
   const onChangearrtime = (e) => {
-    setarrtime(e.target.value);
+    setarrivaltime(e.target.value);
   };
   const onChangeeconseats = (e) => {
     seteconseats(e.target.value);
@@ -44,9 +46,16 @@ const Update = () => {
   const onChangebuisseats = (e) => {
     setbuisseats(e.target.value);
   };
-  const onChangeairport = (e) => {
-    setairport(e.target.value);
+  const onChangeairportarrival = (e) => {
+    setarrivalairport(e.target.value);
   };
+  const onChangeairportdeparture = (e) => {
+    setdepartureair(e.target.value);
+  };
+  const onChangearrival = (e) => {
+    setarrivaltime(e.target.value);
+  };
+
   const handleOpen1 = () => {
     setOpen1(true);
   };
@@ -64,7 +73,6 @@ const Update = () => {
         ArrivalDate: arrtime,
         EconomySeats: econseats,
         BusinessSeats: buissseats,
-        Airport: airport,
       })
       .then(function (response) {
         console.log(response);
@@ -101,7 +109,25 @@ const Update = () => {
           ></TextBox>
         </div>
         <div className={classes.space}>
-          <TextBox title="Airport" onChange={onChangeairport}></TextBox>
+          <TextBox
+            title="Arrival Airport"
+            onChange={onChangeairportarrival}
+          ></TextBox>
+        </div>
+        <div className={classes.space}>
+          <TextBox
+            title="Departure Airport"
+            onChange={setdepartureair}
+          ></TextBox>
+        </div>
+        <div className={classes.space}>
+          <TextBox title="Arrival Time" onChange={onChangearrival}></TextBox>
+        </div>
+        <div className={classes.space}>
+          <TextBox
+            title="Departure Airport"
+            onChange={onChangedeptime}
+          ></TextBox>
         </div>
       </div>
       <div className={classes.updatebutton}>

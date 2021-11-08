@@ -17,7 +17,6 @@ const getFlights = async (req, res) => {
   }
 };
 
-
 const createFlight = async (req, res) => {
   try {
     console.log(req.body);
@@ -81,22 +80,7 @@ const updateFlight = async (req, res) => {
     .then(() => res.json("Flight updated"))
     .catch((err) => res.status(400).json("Error:" + err));
 };
-const showAvailableFlight = async (req, res) => {
-  try {
-    const data = await FlightModel.find();
-    return res.json({
-      statusCode: 0,
-      message: "Success",
-      data: data,
-    });
-  } catch (exception) {
-    console.log(exception);
-    return res.json({
-      statusCode: 1,
-      error: "exception",
-    });
-  }
-};
+
 const deleteFlight = async (req, res) => {
   try {
     const flightToBeDeleted = await Flights.findOne({

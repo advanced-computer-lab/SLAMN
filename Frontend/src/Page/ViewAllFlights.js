@@ -23,13 +23,15 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     display: "flex",
     flexDirection: "column",
-    marginLeft: "-25vw !important",
     marginTop: "-15vw !important",
   },
   textbox: {},
   textboxDiv: {
     marginLeft: "5vw !important",
     marginTop: "2vw !important",
+  },
+  note: {
+    fontSize: "1vw",
   },
 }));
 
@@ -41,6 +43,9 @@ export default function ViewAllFlights() {
   const [EconomySeats, setEconomySeats] = useState("");
   const [DepartureDate, setDepartureDate] = useState("");
   const [ArrivalDate, setArrivalDate] = useState("");
+  const [ArrivalAirport, setArrivalAirport] = useState("");
+  const [DepartureAirport, setDepartureAirpot] = useState("");
+
   const [FlightNumberUp, setFlightNumberUp] = useState("");
   const [BusinessSeatsUp, setBusinessSeatsUp] = useState("");
   const [EconomySeatsUp, setEconomySeatsUp] = useState("");
@@ -122,6 +127,8 @@ export default function ViewAllFlights() {
     if (prop === "BusinessSeats") setBusinessSeats(event.target.value);
     if (prop === "DepartureDate") setDepartureDate(event.target.value);
     if (prop === "ArrivalDate") setArrivalDate(event.target.value);
+    if (prop === "ArrivalAirport") setArrivalAirport(event.target.value);
+    if (prop === "DepartureAirport") setDepartureAirpot(event.target.value);
   };
   const handleClick = () => {
     // if(FlightNumber.length !== 0)
@@ -132,7 +139,9 @@ export default function ViewAllFlights() {
     if (BusinessSeats.length !== 0) obj.BusinessSeats = BusinessSeats;
     if (DepartureDate.length !== 0) obj.DepartureDate = DepartureDate;
     if (ArrivalDate.length !== 0) obj.ArrivalDate = ArrivalDate;
-
+    if (ArrivalAirport.length !== 0) obj.ArrivalAirport = ArrivalAirport;
+    if (DepartureAirport.length !== 0) obj.DepartureAirport = DepartureAirport;
+    console.log(obj);
     axios
       .post("http://localhost:8000/flights/searchflight", obj, {})
       .then((res) => {
@@ -150,6 +159,10 @@ export default function ViewAllFlights() {
   return (
     <div className={classes.root}>
       <div className={classes.textboxDiv}>
+        <h1 className={classes.note}>
+          NOTE:Make sure to use capital letter for the initials of days,months
+          and cities.
+        </h1>
         <TextBox
           title={"Flight Number"}
           onChange={handleChange("FlightNumber")}
@@ -170,11 +183,19 @@ export default function ViewAllFlights() {
           title={"Arrival Date"}
           onChange={handleChange("ArrivalDate")}
         />
+        <TextBox
+          title={"Arrival Airport"}
+          onChange={handleChange("ArrivalAirport")}
+        />
+        <TextBox
+          title={"Departure Airport"}
+          onChange={handleChange("DepartureAirport")}
+        />
         <Button onClick={handleClick} variant="outlined">
           Search
         </Button>
-        <Button onClick={handleClick2} variant="outlined" color="error">
-          Remove Filters
+        <Button onClick={handleClick2} color="error" variant="outlined">
+          Remove Filter
         </Button>
       </div>
       <div className={classes.listDiv}>
@@ -195,7 +216,13 @@ export default function ViewAllFlights() {
                 elem.DepartureDate +
                 "    " +
                 "Arrival Date:" +
-                elem.ArrivalDate
+                elem.ArrivalDate +
+                "    " +
+                "Arrival Airport:" +
+                elem.ArrivalAirport +
+                "    " +
+                "Departure Airport:" +
+                elem.DepartureAirport
               }
             />
             <IconButton size="small">
