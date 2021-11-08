@@ -284,7 +284,6 @@ export default function ViewAllFlights() {
           </>
         ))}
       </div>{" "}
-      ]
       {/* <Popup
         open={open1}
         handleOpen={handleOpen1}

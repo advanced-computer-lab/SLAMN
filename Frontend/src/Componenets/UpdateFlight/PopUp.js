@@ -176,7 +176,7 @@ export default function PopUp(props) {
           <div>
             <Buttons
               title="Update"
-              onClick={handleClick}
+              onClick={props.handleOpenagree}
               className={classes.updatebutton}
               size="small"
             />

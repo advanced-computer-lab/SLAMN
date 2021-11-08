@@ -59,7 +59,7 @@ export default function CreateFlight() {
       console.log(BusinessSeats);
     } else {
       axios
-        .post("http://localhost:8000/flights/createflight", {
+        .post("http://localhost:8000/flights/", {
           FlightNumber: FlightNumber,
           DepartureDate: DepartureDate,
           ArrivalDate: ArrivalDate,
