@@ -6,7 +6,9 @@
   margin: 1vw !important;
 }
 .MuiButton-root {
-  width: 23vw;
-  height: 5.5vw;
+  display: flex;
+  flex-direction: column;
+  width: 14.5vw;
+  height: 3.7vw;
   margin: 1vw !important;
 }
