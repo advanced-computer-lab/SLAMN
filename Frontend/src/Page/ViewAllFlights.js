@@ -13,7 +13,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import PopUp from "../Componenets/UpdateFlight/PopUp";
 import Buttons from "../Componenets/General/Buttons";
 import PopupDelete from "../Componenets/General/PopUp";
-import { set } from "mongoose";
+// import { set } from "mongoose";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,7 +59,7 @@ export default function ViewAllFlights() {
   const [filter, setFilter] = useState({});
   const [open1, setOpen1] = useState(false);
   const [change, setChange] = useState(false);
-  const [flightnumberdelete, setFlightnumberdelete] = useState("");
+  const [flightnumberdelete, setFlightnumberdelete] = useState(0);
 
   const [FlightNumberPopUp, setFlightNumberPopUp] = useState("");
   const [BusinessSeatsPopUp, setBusinessSeatsPopUp] = useState("");
@@ -79,10 +79,9 @@ export default function ViewAllFlights() {
   const classes = useStyles();
   const [open2, setOpen2] = useState(false);
 
-  const handleClickPopUpDelete = (m) => {
-    setFlightnumberdelete(m);
+  const handleClickPopUpDelete = () => {
     setOpen2(true);
-    console.log(flightnumberdelete);
+    console.log(flightnumberdelete, "noooooooo");
   };
 
   const handleOpen2 = () => {
@@ -104,9 +103,8 @@ export default function ViewAllFlights() {
       });
   };
 
-  const handleOpen1 = (n) => {
+  const handleOpen1 = () => {
     setOpen1(true);
-    setFlightNumberPopUp(n);
   };
 
   const handleClose1 = () => {
@@ -136,6 +134,7 @@ export default function ViewAllFlights() {
   };
 
   useEffect(() => {
+    console.log(flightnumberdelete, "noooooooooooooo");
     axios
       .post("http://localhost:8000/flights/getflights", {}, {})
       .then((res) => {
@@ -144,7 +143,7 @@ export default function ViewAllFlights() {
         setFlightNumberPopUp(res.data.data[0].FlightNumber);
         console.log(res.data.data, "dataaaaaaaaaaaaaaaaa");
       });
-  }, [reset, del, update]);
+  }, [reset, del, update, flightnumberdelete]);
 
   const handleChange = (prop) => (event) => {
     // setFilter(Object.assign({ filter, FlightNumber }));
@@ -194,6 +193,7 @@ export default function ViewAllFlights() {
   const createObject = (flights) => {
     // const t = Object.assign({ FlightNumber });
   };
+
   return (
     <div className={classes.root}>
       <div className={classes.textboxDiv}>
@@ -238,40 +238,50 @@ export default function ViewAllFlights() {
       </div>
       <div className={classes.listDiv}>
         {flights.map((elem) => (
-          <ListItem>
-            <ListItemText
-              primary={
-                "Flight Number: " +
-                elem.FlightNumber +
-                "    " +
-                "Business Seats: " +
-                elem.BusinessSeats +
-                "    " +
-                "Economy Seats: " +
-                elem.EconomySeats +
-                "    " +
-                "Departure Date: " +
-                elem.DepartureDate +
-                "    " +
-                "Arrival Date:" +
-                elem.ArrivalDate +
-                "    " +
-                "Arrival Airport:" +
-                elem.ArrivalAirport +
-                "    " +
-                "Departure Airport:" +
-                elem.DepartureAirport
-              }
-            />
-            <IconButton size="small">
-              <EditIcon onClick={() => handleOpen1(elem.FlightNumber)} />
-            </IconButton>
-            <IconButton size="small">
-              <DeleteIcon
-                onClick={() => handleClickPopUpDelete(elem.FlightNumber)}
+          <>
+            <ListItem>
+              <ListItemText
+                primary={
+                  "Flight Number: " +
+                  elem.FlightNumber +
+                  "    " +
+                  "Business Seats: " +
+                  elem.BusinessSeats +
+                  "    " +
+                  "Economy Seats: " +
+                  elem.EconomySeats +
+                  "    " +
+                  "Departure Date: " +
+                  elem.DepartureDate +
+                  "    " +
+                  "Arrival Date:" +
+                  elem.ArrivalDate +
+                  "    " +
+                  "Arrival Airport:" +
+                  elem.ArrivalAirport +
+                  "    " +
+                  "Departure Airport:" +
+                  elem.DepartureAirport
+                }
               />
-            </IconButton>
-          </ListItem>
+              <IconButton size="small">
+                <EditIcon
+                  onClick={() => {
+                    setFlightnumberdelete(elem.FlightNumber);
+                    handleOpen1();
+                  }}
+                />
+              </IconButton>
+              <IconButton size="small">
+                <DeleteIcon
+                  onClick={() => {
+                    setFlightnumberdelete(elem.FlightNumber);
+                    handleClickPopUpDelete();
+                  }}
+                />
+              </IconButton>
+            </ListItem>
+          </>
         ))}
       </div>{" "}
       ]
