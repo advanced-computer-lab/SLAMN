@@ -13,6 +13,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import PopUp from "../Componenets/UpdateFlight/PopUp";
 import Buttons from "../Componenets/General/Buttons";
 import PopupDelete from "../Componenets/General/PopUp";
+import { set } from "mongoose";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -72,6 +73,8 @@ export default function ViewAllFlights() {
 
   const [update, setUpdate] = useState(false);
 
+  const [del, setDelete] = useState(false);
+
   const [test, setTest] = useState([1, 2, 3, 4, 5]);
   const classes = useStyles();
   const [open2, setOpen2] = useState(false);
@@ -91,6 +94,7 @@ export default function ViewAllFlights() {
   };
   const handleClose2agree = (number) => {
     setOpen2(false);
+    setDelete(!del);
     axios
       .post("http://localhost:8000/flights/deleteFlight", {
         FlightNumber: flightnumberdelete,
@@ -111,6 +115,8 @@ export default function ViewAllFlights() {
   const handleClose1agree = () => {
     setOpen1(false);
     console.log("update");
+    setUpdate(!update);
+
     axios
       .post("http://localhost:8000/flights/updateFlight", {
         FlightNumber: FlightNumberUp,
@@ -138,7 +144,7 @@ export default function ViewAllFlights() {
         setFlightNumberPopUp(res.data.data[0].FlightNumber);
         console.log(res.data.data, "dataaaaaaaaaaaaaaaaa");
       });
-  }, [reset]);
+  }, [reset, del, update]);
 
   const handleChange = (prop) => (event) => {
     // setFilter(Object.assign({ filter, FlightNumber }));
