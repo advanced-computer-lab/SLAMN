@@ -64,22 +64,20 @@ export default function Signin() {
     setOpen1(false);
   };
   const handleLogin = (e) => {
-    // window.location = "/home";
-    if (password === "") {
-      seterror("Password cannot be empty");
-      handleOpen1();
-    }
+    console.log("password", "emaill");
+    console.log("email", "passssssssssss");
 
-    if (email === "") {
-      seterror("Email cannot be empty");
-      handleOpen1();
-    } else {
-      axios
-        .post("http://localhost:8000/flights/updateFlight", {})
-        .then(function (response) {
-          console.log(response);
-        });
-    }
+    axios
+      .post("http://localhost:8000/flights/signin", {
+        Email: email,
+        Password: password,
+      })
+      .then(function (response) {
+        console.log(response);
+        console.log("yalllllllllaa");
+      });
+
+    // window.location = "/home";
   };
 
   const onChangePassword = (e) => {

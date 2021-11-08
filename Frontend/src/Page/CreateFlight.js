@@ -4,6 +4,9 @@ import axios from "axios";
 import Button from "../Componenets/General/Buttons";
 import { makeStyles } from "@material-ui/core/styles";
 
+import { useState } from "react";
+import SnackBar from "../Componenets/General/SnackBar";
+
 const useStyles = makeStyles({
   space: {
     marginTop: "2vw !important",
@@ -26,21 +29,49 @@ export default function CreateFlight() {
   const [ArrivalDate, setArrivalDate] = React.useState("");
   const [EconomySeats, setEconomySeats] = React.useState(0);
   const [BusinessSeats, setBusinessSeats] = React.useState(0);
-  const [Airport, setAirport] = React.useState("");
+  const [Arrairport, setArrairport] = React.useState("");
+  const [depariport, setdepairport] = React.useState("");
+  const [arrivaltime, setarrivaltime] = React.useState("");
+  const [deptime, setdeptime] = React.useState("");
+  const [open1, setOpen1] = useState(false);
+  const [error, seterror] = useState("");
+  const handleOpen1 = () => {
+    setOpen1(true);
+  };
 
+  const handleClose1 = () => {
+    setOpen1(false);
+  };
   const handleClick = () => {
-    axios
-      .post("http://localhost:8000/addFlight", {
-        FlightNumber: FlightNumber,
-        DepartureDate: DepartureDate,
-        ArrivalDate: ArrivalDate,
-        EconomySeats: EconomySeats,
-        BusinessSeats: BusinessSeats,
-        Airport: Airport,
-      })
-      .then(function (response) {
-        console.log(response);
-      });
+    if (
+      FlightNumber === 0 ||
+      DepartureDate === 0 ||
+      ArrivalDate === 0 ||
+      EconomySeats === 0 ||
+      BusinessSeats === 0 ||
+      Arrairport === 0 ||
+      depariport === 0 ||
+      arrivaltime === 0 ||
+      deptime === 0
+    ) {
+      seterror("Fields cannot be left empty");
+    } else {
+      axios
+        .post("http://localhost:8000/addFlight", {
+          FlightNumber: FlightNumber,
+          DepartureDate: DepartureDate,
+          ArrivalDate: ArrivalDate,
+          EconomySeats: EconomySeats,
+          BusinessSeats: BusinessSeats,
+          ArrivalAirport: arrivaltime,
+          DepartureAirport: deptime,
+          DepartureTime: deptime,
+          ArrivalTime: arrivaltime,
+        })
+        .then(function (response) {
+          console.log(response);
+        });
+    }
   };
   return (
     <div>
@@ -89,9 +120,27 @@ export default function CreateFlight() {
         </div>
         <div className={classes.space}>
           <TextBox
-            title={"Airport"}
+            title={"Arrival Airport "}
             onChange={(e) => {
-              setAirport(e.target.value);
+              setArrairport(e.target.value);
+            }}
+          />
+          <TextBox
+            title={"Arrival Time "}
+            onChange={(e) => {
+              setarrivaltime(e.target.value);
+            }}
+          />
+          <TextBox
+            title={"Departure Airport "}
+            onChange={(e) => {
+              setdepairport(e.target.value);
+            }}
+          />
+          <TextBox
+            title={"Departure Time"}
+            onChange={(e) => {
+              setdeptime(e.target.value);
             }}
           />
           <div />
@@ -100,6 +149,12 @@ export default function CreateFlight() {
       <div className={classes.updatebutton}>
         <Button title="Add" onClick={handleClick} />
       </div>
+      <SnackBar
+        open={open1}
+        handleOpen={handleOpen1}
+        handleClose={handleClose1}
+        error={error}
+      />
     </div>
   );
 }

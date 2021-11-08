@@ -30,7 +30,7 @@ export default function SnackBar(props) {
       </Button> */}
       <Snackbar
         open={props.open}
-        autoHideDuration={}
+        autoHideDuration={100000000000}
         onClose={props.handleClose}
       >
         <Alert
