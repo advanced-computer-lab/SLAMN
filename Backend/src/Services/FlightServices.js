@@ -49,9 +49,6 @@ const searchFlight = async (req, res) => {
     });
   }
 };
-const deleteFlight = async (req, res) => {
-  //blah blah blah
-};
 
 const updateFlight = async (req, res) => {
   const { id } = req.params;
@@ -60,7 +57,8 @@ const updateFlight = async (req, res) => {
   const ArrivalDate = req.body.ArrivalDate;
   const EconomySeats = req.body.EconomySeats;
   const BusinessSeats = req.body.BusinessSeats;
-  const Airport = req.body.Airport;
+  const ArivalAirport = req.body.ArivalAirport;
+  const DepAirport = req.body.DepAirport;
   Flights.updateOne(
     { _id: id },
     {
@@ -70,12 +68,47 @@ const updateFlight = async (req, res) => {
         ArrivalDate,
         EconomySeats,
         BusinessSeats,
-        Airport,
+        ArivalAirport,
+        DepAirport,
       },
     }
   )
     .then(() => res.json("Flight updated"))
     .catch((err) => res.status(400).json("Error:" + err));
+};
+const showAvailableFlight = async (req, res) => {
+  try {
+    const data = await FlightModel.find();
+    return res.json({
+      statusCode: 0,
+      message: "Success",
+      data: data,
+    });
+  } catch (exception) {
+    console.log(exception);
+    return res.json({
+      statusCode: 1,
+      error: "exception",
+    });
+  }
+};
+const deleteFlight = async (req, res) => {
+  try {
+    const flightToBeDeleted = await Flights.findOne({
+      FlightNumber: req.body.FlightNumber,
+    });
+    console.log(flightToBeDeleted);
+    flightToBeDeleted.delete();
+    return res.json({
+      statusCode: 0,
+      message: "Success",
+    });
+  } catch (exception) {
+    return res.json({
+      statusCode: 1,
+      error: "Exception",
+    });
+  }
 };
 
 module.exports = {
@@ -84,4 +117,5 @@ module.exports = {
   getFlights,
   deleteFlight,
   searchFlight,
+  showAvailableFlight,
 };

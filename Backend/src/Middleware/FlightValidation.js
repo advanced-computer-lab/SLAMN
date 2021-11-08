@@ -24,7 +24,17 @@ const validateAddFlight = (req, res, next) => {
 const validateDeleteFlight = (req, res, next) => {
   const schema = Joi.object({
     FlightNumber: Joi.number().required(),
-  });
+  }).required();
+
+  const isValid = schema.validate(req.body);
+  if (isValid.error) {
+    return res.json({
+      statusCode: 1,
+
+      error: isValid.error.details[0].message,
+    });
+  }
+  return next();
 };
 const validateSearchFlight = (req, res, next) => {
   const schema = Joi.object({
