@@ -2,12 +2,12 @@ import "./App.css";
 import React from "react";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Update from "./Page/UpdateFlight";
-import TextBox from "./Componenets/General/TextBox";
 import AdminHome from "../src/Page/AdminHome";
 import CreateFlight from "./Page/CreateFlight";
 import Signin from "../src/Page/Signin";
 import DeleteFlight from "../src/Page/DeleteFight";
 import ViewAllFlights from "./Page/ViewAllFlights";
+import Test from "./Page/Text";
 
 function App() {
   return (
@@ -20,6 +20,8 @@ function App() {
           <Route path="/deleteflight" element={<DeleteFlight />} />
           <Route path="/" element={<Signin />} />
           <Route path="/viewallflights" element={<ViewAllFlights />} />
+
+          <Route path="/test" element={<Test />} />
         </Routes>
       </BrowserRouter>
     </div>

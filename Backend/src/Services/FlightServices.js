@@ -1,5 +1,5 @@
 const Flights = require("../Models/FlightModel");
-
+const User = require("../Models/UserModel");
 const getFlights = async (req, res) => {
   try {
     const data = await Flights.find({});
@@ -16,6 +16,7 @@ const getFlights = async (req, res) => {
     });
   }
 };
+
 
 const createFlight = async (req, res) => {
   try {
@@ -57,8 +58,10 @@ const updateFlight = async (req, res) => {
   const ArrivalDate = req.body.ArrivalDate;
   const EconomySeats = req.body.EconomySeats;
   const BusinessSeats = req.body.BusinessSeats;
-  const ArivalAirport = req.body.ArivalAirport;
-  const DepAirport = req.body.DepAirport;
+  const ArivalAirport = req.body.ArrivalAirport;
+  const DepAirport = req.body.DepartureAirport;
+  const ArrivalTime = req.body.ArrivalTime;
+  const DepartureTime = req.body.DepartureTime;
   Flights.updateOne(
     { _id: id },
     {
@@ -66,6 +69,8 @@ const updateFlight = async (req, res) => {
         FlightNumber,
         DepartureDate,
         ArrivalDate,
+        DepartureTime,
+        ArrivalTime,
         EconomySeats,
         BusinessSeats,
         ArivalAirport,

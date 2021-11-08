@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const FlightServices = require("../Services/FlightServices");
 const FlightValidation = require("../Middleware/FlightValidation");
+const UserValidation = require("../Middleware/UserValidations");
+const UserServices = require("../Services/UserServices");
 
 router
   .route("/")
@@ -15,5 +17,9 @@ router
 router
   .route("/searchFlight")
   .post(FlightValidation.validateSearchFlight, FlightServices.searchFlight);
+
+router
+  .route("/signin")
+  .post(UserValidation.validateSignin, UserServices.signIn);
 
 module.exports = router;

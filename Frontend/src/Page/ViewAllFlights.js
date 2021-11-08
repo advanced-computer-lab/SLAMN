@@ -1,14 +1,19 @@
-
-import List from "../Componenets/General/Lists";
 import React, { useEffect, useState } from "react";
-
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
 import TextBox from "../Componenets/General/TextBox";
+// import PopUp from "../Componenets/General/UpdatePopUp";
 import Button from "@mui/material/Button";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+// import Popup from "../Componenets/General/PopUp";
+import PopUp from "../Componenets/UpdateFlight/PopUp";
 import Buttons from "../Componenets/General/Buttons";
+import PopupDelete from "../Componenets/General/PopUp";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -18,6 +23,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     display: "flex",
     flexDirection: "column",
+    marginLeft: "-25vw !important",
+    marginTop: "-15vw !important",
   },
   textbox: {},
   textboxDiv: {
@@ -34,10 +41,67 @@ export default function ViewAllFlights() {
   const [EconomySeats, setEconomySeats] = useState("");
   const [DepartureDate, setDepartureDate] = useState("");
   const [ArrivalDate, setArrivalDate] = useState("");
+  const [FlightNumberUp, setFlightNumberUp] = useState("");
+  const [BusinessSeatsUp, setBusinessSeatsUp] = useState("");
+  const [EconomySeatsUp, setEconomySeatsUp] = useState("");
+  const [DepartureDateUp, setDepartureDateUp] = useState("");
+  const [ArrivalDateUp, setArrivalDateUp] = useState("");
   const [filter, setFilter] = useState({});
+  const [open1, setOpen1] = useState(false);
+  const [change, setChange] = useState(false);
+  const [flightnumberdelete, setFlightnumberdelete] = useState("");
 
   const [test, setTest] = useState([1, 2, 3, 4, 5]);
   const classes = useStyles();
+  const [open2, setOpen2] = useState(false);
+
+  const handleClickPopUpDelete = (m) => {
+    setFlightnumberdelete(m);
+    setOpen2(true);
+    console.log(flightnumberdelete);
+  };
+
+  const handleOpen2 = () => {
+    setOpen2(true);
+  };
+
+  const handleClose2 = () => {
+    setOpen2(false);
+  };
+  const handleClose2agree = (number) => {
+    setOpen2(false);
+    axios
+      .post("http://localhost:8000/flights/deleteFlight", {
+        FlightNumber: flightnumberdelete,
+      })
+      .then(function (response) {
+        console.log(response);
+      });
+  };
+
+  const handleOpen1 = () => {
+    setOpen1(true);
+  };
+
+  const handleClose1 = () => {
+    setOpen1(false);
+  };
+  const handleClose1agree = () => {
+    setOpen1(false);
+    console.log("update");
+    axios
+      .post("http://localhost:8000/flights/updateFlight", {
+        FlightNumber: FlightNumberUp,
+        DepartureDate: DepartureDateUp,
+        ArrivalDate: ArrivalDateUp,
+        EconomySeats: EconomySeatsUp,
+        BusinessSeats: BusinessSeatsUp,
+        // Airport: airport,
+      })
+      .then(function (response) {
+        console.log(response);
+      });
+  };
 
   useEffect(() => {
     axios
@@ -45,7 +109,7 @@ export default function ViewAllFlights() {
       .then((res) => {
         console.log(res.data.data);
         setFlights(res.data.data);
-        console.log(filter);
+        console.log(filter, "dataaaaaaaaaaaaaaaaa");
       });
   }, [reset]);
 
@@ -74,45 +138,17 @@ export default function ViewAllFlights() {
       .then((res) => {
         console.log(res);
         setFlights(res.data.data);
+        console.log(flights, "fffffffffffffffffffffff");
       });
   };
   const handleClick2 = () => {
     setReset(!reset);
   };
-  const handleClickUpdate = () => {
-    setOpen1(true);
-  };
-  const handleClickDelete = () => {
-    setOpen1(true);
+  const createObject = (flights) => {
+    // const t = Object.assign({ FlightNumber });
   };
   return (
     <div className={classes.root}>
-      <div className={classes.listDiv}>
-        {flights.map((elem) => (
-          <ListItem>
-            <ListItemText
-              primary={
-                "Flight Number: " +
-                elem.FlightNumber +
-                "    " +
-                "Business Seats: " +
-                elem.BusinessSeats +
-                "    " +
-                "Economy Seats: " +
-                elem.EconomySeats +
-                "    " +
-                "Departure Date: " +
-                elem.DepartureDate +
-                "    " +
-                "Arrival Date:" +
-                elem.ArrivalDate
-              }
-            />
-            <Button title="Update" onClick={handleClickUpdate} />
-            <Button title="Delete" onClick={handleClickDelete} />
-          </ListItem>
-        ))}
-      </div>
       <div className={classes.textboxDiv}>
         <TextBox
           title={"Flight Number"}
@@ -134,13 +170,77 @@ export default function ViewAllFlights() {
           title={"Arrival Date"}
           onChange={handleChange("ArrivalDate")}
         />
-        <Buttons onClick={handleClick} variant="outlined">
+        <Button onClick={handleClick} variant="outlined">
           Search
-        </Buttons>
-        <Buttons onClick={handleClick2} variant="outlined" color="error">
+        </Button>
+        <Button onClick={handleClick2} variant="outlined" color="error">
           Remove Filters
-        </Buttons>
+        </Button>
       </div>
+      <div className={classes.listDiv}>
+        {flights.map((elem) => (
+          <ListItem>
+            <ListItemText
+              primary={
+                "Flight Number: " +
+                elem.FlightNumber +
+                "    " +
+                "Business Seats: " +
+                elem.BusinessSeats +
+                "    " +
+                "Economy Seats: " +
+                elem.EconomySeats +
+                "    " +
+                "Departure Date: " +
+                elem.DepartureDate +
+                "    " +
+                "Arrival Date:" +
+                elem.ArrivalDate
+              }
+            />
+            <IconButton size="small">
+              <EditIcon onClick={handleOpen1} />
+            </IconButton>
+            <IconButton size="small">
+              <DeleteIcon onClick={handleClickPopUpDelete} />
+            </IconButton>
+          </ListItem>
+        ))}
+      </div>
+
+      {/* <Popup
+        open={open1}
+        handleOpen={handleOpen1}
+        handleOpenagree={handleClose1agree}
+        handleClose={handleClose1}
+        className={classes.popup}
+        error="Are you sure you want to update ?"
+        firstbutton="Agree"
+        secondbutton="Disagree"
+      /> */}
+      <PopUp
+        open={open1}
+        handleOpen={handleOpen1}
+        handleClose={handleClose1}
+        handleOpenagree={handleClose1agree}
+        setOpen={setOpen1}
+        flightnumber={setFlightNumberUp}
+        buisseats={setBusinessSeatsUp}
+        econseast={setEconomySeatsUp}
+        deptime={setDepartureDateUp}
+        arrivaltime={setArrivalDateUp}
+      />
+
+      <PopupDelete
+        open={open2}
+        handleOpen={handleOpen2}
+        handleOpenagree={handleClose2agree}
+        handleClose={handleClose2}
+        className={classes.popup}
+        error="Are you sure you want to delete ?"
+        firstbutton="Agree"
+        secondbutton="Disagree"
+      />
     </div>
   );
 }

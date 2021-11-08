@@ -8,6 +8,8 @@ export default function TextBox(props) {
         variant="outlined"
         label={props.title}
         onChange={props.onChange}
+        value={props.value}
+        placeholder={props.value}
       />
     </div>
   );

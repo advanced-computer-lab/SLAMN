@@ -12,6 +12,10 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
+import { useState } from "react";
+import SnackBar from "../Componenets/General/SnackBar";
+
+import axios from "axios";
 
 function Copyright() {
   return (
@@ -48,10 +52,41 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Signin() {
   const classes = useStyles();
-  //const [click, setClick] = React.useState(false);
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [open1, setOpen1] = useState(false);
+  const [error, seterror] = useState("");
+  const handleOpen1 = () => {
+    setOpen1(true);
+  };
+
+  const handleClose1 = () => {
+    setOpen1(false);
+  };
   const handleLogin = (e) => {
-    e.preventDefault();
-    window.location = "/home";
+    // window.location = "/home";
+    if (password === "") {
+      seterror("Password cannot be empty");
+      handleOpen1();
+    }
+
+    if (email === "") {
+      seterror("Email cannot be empty");
+      handleOpen1();
+    } else {
+      axios
+        .post("http://localhost:8000/flights/updateFlight", {})
+        .then(function (response) {
+          console.log(response);
+        });
+    }
+  };
+
+  const onChangePassword = (e) => {
+    setPassword(e.target.value);
+  };
+  const onChangeEmail = (e) => {
+    setEmail(e.target.value);
   };
 
   return (
@@ -75,6 +110,7 @@ export default function Signin() {
             name="email"
             autoComplete="email"
             autoFocus
+            onChange={onChangePassword}
           />
           <TextField
             variant="outlined"
@@ -86,6 +122,7 @@ export default function Signin() {
             type="password"
             id="password"
             autoComplete="current-password"
+            onChange={onChangeEmail}
           />
           <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -115,6 +152,13 @@ export default function Signin() {
       <Box mt={8}>
         <Copyright />
       </Box>
+
+      <SnackBar
+        open={open1}
+        handleOpen={handleOpen1}
+        handleClose={handleClose1}
+        error={error}
+      />
     </Container>
   );
 }

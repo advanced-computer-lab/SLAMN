@@ -8,19 +8,19 @@ const flightSchema = new Schema({
     required: true,
   },
   DepartureDate: {
-    type: Date,
+    type: String,
     required: true,
   },
   ArrivalDate: {
-    type: Date,
+    type: String,
     required: true,
   },
   DepartureTime: {
-    type: time,
+    type: String,
     required: true,
   },
   ArrivalTime: {
-    type: time,
+    type: String,
     required: true,
   },
   EconomySeats: {
@@ -35,7 +35,7 @@ const flightSchema = new Schema({
     type: String,
     required: true,
   },
-  DepAirport: {
+  DepartureAirport: {
     type: String,
     required: true,
   },
