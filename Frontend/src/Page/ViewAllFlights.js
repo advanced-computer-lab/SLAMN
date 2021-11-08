@@ -70,6 +70,8 @@ export default function ViewAllFlights() {
   const [departureAirportPopUp, setDepartureAirportPopUp] = useState("");
   const [arrivalAirportPopUp, setArrivalAirportPopUp] = useState("");
 
+  const [update, setUpdate] = useState(false);
+
   const [test, setTest] = useState([1, 2, 3, 4, 5]);
   const classes = useStyles();
   const [open2, setOpen2] = useState(false);
@@ -98,8 +100,9 @@ export default function ViewAllFlights() {
       });
   };
 
-  const handleOpen1 = () => {
+  const handleOpen1 = (n) => {
     setOpen1(true);
+    setFlightNumberPopUp(n);
   };
 
   const handleClose1 = () => {
@@ -132,7 +135,8 @@ export default function ViewAllFlights() {
       .then((res) => {
         console.log(res.data.data);
         setFlights(res.data.data);
-        console.log(filter, "dataaaaaaaaaaaaaaaaa");
+        setFlightNumberPopUp(res.data.data[0].FlightNumber);
+        console.log(res.data.data, "dataaaaaaaaaaaaaaaaa");
       });
   }, [reset]);
 
@@ -168,6 +172,13 @@ export default function ViewAllFlights() {
         setArrivalAirportPopUp(res.data.data[0].ArrivalAirport);
         setArrivalDatePopUp(res.data.data[0].ArrivalDate);
         setBusinessSeatsPopUp(res.data.data[0].BusinessSeats);
+        setDepartureAirportPopUp(res.data.data[0].DepartureAirport);
+        setDepartureDatePopUp(res.data.data[0].DepartureDate);
+        setEconomySeatsPopUp(res.data.data[0].EconomySeats);
+        setFlightNumberPopUp(res.data.data[0].FlightNumber);
+        // setArrivalTimePopUp(res.data.data[0].ArrivalDate.getTime());
+        // setDepartureTimePopUp(res.data.data[0].DepartureDate.getTime());
+
         console.log(flights, "fffffffffffffffffffffff");
       });
   };
@@ -247,15 +258,17 @@ export default function ViewAllFlights() {
               }
             />
             <IconButton size="small">
-              <EditIcon onClick={handleOpen1} />
+              <EditIcon onClick={() => handleOpen1(elem.FlightNumber)} />
             </IconButton>
             <IconButton size="small">
-              <DeleteIcon onClick={handleClickPopUpDelete} />
+              <DeleteIcon
+                onClick={() => handleClickPopUpDelete(elem.FlightNumber)}
+              />
             </IconButton>
           </ListItem>
         ))}
-      </div>
-
+      </div>{" "}
+      ]
       {/* <Popup
         open={open1}
         handleOpen={handleOpen1}
@@ -281,10 +294,16 @@ export default function ViewAllFlights() {
         arrivaldate={setArrivalDateUp}
         arrivalairport={setArrivalAirportUp}
         departureairport={setDepartureAirportUp}
-        arrivalAirport={arrivalAirportPopUp}
-        arrivalDate={ArrivalDatePopUp}
+        // arrivalAirport={arrivalAirportPopUp}
+        // arrivalDate={ArrivalDatePopUp}
+        flightno={FlightNumberPopUp}
+        // buisSeat={BusinessSeatsPopUp}
+        // depAirport={departureAirportPopUp}
+        // econSeat={EconomySeatsPopUp}
+        // depdate={DepartureDatePopUp}
+        // deptime={DepartureTimePopUp}
+        // arrivaltime={ArrivalTimePopUp}
       />
-
       <PopupDelete
         open={open2}
         handleOpen={handleOpen2}

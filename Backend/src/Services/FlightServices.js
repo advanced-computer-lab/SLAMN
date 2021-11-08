@@ -99,7 +99,20 @@ const deleteFlight = async (req, res) => {
     });
   }
 };
-
+const showAvailableFlight = async (req, res) => {
+  try {
+    const data = await FlightModel.find();
+    return res.json({
+      statusCode: 0,
+      message: "Success",
+    });
+  } catch (exception) {
+    return res.json({
+      statusCode: 1,
+      error: "Exception",
+    });
+  }
+};
 module.exports = {
   createFlight,
   updateFlight,

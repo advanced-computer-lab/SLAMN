@@ -5,7 +5,7 @@ const UserValidation = require("../Middleware/UserValidations");
 const UserServices = require("../Services/UserServices");
 
 router
-  .route("/")
+  .route("/createflight")
   .get(FlightServices.getFlights)
   .post(FlightValidation.validateAddFlight, FlightServices.createFlight);
 router

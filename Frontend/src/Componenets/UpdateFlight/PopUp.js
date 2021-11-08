@@ -113,21 +113,20 @@ export default function PopUp(props) {
                 <TextBox
                   title="Flight Number"
                   onChange={onChangeflight}
-                  value={props.flightnumber}
+                  value={props.flightno}
+                  disabled
                 ></TextBox>
               </div>
               <div className={classes.space}>
                 <TextBox
                   onChange={onChangedepdate}
                   title="Departure Date"
-                  value={props.DepartureDateUp}
                 ></TextBox>
               </div>
               <div className={classes.space}>
                 <TextBox
                   onChange={onChangearrdate}
                   title="Arrival Date"
-                  value={props.arrivalDate}
                 ></TextBox>
               </div>
             </div>
@@ -148,7 +147,6 @@ export default function PopUp(props) {
                 <TextBox
                   title="Arrival Airport"
                   onChange={onChangeairportarrival}
-                  value={props.arrivalAirport}
                 ></TextBox>
               </div>
             </div>
