@@ -51,10 +51,24 @@ export default function ViewAllFlights() {
   const [EconomySeatsUp, setEconomySeatsUp] = useState("");
   const [DepartureDateUp, setDepartureDateUp] = useState("");
   const [ArrivalDateUp, setArrivalDateUp] = useState("");
+  const [DepartureTimeUp, setDepartureTime] = useState("");
+  const [ArrivalTimeUp, setArrivalTime] = useState("");
+  const [departureAirportUp, setDepartureAirportUp] = useState("");
+  const [arrivalAirportUp, setArrivalAirportUp] = useState("");
   const [filter, setFilter] = useState({});
   const [open1, setOpen1] = useState(false);
   const [change, setChange] = useState(false);
   const [flightnumberdelete, setFlightnumberdelete] = useState("");
+
+  const [FlightNumberPopUp, setFlightNumberPopUp] = useState("");
+  const [BusinessSeatsPopUp, setBusinessSeatsPopUp] = useState("");
+  const [EconomySeatsPopUp, setEconomySeatsPopUp] = useState("");
+  const [DepartureDatePopUp, setDepartureDatePopUp] = useState("");
+  const [ArrivalDatePopUp, setArrivalDatePopUp] = useState("");
+  const [DepartureTimePopUp, setDepartureTimePopUp] = useState("");
+  const [ArrivalTimePopUp, setArrivalTimePopUp] = useState("");
+  const [departureAirportPopUp, setDepartureAirportPopUp] = useState("");
+  const [arrivalAirportPopUp, setArrivalAirportPopUp] = useState("");
 
   const [test, setTest] = useState([1, 2, 3, 4, 5]);
   const classes = useStyles();
@@ -101,7 +115,11 @@ export default function ViewAllFlights() {
         ArrivalDate: ArrivalDateUp,
         EconomySeats: EconomySeatsUp,
         BusinessSeats: BusinessSeatsUp,
-        // Airport: airport,
+        ArrivalAirport: arrivalAirportUp,
+
+        DepartureAirport: departureAirportUp,
+        DepartureTime: DepartureTimeUp,
+        ArrivalTime: ArrivalTimeUp,
       })
       .then(function (response) {
         console.log(response);
@@ -147,6 +165,9 @@ export default function ViewAllFlights() {
       .then((res) => {
         console.log(res);
         setFlights(res.data.data);
+        setArrivalAirportPopUp(res.data.data[0].ArrivalAirport);
+        setArrivalDatePopUp(res.data.data[0].ArrivalDate);
+        setBusinessSeatsPopUp(res.data.data[0].BusinessSeats);
         console.log(flights, "fffffffffffffffffffffff");
       });
   };
@@ -254,8 +275,14 @@ export default function ViewAllFlights() {
         flightnumber={setFlightNumberUp}
         buisseats={setBusinessSeatsUp}
         econseast={setEconomySeatsUp}
-        deptime={setDepartureDateUp}
-        arrivaltime={setArrivalDateUp}
+        deptime={setDepartureTime}
+        arrivaltime={setArrivalTime}
+        depdate={setDepartureDateUp}
+        arrivaldate={setArrivalDateUp}
+        arrivalairport={setArrivalAirportUp}
+        departureairport={setDepartureAirportUp}
+        arrivalAirport={arrivalAirportPopUp}
+        arrivalDate={ArrivalDatePopUp}
       />
 
       <PopupDelete

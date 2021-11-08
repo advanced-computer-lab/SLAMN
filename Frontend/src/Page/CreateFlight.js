@@ -27,8 +27,8 @@ export default function CreateFlight() {
   const [FlightNumber, setFlight] = React.useState("");
   const [DepartureDate, setDepartureDate] = React.useState("");
   const [ArrivalDate, setArrivalDate] = React.useState("");
-  const [EconomySeats, setEconomySeats] = React.useState(0);
-  const [BusinessSeats, setBusinessSeats] = React.useState(0);
+  const [EconomySeats, setEconomySeats] = React.useState(-1);
+  const [BusinessSeats, setBusinessSeats] = React.useState(-1);
   const [Arrairport, setArrairport] = React.useState("");
   const [depariport, setdepairport] = React.useState("");
   const [arrivaltime, setarrivaltime] = React.useState("");
@@ -44,20 +44,22 @@ export default function CreateFlight() {
   };
   const handleClick = () => {
     if (
-      FlightNumber === 0 ||
-      DepartureDate === 0 ||
-      ArrivalDate === 0 ||
-      EconomySeats === 0 ||
-      BusinessSeats === 0 ||
-      Arrairport === 0 ||
-      depariport === 0 ||
-      arrivaltime === 0 ||
-      deptime === 0
+      FlightNumber === "" ||
+      DepartureDate.length === "" ||
+      ArrivalDate.length === "" ||
+      EconomySeats.length === -1 ||
+      BusinessSeats.length === -1 ||
+      Arrairport.length === "" ||
+      depariport.length === "" ||
+      arrivaltime.length === "" ||
+      deptime.length === ""
     ) {
       seterror("Fields cannot be left empty");
+      handleOpen1();
+      console.log(BusinessSeats);
     } else {
       axios
-        .post("http://localhost:8000/addFlight", {
+        .post("http://localhost:8000/flights/addFlight", {
           FlightNumber: FlightNumber,
           DepartureDate: DepartureDate,
           ArrivalDate: ArrivalDate,

@@ -124,10 +124,7 @@ const Update = () => {
           <TextBox title="Arrival Time" onChange={onChangearrival}></TextBox>
         </div>
         <div className={classes.space}>
-          <TextBox
-            title="Departure Airport"
-            onChange={onChangedeptime}
-          ></TextBox>
+          <TextBox title="Departure Time" onChange={onChangedeptime}></TextBox>
         </div>
       </div>
       <div className={classes.updatebutton}>

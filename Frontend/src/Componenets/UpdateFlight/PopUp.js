@@ -32,33 +32,48 @@ export default function PopUp(props) {
   const [flightnumber, setflightnumber] = useState(0);
   const [deptime, setdeptime] = useState("");
   const [arrtime, setarrtime] = useState("");
+  const [depdate, setdepdate] = useState("");
+  const [arrdate, setdate] = useState("");
   const [econseats, seteconseats] = useState(0);
   const [buissseats, setbuisseats] = useState(0);
-  const [airport, setairport] = useState("");
+
   const [open1, setOpen1] = useState(false);
+  const [arrivalairport, setarrivalairport] = useState("");
+  const [departureair, setdepartureair] = useState("");
+
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
   const onChangeflight = (e) => {
-    props.setFlightNumberUp(e.target.value);
+    props.flightnumber(e.target.value);
   };
   const onChangedeptime = (e) => {
-    props.setDepartureDateUp(e.target.value);
+    props.deptime(e.target.value);
   };
   const onChangearrtime = (e) => {
-    props.setArrivalDateUp(e.target.value);
+    props.arrivaltime(e.target.value);
+  };
+  const onChangedepdate = (e) => {
+    props.depdate(e.target.value);
+  };
+  const onChangearrdate = (e) => {
+    props.arrivaldate(e.target.value);
   };
   const onChangeeconseats = (e) => {
-    props.setEconomySeatsUp(e.target.value);
+    props.econseast(e.target.value);
   };
   const onChangebuisseats = (e) => {
-    props.setBusinessSeatsUp(e.target.value);
+    props.buisseats(e.target.value);
   };
-  const onChangeairport = (e) => {
-    setairport(e.target.value);
-  };
+
   const handleOpen1 = () => {
     setOpen1(true);
+  };
+  const onChangeairportarrival = (e) => {
+    setarrivalairport(e.target.value);
+  };
+  const onChangeairportdep = (e) => {
+    setdepartureair(e.target.value);
   };
 
   const handleClose1 = () => {
@@ -103,16 +118,16 @@ export default function PopUp(props) {
               </div>
               <div className={classes.space}>
                 <TextBox
-                  onChange={onChangedeptime}
-                  title="Departure Time"
-                  value={props.deptime}
+                  onChange={onChangedepdate}
+                  title="Departure Date"
+                  value={props.DepartureDateUp}
                 ></TextBox>
               </div>
               <div className={classes.space}>
                 <TextBox
-                  onChange={onChangearrtime}
-                  title="Arrival Time"
-                  value={props.arrivaltime}
+                  onChange={onChangearrdate}
+                  title="Arrival Date"
+                  value={props.arrivalDate}
                 ></TextBox>
               </div>
             </div>
@@ -121,18 +136,40 @@ export default function PopUp(props) {
                 <TextBox
                   onChange={onChangeeconseats}
                   title="Available Economy Seats"
-                  value={props.econseast}
                 ></TextBox>
               </div>
               <div className={classes.space}>
                 <TextBox
                   onChange={onChangebuisseats}
                   title="Available Buisness Class Seats"
-                  value={props.buisseats}
                 ></TextBox>
               </div>
               <div className={classes.space}>
-                <TextBox title="Airport" onChange={onChangeairport}></TextBox>
+                <TextBox
+                  title="Arrival Airport"
+                  onChange={onChangeairportarrival}
+                  value={props.arrivalAirport}
+                ></TextBox>
+              </div>
+            </div>
+            <div className={classes.root}>
+              <div className={classes.space}>
+                <TextBox
+                  onChange={onChangeairportdep}
+                  title="Departure Airport"
+                ></TextBox>
+              </div>
+              <div className={classes.space}>
+                <TextBox
+                  onChange={onChangearrtime}
+                  title="Arrival Time"
+                ></TextBox>
+              </div>
+              <div className={classes.space}>
+                <TextBox
+                  title="Departure Time"
+                  onChange={onChangedeptime}
+                ></TextBox>
               </div>
             </div>
           </div>
