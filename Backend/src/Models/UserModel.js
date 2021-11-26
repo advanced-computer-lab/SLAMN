@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const reservation = require("./FlightReservation");
+const summary = require("./SummaryModel");
 
 const userSchema = new Schema({
   FirstName: {
@@ -26,16 +28,30 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  PassportNumber: {
+    type: String,
+    required: true,
+  },
   Admin: {
     type: Boolean,
     required: true,
   },
-  // Flights: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: "Flight",
-  // },
+  UserReservations: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Reservations",
+    },
+  ],
+  Summaries: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "summary",
+    },
+  ],
 });
 
 mongoose.models = {};
+userSchema.set("toJSON", { virtuals: true });
+userSchema.set("toObject", { virtuals: true });
 const User = mongoose.model("User", userSchema);
 module.exports = User;

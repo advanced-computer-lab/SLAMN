@@ -1,5 +1,6 @@
 const { time } = require("console");
 const mongoose = require("mongoose");
+const internal = require("stream");
 const Schema = mongoose.Schema;
 
 const flightSchema = new Schema({
@@ -39,6 +40,20 @@ const flightSchema = new Schema({
     type: String,
     required: true,
   },
+  isDeparture: {
+    type: Boolean,
+    required: true,
+  },
+  Price: {
+    type: Number,
+    required: true,
+  },
+  TripDuration: {
+    type: String,
+    required: true,
+  },
+  EconomySeatsList: [{ type: String, required: true }],
+  BusinessSeatsList: [{ type: String, required: true }],
 });
 
 mongoose.models = {};

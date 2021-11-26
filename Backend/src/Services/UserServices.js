@@ -1,4 +1,5 @@
 const User = require("../Models/UserModel");
+
 const signIn = async (req, res) => {
   const email = req.body.Email;
   const password = req.body.password;
@@ -26,6 +27,18 @@ const signIn = async (req, res) => {
     }
   } catch (exception) {
     console.log(exception);
+    return res.json({
+      statusCode: 1,
+      error: "exception",
+    });
+  }
+};
+
+const viewAvailableSeats = async (req, res) => {
+  try {
+    cabin = req.Cabin;
+    flight = req.FlightNumber;
+  } catch (exception) {
     return res.json({
       statusCode: 1,
       error: "exception",
