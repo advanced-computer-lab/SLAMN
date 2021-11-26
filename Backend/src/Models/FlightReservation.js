@@ -11,5 +11,6 @@ const reservation = new Schema({
     ref: "User",
   },
 });
-
+reservation.set("toJSON", { virtuals: true });
+reservation.set("toObject", { virtuals: true });
 module.exports = mongoose.model("Reservations", reservation);

@@ -1,12 +1,18 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const flightSchema = require("./FlightModel");
+const Flight = require("./FlightModel");
 
 const summary = new Schema({
-  DepartureFlight: { flightSchema },
-  ArrivalFlight: { flightSchema },
+  DepartureFlight: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Flight",
+  },
+  ArrivalFlight: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Flight",
+  },
   Price: {
-    type: int,
+    type: Number,
     require: true,
   },
   User: {
@@ -15,4 +21,6 @@ const summary = new Schema({
   },
 });
 
+summary.set("toJSON", { virtuals: true });
+summary.set("toObject", { virtuals: true });
 module.exports = mongoose.model("summary", summary);

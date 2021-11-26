@@ -1,7 +1,6 @@
 const { time } = require("console");
 const mongoose = require("mongoose");
 const internal = require("stream");
-const { isBooleanObject } = require("util/types");
 const Schema = mongoose.Schema;
 
 const flightSchema = new Schema({
@@ -46,7 +45,7 @@ const flightSchema = new Schema({
     required: true,
   },
   Price: {
-    type: int,
+    type: Number,
     required: true,
   },
   TripDuration: {
