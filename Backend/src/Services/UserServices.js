@@ -1,4 +1,5 @@
 const User = require("../Models/UserModel");
+const Summary=require("../Models/SummaryModel");
 
 const signIn = async (req, res) => {
   const email = req.body.Email;
@@ -35,6 +36,7 @@ const signIn = async (req, res) => {
 };
 
 const viewAvailableSeats = async (req, res) => {
+  
   try {
     cabin = req.Cabin;
     flight = req.FlightNumber;
@@ -46,4 +48,52 @@ const viewAvailableSeats = async (req, res) => {
   }
 };
 
-module.exports = { signIn };
+// const createSummary = async (req, res) => {
+//   const email = req.body.Email;
+//   try {
+//     const data = await User.find({ Email: email });
+//     if(data){
+//       data.Summaries.DepartureFlight=req.DepartureFlight;
+//       data.Summaries.ArrivalFlight=req.ArrivalFlight;
+//       data.Summaries.price=data.Summaries.DepartureFlight.price+data.Summaries.ArrivalFlight.price;
+//     }
+//     else {
+//       return res.json({
+//         statusCode: 1,
+//         error: "Invalid Email",
+//       });
+//     }
+//   } catch (exception) {
+//     return res.json({
+//       statusCode: 1,
+//       error: "exception",
+//     });
+//   }
+// };
+
+// const viewSummary = async (req, res) => {
+//   const email = req.body.Email;
+//   try {
+//     const data = await User.find({ Email: email });
+//     if(data){
+//       DepartureFlight=req.DepartureFlight;
+//       ArrivalFlight=req.ArrivalFlight;
+//       price=DepartureFlight.price+ArrivalFlight.price;
+//     }
+//     else {
+//       return res.json({
+//         statusCode: 1,
+//         error: "Invalid Email",
+//       });
+//     }
+//   } catch (exception) {
+//     return res.json({
+//       statusCode: 1,
+//       error: "exception",
+//     });
+//   }
+// };
+
+
+
+module.exports = { signIn,viewAvailableSeats };
