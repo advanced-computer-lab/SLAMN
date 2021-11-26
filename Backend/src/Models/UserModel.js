@@ -1,8 +1,13 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const reservation = require("./FlightReservation");
 
 const userSchema = new Schema({
-  Name: {
+  FirstName: {
+    type: String,
+    required: true,
+  },
+  LastName: {
     type: String,
     required: true,
   },
@@ -18,14 +23,21 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  PassportNumber: {
+    type: String,
+    required: true,
+  },
   Admin: {
     type: Boolean,
     required: true,
   },
-  // Flights: {
-  //   type: Schema.Types.ObjectId,
-  //   ref: "Flight",
-  // },
+  UserReservations: [reservation],
+  Summaries: [summary],
+});
+
+userSchema.virtual("myReservations", {
+  ref: "Reservations",
+  localField: "",
 });
 
 mongoose.models = {};
