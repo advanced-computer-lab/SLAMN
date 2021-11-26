@@ -53,6 +53,8 @@ const flightSchema = new Schema({
     type: String,
     required: true,
   },
+  EconomySeatsList: [{ type: String, required: true }],
+  BusinessSeatsList: [{ type: String, required: true }],
 });
 
 mongoose.models = {};
