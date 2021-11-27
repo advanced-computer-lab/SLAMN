@@ -6,6 +6,50 @@ const validateSignin = (req, res, next) => {
     Email: Joi.string().required(),
     Password: Joi.string().required(),
   }).required();
+
+  const isValid = schema.validate(req.body);
+  if (isValid.error) {
+    return res.json({
+      statusCode: 1,
+      error: isValid.error.details[0].message,
+    });
+  }
+  return next();
 };
 
-module.exports = { validateSignin };
+const validateSeats = (req, res, next) => {
+  const schema = Joi.object({
+    FlightNumber: Joi.string().required(),
+    Cabin: Joi.string().required(),
+  }).required();
+
+  const isValid = schema.validate(req.body);
+  if (isValid.error) {
+    return res.json({
+      statusCode: 1,
+      error: isValid.error.details[0].message,
+    });
+  }
+  return next();
+};
+
+const validateSelection = (req, res, next) => {
+  const schema = Joi.object({
+    FlightNumber: Joi.string().required(),
+    Cabin: Joi.string().required(),
+  }).required();
+};
+
+const validateDeselection = (req, res, next) => {
+  const schema = Joi.object({
+    FlightNumber: Joi.string().required(),
+    Cabin: Joi.string().required(),
+  }).required();
+};
+
+module.exports = {
+  validateSignin,
+  validateSeats,
+  validateSelection,
+  validateDeselection,
+};

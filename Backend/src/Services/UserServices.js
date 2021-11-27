@@ -1,18 +1,33 @@
 const User = require("../Models/UserModel");
 const Flights = require("../Models/FlightModel");
+const jwt = require("jsonwebtoken");
+require("dotenv").config;
 
 const signIn = async (req, res) => {
   const email = req.body.Email;
-  const password = req.body.password;
+  const password = req.body.Password;
 
   try {
-    const data = await User.find({ Email: email });
+    const data = await User.findOne({ Email: email });
     if (data) {
-      if (data.password === password) {
+      if (data.Password === password) {
+        const token = await jwt.sign(
+          {
+            id: data._id,
+            email: data.email,
+            password: data.Password,
+          },
+          process.env.SECRET,
+          {
+            expiresIn: "5h",
+          }
+        );
+        res.set("auth", token);
         return res.json({
           statusCode: 0,
           message: "Success",
           data: data.Admin,
+          token,
         });
       } else {
         return res.json({
@@ -222,4 +237,4 @@ const deselectSeats = async (req, res) => {
   }
 };
 
-module.exports = { signIn, viewAvailableSeats };
+module.exports = { signIn, viewAvailableSeats, selectSeats, deselectSeats };
