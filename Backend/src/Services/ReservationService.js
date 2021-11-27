@@ -18,9 +18,7 @@ const createFlightReservation = async (req, res) => {
   };
   const deleteReservation = async (req, res) => {
     try {
-      const ReservationToBeDeleted = await Reservation.findOne({
-        Flight: req.body.FlightNumber,
-      });
+      const ReservationToBeDeleted = await Reservation.findOne({_id});
       console.log(ReservationToBeDeleted);
       ReservationToBeDeleted.delete();
       return res.json({
