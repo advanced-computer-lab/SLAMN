@@ -62,8 +62,14 @@ const validateSearchFlight = (req, res, next) => {
   }
   return next();
 };
+
+
+
+
+
 module.exports = {
   validateAddFlight,
   validateDeleteFlight,
   validateSearchFlight,
+
 };

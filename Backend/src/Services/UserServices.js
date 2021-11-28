@@ -167,5 +167,31 @@ else {
 }
 };
 
+const updateAccount = async (req, res) =>{
+ 
+ const UpdatedUser = {
+ 
+  FirstName:req.body.FirstName,
+  LastName:req.body.LastName,
+  Email:req.body.Email,
+  Phone:req.body.Phone ,
+  PassportNumber:req.body.PassportNumber,
+  Password:req.body.Password ,
+  Admin:req.body.Admin,
+  UserReservations:req.body.UserReservations,
+  Summaries:req.body.Summaries
+ };
+   
+ 
+await User.findOneAndUpdate({PassportNumber: req.body.PassportNumber }, 
+  UpdatedUser, null)
+     .then(() => res.json(UpdatedUser))
+     .catch((err) => res.status(400).json("Error:" + err));
+ 
+ 
+ };
+ 
+ 
+
 module.exports = { signIn,viewAvailableSeats,createFlightReservation,deleteReservation,createSummary,
-getSummary};
+getSummary,updateAccount};

@@ -16,5 +16,9 @@ router
   .route("/createSummary")
   .post(UserValidation.validateAddSummary, UserServices.createSummary);
 router.route("/getSummary").post(UserServices.getSummary);
+
+router
+  .route("/updateAccount")
+  .post(UserValidation.validateUpdateAccount,UserServices.updateAccount);
   
 module.exports = router;
