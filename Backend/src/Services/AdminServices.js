@@ -1,5 +1,6 @@
 const Flights = require("../Models/FlightModel");
 const User = require("../Models/UserModel");
+
 const getFlights = async (req, res) => {
   try {
     const data = await Flights.find({});
@@ -20,7 +21,57 @@ const getFlights = async (req, res) => {
 const createFlight = async (req, res) => {
   try {
     console.log(req.body);
-    await Flights.create(req.body);
+    const Eseats = req.body.EconomySeats;
+    const Bseats = req.body.BusinessSeats;
+    const Fseats = req.body.FirstClassSeats;
+    if ((Eseats < 0) | (Bseats < 0) | (Fseats < 0)) {
+      return res.json({
+        statusCode: 1,
+        error: "Cannot enter a negative number of seats",
+      });
+    }
+    var Economylist = [];
+    var Businesslist = [];
+    var Firstlist = [];
+    var i = 1;
+    for (i; i <= Eseats; i++) {
+      Economylist.push({
+        Number: "E" + i,
+        isReserved: false,
+      });
+    }
+    var i = 1;
+    for (i; i <= Bseats; i++) {
+      Businesslist.push({
+        Number: "B" + i,
+        isReserved: false,
+      });
+    }
+    var i = 1;
+    for (i; i <= Fseats; i++) {
+      Firstlist.push({
+        Number: "F" + i,
+        isReserved: false,
+      });
+    }
+    await Flights.create({
+      FlightNumber: req.body.FlightNumber,
+      DepartureDate: req.body.DepartureDate,
+      ArrivalDate: req.body.ArrivalDate,
+      DepartureTime: req.body.DepartureTime,
+      ArrivalTime: req.body.ArrivalTime,
+      EconomySeats: req.body.EconomySeats,
+      BusinessSeats: req.body.BusinessSeats,
+      FirstClassSeats: req.body.FirstClassSeats,
+      ArrivalAirport: req.body.ArrivalAirport,
+      DepartureAirport: req.body.DepartureAirport,
+      isDeparture: req.body.isDeparture,
+      Price: req.body.Price,
+      TripDuration: req.body.TripDuration,
+      EconomySeatsList: Economylist,
+      BusinessSeatsList: Businesslist,
+      FirstSeatsList: Firstlist,
+    });
     return res.json({
       statusCode: 0,
       message: "Success",
@@ -33,6 +84,7 @@ const createFlight = async (req, res) => {
     });
   }
 };
+
 const searchFlight = async (req, res) => {
   try {
     const data = await Flights.find(req.body);
@@ -98,6 +150,7 @@ const deleteFlight = async (req, res) => {
     });
   }
 };
+
 const showAvailableFlight = async (req, res) => {
   try {
     const data = await FlightModel.find();
@@ -112,6 +165,7 @@ const showAvailableFlight = async (req, res) => {
     });
   }
 };
+
 module.exports = {
   createFlight,
   updateFlight,

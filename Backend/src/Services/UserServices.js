@@ -56,7 +56,7 @@ const createFlightReservation = async (req, res) => {
     console.log(req.body);
     const userData=await User.findOne({_id});
     const arrivalFlight=await Flight.findOne(req.body.ArrivalFlightNumber);
-    const departureFlight=await Flight.findOne(req.body.DepartureFlightNumber); 
+    const departureFlight=await Flight.findOne(req.body.DepartureFlight); 
     const Cabinclass=req.body.CabinClass; 
     const basePrice=arrivalFlight.Price+departureFlight.Price;
     const noOfChildren=req.body.NumberOfChildren;

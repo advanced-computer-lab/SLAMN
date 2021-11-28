@@ -32,6 +32,10 @@ const flightSchema = new Schema({
     type: Number,
     required: true,
   },
+  FirstClassSeats: {
+    type: Number,
+    required: true,
+  },
   ArrivalAirport: {
     type: String,
     required: true,
@@ -52,8 +56,24 @@ const flightSchema = new Schema({
     type: String,
     required: true,
   },
-  EconomySeatsList: [{ type: String, required: true }],
-  BusinessSeatsList: [{ type: String, required: true }],
+  EconomySeatsList: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Seat",
+    },
+  ],
+  BusinessSeatsList: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Seat",
+    },
+  ],
+  FirstSeatsList: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Seat",
+    },
+  ],
 });
 
 mongoose.models = {};
