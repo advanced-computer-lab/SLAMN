@@ -1,7 +1,8 @@
 const connectDB = require("./database");
 const express = require("express");
 const cors = require("cors");
-
+const UserRouter = require("./Routes/UserRoutes");
+const AdminRouter = require("./Routes/AdminRoutes");
 const app = express();
 const port = 8000;
 
@@ -15,10 +16,9 @@ app.use(
 );
 app.use(express.json());
 
-const AdminRouter = require("./Routes/AdminRoutes");
-app.use("/flights", AdminRouter);
-const UserRouter = require("./Routes/UserRoutes");
 app.use("/users", UserRouter);
+app.use("/flights", AdminRouter);
+
 connectDB();
 
 app.listen(port);

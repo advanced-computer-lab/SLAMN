@@ -34,3 +34,5 @@ router
     UserValidation.validateDeselection,
     UserServices.deselectSeats
   );
+
+module.exports = router;

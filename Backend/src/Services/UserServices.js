@@ -55,7 +55,7 @@ const signIn = async (req, res) => {
 const signUp = async (req, res) => {
   try {
     const user = req.body;
-    const data = await UserModel.find({ Email: user.email });
+    const data = await User.findOne({ Email: user.Email });
     if (data) {
       return res.json({
         statusCode: 1,
@@ -63,17 +63,18 @@ const signUp = async (req, res) => {
       });
     } else {
       const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(user.password, salt);
+      user.password = await bcrypt.hash(user.Password, salt);
       console.log(user);
       const reservations = [];
       const summaries = [];
-      await UserModel.create({
+      await User.create({
         FirstName: user.FirstName,
         LastName: user.LastName,
         Email: user.Email,
         Phone: user.Phone,
         Password: user.Password,
         PassportNumber: user.PassportNumber,
+        Admin: false,
         UserReservations: reservations,
         Summaries: summaries,
       });
@@ -93,8 +94,8 @@ const signUp = async (req, res) => {
 
 const viewAvailableSeats = async (req, res) => {
   try {
-    cabin = req.body.Cabin;
-    flight = req.body.FlightNumber;
+    const cabin = req.body.Cabin;
+    const flight = req.body.FlightNumber;
     const seats = await Flights.findOne({ FlightNumber: flight });
     if (cabin == "Economy") {
       return res.json({
@@ -130,9 +131,9 @@ const viewAvailableSeats = async (req, res) => {
 const selectSeats = async (req, res) => {
   try {
     const selectedSeat = req.body.seat,
-      cabin = req.body.Cabin;
-    flight = req.body.FlightNumber;
-    const flight = await Flights.findOne({ FlightNumber: flight });
+    const cabin = req.body.Cabin;
+    const flightnum = req.body.FlightNumber;
+    const flight = await Flights.findOne({ FlightNumber: flightnum });
     if (cabin == "Economy") {
       var i = 1;
       const Eseats = flight.EconomySeatsList;
@@ -205,9 +206,9 @@ const selectSeats = async (req, res) => {
 const deselectSeats = async (req, res) => {
   try {
     const selectedSeat = req.body.seat,
-      cabin = req.body.Cabin;
-    flight = req.body.FlightNumber;
-    const flight = await Flights.findOne({ FlightNumber: flight });
+    const cabin = req.body.Cabin;
+    const flightnum = req.body.FlightNumber;
+    const flight = await Flights.findOne({ FlightNumber: flightnum });
     if (cabin == "Economy") {
       var i = 1;
       const Eseats = flight.EconomySeatsList;
