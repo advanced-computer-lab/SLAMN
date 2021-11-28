@@ -1,5 +1,6 @@
 const Joi = require("joi");
 const { builtinModules } = require("module");
+const { join } = require("path/posix");
 
 const validateSignin = (req, res, next) => {
   const schema = Joi.object({
@@ -10,7 +11,11 @@ const validateSignin = (req, res, next) => {
 
 const validateCreateReservation = (req, res, next) => {
   const schema = Joi.object({
-   FlightNumber: Joi.number().required()
+   DepartureFlightNumber: Joi.number().required(),
+   ArrivalFlightNumber: Joi.number().required(),
+   CabinClass: Joi.string().required(),
+   NumberOfChildren: Joi.number().required(),
+   NumberOfAdults:Joi.number().required(),
   }).required();
 
   const isValid = schema.validate(req.body);
@@ -43,7 +48,9 @@ const validateDeleteFlightReservation = (req, res, next) => {
 const validateAddSummary = (req, res, next) => {
   const schema = Joi.object({
     DepartureFlight: Joi.string().required(),
-    ArrivalFlight: Joi.string().required()
+    ArrivalFlight: Joi.string().required(),
+    seat: Joi.string().required(),
+    cabin: Joi.string().required()
   }).required();
 
   const isValid = schema.validate(req.body);

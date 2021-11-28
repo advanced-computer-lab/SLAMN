@@ -13,7 +13,7 @@ router
   .post(UserValidation.validateCreateReservation, UserServices.createFlightReservation);
 
 router
-  .route("/createSummary")
+  .route("/createSummary/DepartureNo/ArrivalNo/cabin/seat")
   .post(UserValidation.validateAddSummary, UserServices.createSummary);
 router.route("/getSummary").post(UserServices.getSummary);
   
