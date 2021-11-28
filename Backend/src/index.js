@@ -15,8 +15,10 @@ app.use(
 );
 app.use(express.json());
 
-const FlightRouter = require("./Routes/FlightRoutes");
-app.use("/flights", FlightRouter);
+const AdminRouter = require("./Routes/AdminRoutes");
+app.use("/flights", AdminRouter);
+const UserRouter = require("./Routes/UserRoutes");
+app.use("/users", UserRouter);
 connectDB();
 
 app.listen(port);

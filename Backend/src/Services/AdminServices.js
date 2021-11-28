@@ -1,5 +1,6 @@
 const Flights = require("../Models/FlightModel");
 const User = require("../Models/UserModel");
+
 const getFlights = async (req, res) => {
   try {
     const data = await Flights.find({});
@@ -23,6 +24,12 @@ const createFlight = async (req, res) => {
     const Eseats = req.body.EconomySeats;
     const Bseats = req.body.BusinessSeats;
     const Fseats = req.body.FirstClassSeats;
+    if ((Eseats < 0) | (Bseats < 0) | (Fseats < 0)) {
+      return res.json({
+        statusCode: 1,
+        error: "Cannot enter a negative number of seats",
+      });
+    }
     var Economylist = [];
     var Businesslist = [];
     var Firstlist = [];
@@ -77,6 +84,7 @@ const createFlight = async (req, res) => {
     });
   }
 };
+
 const searchFlight = async (req, res) => {
   try {
     const data = await Flights.find(req.body);
@@ -142,6 +150,7 @@ const deleteFlight = async (req, res) => {
     });
   }
 };
+
 const showAvailableFlight = async (req, res) => {
   try {
     const data = await FlightModel.find();
@@ -156,6 +165,7 @@ const showAvailableFlight = async (req, res) => {
     });
   }
 };
+
 module.exports = {
   createFlight,
   updateFlight,

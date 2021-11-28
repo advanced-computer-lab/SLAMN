@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const FlightServices = require("../Services/FlightServices");
+const FlightServices = require("../Services/AdminServices");
 const FlightValidation = require("../Middleware/FlightValidation");
 const UserValidation = require("../Middleware/UserValidations");
 const UserServices = require("../Services/UserServices");
@@ -30,34 +30,6 @@ router
     authentication.validateUser,
     FlightValidation.validateSearchFlight,
     FlightServices.searchFlight
-  );
-
-router
-  .route("/signin")
-  .post(UserValidation.validateSignin, UserServices.signIn);
-
-router
-  .route("/viewAvailableSeats")
-  .post(
-    authentication.validateUser,
-    UserValidation.validateSeats,
-    UserServices.viewAvailableSeats
-  );
-
-router
-  .route("/selectSeats")
-  .post(
-    authentication.validateUser,
-    UserValidation.validateSelection,
-    UserServices.selectSeats
-  );
-
-router
-  .route("/deselectSeats")
-  .post(
-    authentication.validateUser,
-    UserValidation.validateDeselection,
-    UserServices.deselectSeats
   );
 
 router.route("/getflights").post(FlightServices.getFlights);

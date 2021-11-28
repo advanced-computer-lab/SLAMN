@@ -1,6 +1,7 @@
 const User = require("../Models/UserModel");
 const Flights = require("../Models/FlightModel");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 require("dotenv").config;
 
 const signIn = async (req, res) => {
@@ -10,7 +11,8 @@ const signIn = async (req, res) => {
   try {
     const data = await User.findOne({ Email: email });
     if (data) {
-      if (data.Password === password) {
+      const validPassword = await bcrypt.compare(password, data.Password);
+      if (validPassword) {
         const token = await jwt.sign(
           {
             id: data._id,
@@ -46,6 +48,45 @@ const signIn = async (req, res) => {
     return res.json({
       statusCode: 1,
       error: "exception",
+    });
+  }
+};
+
+const signUp = async (req, res) => {
+  try {
+    const user = req.body;
+    const data = await UserModel.find({ Email: user.email });
+    if (data) {
+      return res.json({
+        statusCode: 1,
+        error: "Invalid Email,this email already exists",
+      });
+    } else {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(user.password, salt);
+      console.log(user);
+      const reservations = [];
+      const summaries = [];
+      await UserModel.create({
+        FirstName: user.FirstName,
+        LastName: user.LastName,
+        Email: user.Email,
+        Phone: user.Phone,
+        Password: user.Password,
+        PassportNumber: user.PassportNumber,
+        UserReservations: reservations,
+        Summaries: summaries,
+      });
+      return res.json({
+        statusCode: 0,
+        message: "Your account successfully created",
+      });
+    }
+  } catch (exception) {
+    console.log(exception);
+    return res.json({
+      statusCode: 1,
+      error: "Server Error",
     });
   }
 };
@@ -237,4 +278,10 @@ const deselectSeats = async (req, res) => {
   }
 };
 
-module.exports = { signIn, viewAvailableSeats, selectSeats, deselectSeats };
+module.exports = {
+  signIn,
+  viewAvailableSeats,
+  selectSeats,
+  deselectSeats,
+  signUp,
+};
