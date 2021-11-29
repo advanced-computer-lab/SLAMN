@@ -8,6 +8,7 @@ import Signin from "../src/Page/SigninPage";
 import DeleteFlight from "../src/Page/DeleteFight";
 import ViewAllFlights from "./Page/ViewAllFlights";
 import Homepage from "./Page/WelcomePage";
+import ViewAvailableSeats from "./Page/ViewAvailableSeats";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/deleteflight" element={<DeleteFlight />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/viewallflights" element={<ViewAllFlights />} />
+          <Route path="/viewavailableseats" element={<ViewAvailableSeats />} />
         </Routes>
       </BrowserRouter>
     </div>

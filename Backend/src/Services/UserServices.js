@@ -97,21 +97,21 @@ const viewAvailableSeats = async (req, res) => {
     const cabin = req.body.Cabin;
     const flight = req.body.FlightNumber;
     const seats = await Flights.findOne({ FlightNumber: flight });
-    if (cabin == "Economy") {
+    if (cabin === "Economy") {
       return res.json({
         statusCode: 0,
         message: "Flightfound",
         data: seats.EconomySeatsList,
       });
     } else {
-      if (cabin == "Business") {
+      if (cabin === "Business") {
         return res.json({
           statusCode: 0,
           message: "Flightfound",
           data: seats.BusinessSeatsList,
         });
       } else {
-        if (cabin == "FirstClass") {
+        if (cabin === "FirstClass") {
           return res.json({
             statusCode: 0,
             message: "Flightfound",
@@ -130,16 +130,16 @@ const viewAvailableSeats = async (req, res) => {
 
 const selectSeats = async (req, res) => {
   try {
-    const selectedSeat = req.body.seat,
+    const selectedSeat = req.body.seat;
     const cabin = req.body.Cabin;
     const flightnum = req.body.FlightNumber;
     const flight = await Flights.findOne({ FlightNumber: flightnum });
-    if (cabin == "Economy") {
+    if (cabin === "Economy") {
       var i = 1;
       const Eseats = flight.EconomySeatsList;
       for (i; i < Eseats.length; i++) {
-        if (selectedSeat == Eseats[i].Number) {
-          if (Eseats[i].isReserved == false) {
+        if (selectedSeat === Eseats[i].Number) {
+          if (Eseats[i].isReserved === false) {
             Eseats[i].isReserved = true;
             return res.json({
               statusCode: 0,
@@ -154,12 +154,12 @@ const selectSeats = async (req, res) => {
         }
       }
     } else {
-      if (cabin == "Business") {
+      if (cabin === "Business") {
         var i = 1;
         const Bseats = flight.BusinessSeatsList;
         for (i; i < Bseats.length; i++) {
-          if (selectedSeat == Bseats[i].Number) {
-            if (Bseats[i].isReserved == false) {
+          if (selectedSeat === Bseats[i].Number) {
+            if (Bseats[i].isReserved === false) {
               Bseats[i].isReserved = true;
               return res.json({
                 statusCode: 0,
@@ -174,12 +174,12 @@ const selectSeats = async (req, res) => {
           }
         }
       } else {
-        if (cabin == "FirstClass") {
+        if (cabin === "FirstClass") {
           var i = 1;
           const Fseats = flight.FirstSeatsList;
           for (i; i < Fseats.length; i++) {
-            if (selectedSeat == Fseats[i].Number) {
-              if (Fseats[i].isReserved == false) {
+            if (selectedSeat === Fseats[i].Number) {
+              if (Fseats[i].isReserved === false) {
                 Fseats[i].isReserved = true;
                 return res.json({
                   statusCode: 0,
@@ -205,16 +205,16 @@ const selectSeats = async (req, res) => {
 };
 const deselectSeats = async (req, res) => {
   try {
-    const selectedSeat = req.body.seat,
+    const selectedSeat = req.body.seat;
     const cabin = req.body.Cabin;
     const flightnum = req.body.FlightNumber;
     const flight = await Flights.findOne({ FlightNumber: flightnum });
-    if (cabin == "Economy") {
+    if (cabin === "Economy") {
       var i = 1;
       const Eseats = flight.EconomySeatsList;
       for (i; i < Eseats.length; i++) {
-        if (selectedSeat == Eseats[i].Number) {
-          if (Eseats[i].isReserved == true) {
+        if (selectedSeat === Eseats[i].Number) {
+          if (Eseats[i].isReserved === true) {
             Eseats[i].isReserved = false;
             return res.json({
               statusCode: 0,
@@ -229,12 +229,12 @@ const deselectSeats = async (req, res) => {
         }
       }
     } else {
-      if (cabin == "Business") {
+      if (cabin === "Business") {
         var i = 1;
         const Bseats = flight.BusinessSeatsList;
         for (i; i < Bseats.length; i++) {
-          if (selectedSeat == Bseats[i].Number) {
-            if (Bseats[i].isReserved == true) {
+          if (selectedSeat === Bseats[i].Number) {
+            if (Bseats[i].isReserved === true) {
               Bseats[i].isReserved = false;
               return res.json({
                 statusCode: 0,
@@ -249,12 +249,12 @@ const deselectSeats = async (req, res) => {
           }
         }
       } else {
-        if (cabin == "FirstClass") {
+        if (cabin === "FirstClass") {
           var i = 1;
           const Fseats = flight.FirstSeatsList;
           for (i; i < Fseats.length; i++) {
-            if (selectedSeat == Fseats[i].Number) {
-              if (Fseats[i].isReserved == true) {
+            if (selectedSeat === Fseats[i].Number) {
+              if (Fseats[i].isReserved === true) {
                 Fseats[i].isReserved = false;
                 return res.json({
                   statusCode: 0,

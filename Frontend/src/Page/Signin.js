@@ -64,11 +64,10 @@ export default function Signin() {
     setOpen1(false);
   };
   const handleLogin = (e) => {
-    console.log("password", "emaill");
     console.log("email", "passssssssssss");
 
     axios
-      .post("http://localhost:8000/flights/signin", {
+      .post("http://localhost:8000/users/signin", {
         Email: email,
         Password: password,
       })
