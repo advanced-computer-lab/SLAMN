@@ -42,7 +42,7 @@ export default function SigninPage() {
     } else {
       console.log("innnnnnnnnnnn");
       axios
-        .post("http://localhost:8000/flights/signin", {
+        .post("http://localhost:8000/users/signin", {
           Email: email,
           Password: password,
         })

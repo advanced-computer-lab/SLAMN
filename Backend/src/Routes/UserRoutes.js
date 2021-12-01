@@ -1,8 +1,9 @@
 const router = require("express").Router();
-const FlightServices = require("../Services/FlightServices");
-const FlightValidation = require("../Middleware/FlightValidation");
+//const FlightServices = require("../Services/FlightServices");
+//const FlightValidation = require("../Middleware/FlightValidation");
 const UserValidation = require("../Middleware/UserValidations");
 const UserServices = require("../Services/UserServices");
+const authentication = require("../Middleware/authentication");
 
 router
   .route("/deleteReservation")
@@ -13,15 +14,11 @@ router
   .post(UserValidation.validateCreateReservation, UserServices.createFlightReservation);
 
 router
-  .route("/createSummary/DepartureNo/ArrivalNo/cabin/seat")
+  .route("/createSummary")
   .post(UserValidation.validateAddSummary, UserServices.createSummary);
 router.route("/getSummary").post(UserServices.getSummary);
   
-module.exports = router;
-const UserValidation = require("../Middleware/UserValidations");
-const UserServices = require("../Services/UserServices");
-const authentication = require("../Middleware/authentication");
-const router = require("express").Router();
+
 
 router
   .route("/signin")

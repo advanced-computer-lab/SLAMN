@@ -2,20 +2,36 @@ const User = require("../Models/UserModel");
 const Summary=require("../Models/SummaryModel");
 const Reservation = require("../Models/FlightReservation");
 const Flight = require("../Models/FlightModel");
-
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+require("dotenv").config;
 
 const signIn = async (req, res) => {
   const email = req.body.Email;
-  const password = req.body.password;
+  const password = req.body.Password;
 
   try {
-    const data = await User.find({ Email: email });
+    const data = await User.findOne({ Email: email });
     if (data) {
-      if (data.password === password) {
+      const validPassword = await bcrypt.compare(password, data.Password);
+      if (validPassword) {
+        const token = await jwt.sign(
+          {
+            id: data._id,
+            email: data.email,
+            password: data.Password,
+          },
+          process.env.SECRET,
+          {
+            expiresIn: "5h",
+          }
+        );
+        res.set("auth", token);
         return res.json({
           statusCode: 0,
           message: "Success",
           data: data.Admin,
+          token,
         });
       } else {
         return res.json({
@@ -34,6 +50,46 @@ const signIn = async (req, res) => {
     return res.json({
       statusCode: 1,
       error: "exception",
+    });
+  }
+};
+
+const signUp = async (req, res) => {
+  try {
+    const user = req.body;
+    const data = await User.findOne({ Email: user.Email });
+    if (data) {
+      return res.json({
+        statusCode: 1,
+        error: "Invalid Email,this email already exists",
+      });
+    } else {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(user.Password, salt);
+      console.log(user);
+      const reservations = [];
+      const summaries = [];
+      await User.create({
+        FirstName: user.FirstName,
+        LastName: user.LastName,
+        Email: user.Email,
+        Phone: user.Phone,
+        Password: user.Password,
+        PassportNumber: user.PassportNumber,
+        Admin: false,
+        UserReservations: reservations,
+        Summaries: summaries,
+      });
+      return res.json({
+        statusCode: 0,
+        message: "Your account successfully created",
+      });
+    }
+  } catch (exception) {
+    console.log(exception);
+    return res.json({
+      statusCode: 1,
+      error: "Server Error",
     });
   }
 };
@@ -204,5 +260,5 @@ else {
 }
 };
 
-module.exports = { signIn,viewAvailableSeats,createFlightReservation,deleteReservation,createSummary,
+module.exports = { signIn,signUp,viewAvailableSeats,createFlightReservation,deleteReservation,createSummary,
 getSummary};
