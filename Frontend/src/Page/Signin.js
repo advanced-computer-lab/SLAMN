@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: "#005dad",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -77,7 +77,7 @@ export default function Signin() {
         console.log("yalllllllllaa");
       });
 
-    // window.location = "/home";
+    window.location = "/home";
   };
 
   const onChangePassword = (e) => {
@@ -92,7 +92,7 @@ export default function Signin() {
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
+          <LockOutlinedIcon style={{ color: "#ffd633" }} />
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign in
@@ -133,6 +133,7 @@ export default function Signin() {
             color="primary"
             className={classes.submit}
             onClick={handleLogin}
+            style={{ backgroundColor: "#005dad" }}
           >
             Sign In
           </Button>
