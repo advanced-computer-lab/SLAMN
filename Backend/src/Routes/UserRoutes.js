@@ -11,12 +11,21 @@ router
   
 router
   .route("/createReservation")
-  .post(UserValidation.validateCreateReservation, UserServices.createFlightReservation);
+  .post(
+    UserValidation.validateCreateReservation,
+     UserServices.createFlightReservation,
+  );
 
 router
   .route("/createSummary")
-  .post(UserValidation.validateAddSummary, UserServices.createSummary);
+  .post(
+    UserValidation.validateAddSummary,
+     UserServices.createSummary);
 router.route("/getSummary").post(UserServices.getSummary);
+
+router
+  .route("/updateAccount")
+  .post(UserValidation.validateUpdateAccount,UserServices.updateAccount);
   
 
 
@@ -27,7 +36,7 @@ router
 router
   .route("/signup")
   .post(UserValidation.validateSignup, UserServices.signUp);
-
+/*
 router
   .route("/viewAvailableSeats")
   .post(
@@ -50,6 +59,6 @@ router
     authentication.validateUser,
     UserValidation.validateDeselection,
     UserServices.deselectSeats
-  );
+  );*/
 
 module.exports = router;

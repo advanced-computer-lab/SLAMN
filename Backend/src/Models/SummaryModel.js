@@ -13,11 +13,11 @@ const summary = new Schema({
   //   ref: "Flight",
   // },
   DepartureFlightNumber:{
-    type:String,
+    type:Number,
     required:true,
   },
   ArrivalFlightNumber:{
-    type:String,
+    type:Number,
     required:true,
   },
   DepartureDepartureDate: {

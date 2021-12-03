@@ -28,10 +28,7 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
-  PassportNumber: {
-    type: String,
-    required: true,
-  },
+  
   Admin: {
     type: Boolean,
     required: true,

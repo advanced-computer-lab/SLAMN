@@ -107,25 +107,31 @@ const viewAvailableSeats = async (req, res) => {
   }
 };
 
+
+
 const createFlightReservation = async (req, res) => {
   try {
     console.log(req.body);
-    const userData=await User.findOne({_id});
-    const arrivalFlight=await Flight.findOne(req.body.ArrivalFlightNumber);
-    const departureFlight=await Flight.findOne(req.body.DepartureFlight); 
+    /*const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
+    const userData = payload.id;*/
+    const userData=await User.findOne({_id:"61a7780f866bf0ec6787692a"});
+    const arrivalFlight=await Flight.findOne({FlightNumber:req.body.ArrivalFlightNumber});
+    const departureFlight=await Flight.findOne({FlightNumber:req.body.DepartureFlightNumber}); 
     const Cabinclass=req.body.CabinClass; 
-    const basePrice=arrivalFlight.Price+departureFlight.Price;
+    var basePrice=arrivalFlight.Price+departureFlight.Price;
     const noOfChildren=req.body.NumberOfChildren;
     const noOfAdults=req.body.NumberOfAdults;
+    
     switch(Cabinclass){
       case "Economy":{basePrice=basePrice;break;}
-      case "First Class":{basePrice=700+basePrice;break;}
-      case " Business Class":{basePrice=basePrice+1000;break;}
+      case "First Class":{basePrice+=700;break;}
+      case "Business Class":{basePrice+=1000;break;}
       default:{return res.json({
         statusCode: 1,
         error: "Not a valid class",
       });}
     }
+    
     if(userData){
       const reserve=await Reservation.create({
         DepartureFlightNumber:departureFlight.FlightNumber,
@@ -133,8 +139,34 @@ const createFlightReservation = async (req, res) => {
         NumberOfChildren:noOfChildren,
         NumberOfAdults:noOfAdults,
         totalPrice:((basePrice*0.5)*noOfChildren)+(basePrice*noOfAdults),
-        User:userData});
-      userData.UserReservations.push(reserve);
+        User:{
+          _id:userData._id,
+          FirstName:userData.FirstName,
+          LastName:userData.LastName,
+          Email:userData.Email,
+          Phone:userData.Phone ,
+          PassportNumber:userData.PassportNumber,
+          Password:userData.Password , 
+          Admin:userData.Admin,
+          UserReservations:userData.UserReservations,
+          Summaries:userData.Summaries ,
+        }});
+      const ReserveTobePushed={
+        _id:reserve._id,
+        User: reserve.User,
+        DepartureFlightNumber:reserve.DepartureFlightNumber,
+        ArrivalFlightNumber:reserve.ArrivalFlightNumber,
+        CabinClass:reserve.CabinClass,
+        NumberOfChildren:reserve.NumberOfChildren,
+        NumberOfAdults:reserve.NumberOfAdults,
+        totalPrice:reserve.totalPrice
+      };
+      userData.UserReservations.push(ReserveTobePushed);
+       
+await User.findOneAndUpdate({_id: userData._id}, 
+  userData, null)
+     .catch((err) => res.status(400).json("Error:" + err));
+      
     }
     else {
       return res.json({
@@ -145,6 +177,7 @@ const createFlightReservation = async (req, res) => {
     return res.json({
       statusCode: 0,
       message: "Success",
+    
     });
     
   } catch (exception) {
@@ -156,13 +189,30 @@ const createFlightReservation = async (req, res) => {
   }
 };
 
+
+
+
 const deleteReservation = async (req, res) => {
   try {
-    const ReservationToBeDeleted = await Reservation.findOne({_id});
-    const userData=await User.findOne({_id});
+ /*const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
+    const userData = payload.id;*/
+    const userData=await User.findOne({_id:"61a7780f866bf0ec6787692a"});
+    const ReservationToBeDeleted = await Reservation.findOne({_id:req.body._id});
     if(userData){
     console.log(ReservationToBeDeleted);
-    userData.UserReservations.pop(ReservationToBeDeleted);
+    //userData.UserReservations.pop(ReservationToBeDeleted);
+    userData.UserReservations.forEach(element => {
+      if(element._id==req.body._id)
+        {
+          var index=userData.UserReservations.indexOf(element);
+          if (index > -1) {
+            userData.UserReservations.splice(index, 1);
+          }
+        }
+   });
+    await User.findOneAndUpdate({_id: userData._id}, 
+      userData, null)
+         .catch((err) => res.status(400).json("Error:" + err));
     ReservationToBeDeleted.delete();
     return res.json({
       statusCode: 0,
@@ -185,17 +235,20 @@ const deleteReservation = async (req, res) => {
 
 const createSummary= async (req, res) => {
   try {
-    console.log(req.body);
-    const userData=await User.findOne({_id});
-    const arrivalFlight=await Flight.findOne(req.body.ArrivalFlight);
-    const departureFlight=await Flight.findOne(req.body.DepartureFlight);
+    
+ /*const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
+    const userData = payload.id;*/
+    const userData=await User.findOne({_id:"61a7780f866bf0ec6787692a"});
+    const arrivalFlight=await Flight.findOne({FlightNumber:req.body.ArrivalFlightNumber});
+    const departureFlight=await Flight.findOne({FlightNumber:req.body.DepartureFlightNumber});
     const totalPrice=arrivalFlight.Price+departureFlight.Price;
 
     if(userData){
       const sumUP=await Summary.create({
-        // DepartureFlight:departureFlight,ArrivalFlight:arrivalFlight,
-        DepartueFlightNumber:departureFlight.FlightNumber,
-        ArrivalFlightNumber:arrivalFlight.FlightNumber,
+        //DepartueFlightNumber:departureFlight.FlightNumber,
+        //ArrivalFlightNumber:arrivalFlight.FlightNumber,
+        DepartueFlightNumber:2,
+        ArrivalFlightNumber:3,
         DepartureDepartureDate:departureFlight.DepartureDate,
         DepartureArrivalDate:departureFlight.ArrivalDate,
         ArrivalDepartureDate:arrivalFlight.DepartureDate,
@@ -208,9 +261,25 @@ const createSummary= async (req, res) => {
         ArrivalPrice:arrivalFlight.Price,
         CabinClass:req.body.cabin,
         SeatNumber:req.body.seat,
-        User:userData,
+        User:{
+          _id:userData._id,
+          FirstName:userData.FirstName,
+          LastName:userData.LastName,
+          Email:userData.Email,
+          Phone:userData.Phone ,
+          PassportNumber:userData.PassportNumber,
+          Password:userData.Password , 
+          Admin:userData.Admin,
+          UserReservations:userData.UserReservations,
+          Summaries:userData.Summaries ,
+        },
         Price:totalPrice});
       userData.Summaries.push(sumUP);
+             
+await User.findOneAndUpdate({_id: userData._id}, 
+  userData, null)
+     .catch((err) => res.status(400).json("Error:" + err));
+      console.log(sumUp);
     }
     else {
       return res.json({
@@ -234,9 +303,10 @@ const createSummary= async (req, res) => {
 const getSummary = async (req, res) => {
   
 try {
-  const arrivalFlight=await Flight.findOne(req.body.ArrivalFlight);
-  const departureFlight=await Flight.findOne(req.body.DepartureFlight);
-  const userData=await User.findOne({_id});
+  const arrivalFlight=await Flight.findOne({FlightNumber:req.body.ArrivalFlightNumber});
+  const departureFlight=await Flight.findOne({FlightNumber:req.body.DepartureFlightNumber}); 
+  const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
+  const userData = payload.id;
   if(userData) {
     const data = await userData.Summaries.find({ArrivalFlightNumber:arrivalFlight.FlightNumber,DepartureFlight:departureFlight.FlightNumber});
   return res.json({
@@ -260,5 +330,35 @@ else {
 }
 };
 
+const updateAccount = async (req, res) =>{
+ 
+ const UpdatedUser = {
+ 
+  FirstName:req.body.FirstName,
+  LastName:req.body.LastName,
+  Email:req.body.Email,
+  Phone:req.body.Phone ,
+  PassportNumber:req.body.PassportNumber,
+  Password:req.body.Password ,
+  Admin:req.body.Admin,
+  UserReservations:req.body.UserReservations,
+  Summaries:req.body.Summaries
+ };
+   
+ 
+await User.findOneAndUpdate({PassportNumber: req.body.PassportNumber }, 
+  UpdatedUser, null)
+     .then(() => res.json(UpdatedUser))
+     .catch((err) => res.status(400).json("Error:" + err));
+ 
+ 
+ };
+
+ 
+ 
+ 
+
 module.exports = { signIn,signUp,viewAvailableSeats,createFlightReservation,deleteReservation,createSummary,
-getSummary};
+getSummary,updateAccount};
+
+

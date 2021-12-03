@@ -6,6 +6,7 @@ const AdminRouter = require("./Routes/AdminRoutes");
 const app = express();
 const port = 8000;
 
+
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
 
@@ -20,5 +21,14 @@ app.use("/users", UserRouter);
 app.use("/flights", AdminRouter);
 
 connectDB();
+
+
+
+connectDB();
+app.use(cors({}));
+app.use(express.json());
+
+
+
 
 app.listen(port);

@@ -63,6 +63,7 @@ const validateSelection = (req, res, next) => {
 
 const validateCreateReservation = (req, res, next) => {
   const schema = Joi.object({
+    
    DepartureFlightNumber: Joi.number().required(),
    ArrivalFlightNumber: Joi.number().required(),
    CabinClass: Joi.string().required(),
@@ -83,7 +84,7 @@ const validateCreateReservation = (req, res, next) => {
 
 const validateDeleteFlightReservation = (req, res, next) => {
     const schema = Joi.object({
-    FlightNumber: Joi.number().required(),
+    _id: Joi.string().required(),
   }).required();
 
   const isValid = schema.validate(req.body);
@@ -99,9 +100,9 @@ const validateDeleteFlightReservation = (req, res, next) => {
 
 const validateAddSummary = (req, res, next) => {
   const schema = Joi.object({
-    DepartureFlight: Joi.string().required(),
-    ArrivalFlight: Joi.string().required(),
-    seat: Joi.string().required(),
+    DepartureFlightNumber: Joi.number().required(),
+    ArrivalFlightNumber: Joi.number().required(),
+    seat: Joi.number().required(),
     cabin: Joi.string().required()
   }).required();
 
@@ -123,4 +124,31 @@ const validateDeselection = (req, res, next) => {
 };
 module.exports = { validateSignin,validateSeats,validateSelection,validateDeselection,validateSignup,
   validateCreateReservation,validateDeleteFlightReservation,validateAddSummary};
+
+const validateUpdateAccount = (req, res, next) => {
+  const schema = Joi.object({
+    FirstName:Joi.string().required(),
+    LastName: Joi.string().required(),
+    Email: Joi.string().required(),
+    Phone: Joi.string().required(),
+    Password: Joi.string().required(),
+    PassportNumber: Joi.string().required(),
+    Admin: Joi.boolean().required(),
+    UserReservations: Joi.array().required(),
+    Summaries: Joi.array().required()
+    
+  }).required();
+
+  const isValid = schema.validate(req.body);
+  if (isValid.error) {
+    return res.json({
+      statusCode: 1,
+
+      error: isValid.error.details[0].message,
+    });
+  }
+  return next();
+};
+
+module.exports = { validateSignin,validateSignup,validateCreateReservation,validateDeleteFlightReservation,validateAddSummary,validateUpdateAccount,validateSeats,validateSelection};
 
