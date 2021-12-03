@@ -13,6 +13,7 @@ import AccountDetails from "./Page/AccountDetails";
 import UpdateAccountDeatils from "../src/Page/UpdateAccount";
 import Booking from "../src/Page/Booking";
 import ChangePassword from "../src/Page/ChangePassword";
+import ViewAvailableSeats from "./Page/ViewAvailableSeats";
 
 function App() {
   return (
@@ -26,12 +27,16 @@ function App() {
           <Route path="/deleteflight" element={<DeleteFlight />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/viewallflights" element={<ViewAllFlights />} />
+<<<<<<< HEAD
 
           <Route path="/home" element={<Home />} />
           <Route path="/account" element={<AccountDetails />} />
           <Route path="/updateaccount" element={<UpdateAccountDeatils />} />
           <Route path="/bookflight" element={<Booking />} />
           <Route path="/changepassword" element={<ChangePassword />} />
+=======
+          <Route path="/viewavailableseats" element={<ViewAvailableSeats />} />
+>>>>>>> 879b88cf8db9d7a13c5cc62d32958873c7cd11e3
         </Routes>
       </BrowserRouter>
     </div>
