@@ -7,16 +7,16 @@ const authentication = require("../Middleware/authentication");
 
 router
   .route("/deleteReservation")
-  .post(UserValidation.validateDeleteFlightReservation, UserServices.deleteReservation);
+  .post(authentication.validateUser,UserValidation.validateDeleteFlightReservation, UserServices.deleteReservation);
   
 router
   .route("/createReservation")
-  .post(UserValidation.validateCreateReservation, UserServices.createFlightReservation);
+  .post(authentication.validateUser,UserValidation.validateCreateReservation, UserServices.createFlightReservation);
 
 router
   .route("/createSummary")
-  .post(UserValidation.validateAddSummary, UserServices.createSummary);
-router.route("/getSummary").post(UserServices.getSummary);
+  .post(authentication.validateUser,UserValidation.validateAddSummary, UserServices.createSummary);
+router.route("/getSummary").post(authentication.validateUser,UserServices.getSummary);
   
 
 
@@ -28,28 +28,28 @@ router
   .route("/signup")
   .post(UserValidation.validateSignup, UserServices.signUp);
 
-router
-  .route("/viewAvailableSeats")
-  .post(
-    authentication.validateUser,
-    UserValidation.validateSeats,
-    UserServices.viewAvailableSeats
-  );
+// router
+//   .route("/viewAvailableSeats")
+//   .post(
+//     authentication.validateUser,
+//     UserValidation.validateSeats,
+//     UserServices.viewAvailableSeats
+//   );
 
-router
-  .route("/selectSeats")
-  .post(
-    authentication.validateUser,
-    UserValidation.validateSelection,
-    UserServices.selectSeats
-  );
+// router
+//   .route("/selectSeats")
+//   .post(
+//     authentication.validateUser,
+//     UserValidation.validateSelection,
+//     UserServices.selectSeats
+//   );
 
-router
-  .route("/deselectSeats")
-  .post(
-    authentication.validateUser,
-    UserValidation.validateDeselection,
-    UserServices.deselectSeats
-  );
+// router
+//   .route("/deselectSeats")
+//   .post(
+//     authentication.validateUser,
+//     UserValidation.validateDeselection,
+//     UserServices.deselectSeats
+//   );
 
 module.exports = router;

@@ -14,6 +14,9 @@ const signIn = async (req, res) => {
     const data = await User.findOne({ Email: email });
     if (data) {
       const validPassword = await bcrypt.compare(password, data.Password);
+      console.log(validPassword,"trueeeeee");
+      console.log(password,"trueeeeee");
+      console.log(data.Password,"trueeeeee");
       if (validPassword) {
         const token = await jwt.sign(
           {
@@ -26,7 +29,7 @@ const signIn = async (req, res) => {
             expiresIn: "5h",
           }
         );
-        res.set("auth", token);
+        res.setHeader("auth", token);
         return res.json({
           statusCode: 0,
           message: "Success",
@@ -65,7 +68,7 @@ const signUp = async (req, res) => {
       });
     } else {
       const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(user.Password, salt);
+      user.Password = await bcrypt.hash(user.Password, salt);
       console.log(user);
       const reservations = [];
       const summaries = [];
@@ -110,9 +113,10 @@ const viewAvailableSeats = async (req, res) => {
 const createFlightReservation = async (req, res) => {
   try {
     console.log(req.body);
-    const userData=await User.findOne({_id});
-    const arrivalFlight=await Flight.findOne(req.body.ArrivalFlightNumber);
-    const departureFlight=await Flight.findOne(req.body.DepartureFlight); 
+    const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
+    const userData = payload.id;
+    const arrivalFlight=await Flight.findOne({FlightNumber:req.body.ArrivalFlightNumber});
+    const departureFlight=await Flight.findOne({FlightNumber:req.body.DepartureFlight}); 
     const Cabinclass=req.body.CabinClass; 
     const basePrice=arrivalFlight.Price+departureFlight.Price;
     const noOfChildren=req.body.NumberOfChildren;
@@ -158,8 +162,9 @@ const createFlightReservation = async (req, res) => {
 
 const deleteReservation = async (req, res) => {
   try {
+    const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
+    const userData = payload.id;
     const ReservationToBeDeleted = await Reservation.findOne({_id});
-    const userData=await User.findOne({_id});
     if(userData){
     console.log(ReservationToBeDeleted);
     userData.UserReservations.pop(ReservationToBeDeleted);
@@ -186,14 +191,14 @@ const deleteReservation = async (req, res) => {
 const createSummary= async (req, res) => {
   try {
     console.log(req.body);
-    const userData=await User.findOne({_id});
+    const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
+    const userData = payload.id;
     const arrivalFlight=await Flight.findOne(req.body.ArrivalFlight);
     const departureFlight=await Flight.findOne(req.body.DepartureFlight);
     const totalPrice=arrivalFlight.Price+departureFlight.Price;
 
     if(userData){
       const sumUP=await Summary.create({
-        // DepartureFlight:departureFlight,ArrivalFlight:arrivalFlight,
         DepartueFlightNumber:departureFlight.FlightNumber,
         ArrivalFlightNumber:arrivalFlight.FlightNumber,
         DepartureDepartureDate:departureFlight.DepartureDate,
@@ -236,7 +241,8 @@ const getSummary = async (req, res) => {
 try {
   const arrivalFlight=await Flight.findOne(req.body.ArrivalFlight);
   const departureFlight=await Flight.findOne(req.body.DepartureFlight);
-  const userData=await User.findOne({_id});
+  const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
+  const userData = payload.id;
   if(userData) {
     const data = await userData.Summaries.find({ArrivalFlightNumber:arrivalFlight.FlightNumber,DepartureFlight:departureFlight.FlightNumber});
   return res.json({
