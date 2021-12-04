@@ -61,16 +61,13 @@ const validateSelection = (req, res, next) => {
   }).required();
 };
 
-<<<<<<< HEAD
-=======
 const validateCreateReservation = (req, res, next) => {
   const schema = Joi.object({
-    
-   DepartureFlightNumber: Joi.number().required(),
-   ArrivalFlightNumber: Joi.number().required(),
-   CabinClass: Joi.string().required(),
-   NumberOfChildren: Joi.number().required(),
-   NumberOfAdults:Joi.number().required(),
+    DepartureFlightNumber: Joi.number().required(),
+    ArrivalFlightNumber: Joi.number().required(),
+    CabinClass: Joi.string().required(),
+    NumberOfChildren: Joi.number().required(),
+    NumberOfAdults: Joi.number().required(),
   }).required();
 
   const isValid = schema.validate(req.body);
@@ -85,7 +82,7 @@ const validateCreateReservation = (req, res, next) => {
 };
 
 const validateDeleteFlightReservation = (req, res, next) => {
-    const schema = Joi.object({
+  const schema = Joi.object({
     _id: Joi.string().required(),
   }).required();
 
@@ -105,7 +102,7 @@ const validateAddSummary = (req, res, next) => {
     DepartureFlightNumber: Joi.number().required(),
     ArrivalFlightNumber: Joi.number().required(),
     seat: Joi.number().required(),
-    cabin: Joi.string().required()
+    cabin: Joi.string().required(),
   }).required();
 
   const isValid = schema.validate(req.body);
@@ -118,38 +115,20 @@ const validateAddSummary = (req, res, next) => {
   }
   return next();
 };
->>>>>>> db0d7211c11f8e6eb77c2b07001dfaa4d600f052
 const validateDeselection = (req, res, next) => {
   const schema = Joi.object({
     FlightNumber: Joi.string().required(),
     Cabin: Joi.string().required(),
   }).required();
 };
-<<<<<<< HEAD
-
-module.exports = {
-  validateSignin,
-  validateSeats,
-  validateSelection,
-  validateDeselection,
-  validateSignup,
-};
-=======
-module.exports = { validateSignin,validateSeats,validateSelection,validateDeselection,validateSignup,
-  validateCreateReservation,validateDeleteFlightReservation,validateAddSummary};
 
 const validateUpdateAccount = (req, res, next) => {
   const schema = Joi.object({
-    FirstName:Joi.string().required(),
+    FirstName: Joi.string().required(),
     LastName: Joi.string().required(),
     Email: Joi.string().required(),
-    Phone: Joi.string().required(),
-    Password: Joi.string().required(),
+
     PassportNumber: Joi.string().required(),
-    Admin: Joi.boolean().required(),
-    UserReservations: Joi.array().required(),
-    Summaries: Joi.array().required()
-    
   }).required();
 
   const isValid = schema.validate(req.body);
@@ -163,6 +142,13 @@ const validateUpdateAccount = (req, res, next) => {
   return next();
 };
 
-module.exports = { validateSignin,validateSignup,validateCreateReservation,validateDeleteFlightReservation,validateAddSummary,validateUpdateAccount,validateSeats,validateSelection};
-
->>>>>>> db0d7211c11f8e6eb77c2b07001dfaa4d600f052
+module.exports = {
+  validateSignin,
+  validateSignup,
+  validateCreateReservation,
+  validateDeleteFlightReservation,
+  validateAddSummary,
+  validateUpdateAccount,
+  validateSeats,
+  validateSelection,
+};

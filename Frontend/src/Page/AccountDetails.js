@@ -4,7 +4,8 @@ import NavBar from "../Componenets/General/NavBar";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "../Componenets/AccountDetails/List";
 import AccountForm from "../Componenets/AccountDetails/AccountForm";
-import { useState } from "react";
+import { useEffect } from "react";
+import axios from "axios";
 
 const useStyles = makeStyles({
   root: {
@@ -57,14 +58,42 @@ const useStyles = makeStyles({
 
 export default function AccountDetails() {
   const classes = useStyles();
-  
+  const headers = window.localStorage.getItem("token");
+  const [first, setFirst] = React.useState("");
+  const [last, setLast] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [pass, setPass] = React.useState("");
+
+  useEffect(() => {
+    console.log(headers, "headersssssssssss");
+    axios
+      .post(
+        "http://localhost:8000/users/displayaccount",
+        {},
+        {
+          headers: {
+            auth: headers,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data.user.FirstName);
+        setFirst(res.data.user.FirstName);
+        setLast(res.data.user.LastName);
+        setEmail(res.data.user.Email);
+        setPass(res.data.user.PassportNumber);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div className={classes.root}>
       <NavBar />
       <div className={classes.welcome}>
         <div className={classes.welcometitle}>
-          Welcome to your account , xxx !
+          Welcome to your account {first} !
         </div>
       </div>
       <div className={classes.form}>
@@ -72,7 +101,12 @@ export default function AccountDetails() {
           <List />
         </div>
         <div className={classes.accountform}>
-          <AccountForm />
+          <AccountForm
+            firstname={first}
+            lastname={last}
+            email={email}
+            passport={pass}
+          />
         </div>
       </div>
     </div>

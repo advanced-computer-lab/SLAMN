@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-const UserValidation = require("../Middleware/UserValidations");
-const UserServices = require("../Services/UserServices");
-const authentication = require("../Middleware/authentication");
-const router = require("express").Router();
-=======
 const router = require("express").Router();
 //const FlightServices = require("../Services/FlightServices");
 //const FlightValidation = require("../Middleware/FlightValidation");
@@ -13,28 +7,30 @@ const authentication = require("../Middleware/authentication");
 
 router
   .route("/deleteReservation")
-  .post(UserValidation.validateDeleteFlightReservation, UserServices.deleteReservation);
-  
+  .post(
+    UserValidation.validateDeleteFlightReservation,
+    UserServices.deleteReservation
+  );
+
 router
   .route("/createReservation")
   .post(
     UserValidation.validateCreateReservation,
-     UserServices.createFlightReservation,
+    UserServices.createFlightReservation
   );
 
 router
   .route("/createSummary")
-  .post(
-    UserValidation.validateAddSummary,
-     UserServices.createSummary);
+  .post(UserValidation.validateAddSummary, UserServices.createSummary);
 router.route("/getSummary").post(UserServices.getSummary);
 
 router
   .route("/updateAccount")
-  .post(UserValidation.validateUpdateAccount,UserServices.updateAccount);
-  
+  .post(UserValidation.validateUpdateAccount, UserServices.updateAccount);
 
->>>>>>> db0d7211c11f8e6eb77c2b07001dfaa4d600f052
+router
+  .route("/displayaccount")
+  .post(authentication.validateUser, UserServices.displayaccount);
 
 router
   .route("/signin")

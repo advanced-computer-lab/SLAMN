@@ -4,7 +4,7 @@ import NavBar from "../Componenets/General/NavBar";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "../Componenets/AccountDetails/List";
 import AccountForm from "../Componenets/AccountDetails/AccountFormUpdate";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const useStyles = makeStyles({
@@ -55,14 +55,41 @@ const useStyles = makeStyles({
   },
 });
 
-
-
 export default function UpdateAccount() {
   const classes = useStyles();
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [passport, setPassport] = useState("");
+  const headers = window.localStorage.getItem("token");
+  const [first, setFirst] = React.useState("");
+  const [last, setLast] = React.useState("");
+  const [emails, setEmails] = React.useState("");
+  const [pass, setPass] = React.useState("");
+
+  useEffect(() => {
+    console.log(headers, "headersssssssssss");
+    axios
+      .post(
+        "http://localhost:8000/users/displayaccount",
+        {},
+        {
+          headers: {
+            auth: headers,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data.user.FirstName);
+        setFirst(res.data.user.FirstName);
+        setLast(res.data.user.LastName);
+        setEmails(res.data.user.Email);
+        setPass(res.data.user.PassportNumber);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const onChangeFirstName = (e) => {
     setFirstName(e.target.value);
@@ -81,7 +108,7 @@ export default function UpdateAccount() {
       <NavBar />
       <div className={classes.welcome}>
         <div className={classes.welcometitle}>
-          Welcome to your account , xxx !
+          Welcome to your account , {first}!
         </div>
       </div>
       <div className={classes.form}>
@@ -98,6 +125,10 @@ export default function UpdateAccount() {
             last={lastName}
             emails={email}
             passports={passport}
+            firstname={first}
+            lastname={last}
+            email={email}
+            passport={pass}
           />
         </div>
       </div>

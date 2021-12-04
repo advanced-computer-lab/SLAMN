@@ -106,7 +106,7 @@ const useStyles = makeStyles({
     cursor: "pointer",
   },
 });
-export default function AccountForm() {
+export default function AccountForm(props) {
   const classes = useStyles();
   const [update, setupdate] = React.useState(false);
   const [password, setPassword] = React.useState(false);
@@ -123,19 +123,19 @@ export default function AccountForm() {
 
       <div className={classes.display}>
         <div className={classes.firstName}>First Name</div>
-        <div className={classes.firstNameValue}> Nour</div>
+        <div className={classes.firstNameValue}> {props.firstname}</div>
       </div>
       <div className={classes.display}>
         <div className={classes.lastName}>Last Name</div>
-        <div className={classes.lastNamevalue}> Nour</div>
+        <div className={classes.lastNamevalue}> {props.lastname}</div>
       </div>
       <div className={classes.display}>
         <div className={classes.email}>Email</div>
-        <div className={classes.emailvalue}> Nour</div>
+        <div className={classes.emailvalue}> {props.email}</div>
       </div>
       <div className={classes.display}>
         <div className={classes.passport}>Passport Number </div>
-        <div className={classes.passportvalue}> Nour</div>
+        <div className={classes.passportvalue}> {props.passport}</div>
       </div>
 
       <Divider />

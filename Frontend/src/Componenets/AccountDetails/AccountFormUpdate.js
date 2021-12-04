@@ -5,6 +5,7 @@ import Textfield from "../AccountDetails/Textfields";
 import Button from "../General/BasicButton";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
+import { useEffect } from "react";
 const useStyles = makeStyles({
   root: {
     backgroundColor: "white",
@@ -187,6 +188,7 @@ export default function AccountForm(props) {
       }
     }
     if (x === 0) {
+      console.log("INNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
       axios
         .post("http://localhost:8000/users/updateFlight", {
           FirstName: props.first,
@@ -214,7 +216,11 @@ export default function AccountForm(props) {
         <div className={classes.firstName}>First Name</div>
         <div className={classes.firstNameValue}>
           {" "}
-          <Textfield error={errorfirst} onChange={props.firstName} />
+          <Textfield
+            error={errorfirst}
+            onChange={props.firstName}
+            defaultValue={props.firstname}
+          />
         </div>
 
         <CloseIcon
@@ -234,6 +240,7 @@ export default function AccountForm(props) {
             error={errorlast}
             className={classes.text}
             onChange={props.lastName}
+            defaultValue={props.lastname}
           />
         </div>
         <CloseIcon
@@ -251,7 +258,11 @@ export default function AccountForm(props) {
         <div className={classes.email}>Email</div>
         <div className={classes.emailvalue}>
           {" "}
-          <Textfield error={erroremail} onChange={props.email} />
+          <Textfield
+            error={erroremail}
+            onChange={props.email}
+            defaultValue={props.email}
+          />
         </div>
         <CloseIcon
           style={erroremail ? { color: "crimson" } : { color: "white" }}
@@ -266,7 +277,11 @@ export default function AccountForm(props) {
         <div className={classes.passport}>Passport Number </div>
         <div className={classes.passportvalue}>
           {" "}
-          <Textfield error={errorpass} onChange={props.passport} />
+          <Textfield
+            error={errorpass}
+            onChange={props.passport}
+            defaultValue={props.passport}
+          />
         </div>
         <CloseIcon
           style={errorpass ? { color: "crimson" } : { color: "white" }}

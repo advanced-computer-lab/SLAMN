@@ -4,7 +4,7 @@ import { Routes, Route, BrowserRouter } from "react-router-dom";
 import Update from "./Page/UpdateFlight";
 import AdminHome from "../src/Page/AdminHome";
 import CreateFlight from "./Page/CreateFlight";
-import Signin from "./Page/Signin1";
+import Signin from "./Page/Signin";
 import DeleteFlight from "../src/Page/DeleteFight";
 import ViewAllFlights from "./Page/ViewAllFlights";
 import Homepage from "./Page/WelcomePage";
@@ -14,7 +14,6 @@ import UpdateAccountDeatils from "../src/Page/UpdateAccount";
 import Booking from "../src/Page/Booking";
 import ChangePassword from "../src/Page/ChangePassword";
 import ViewAvailableSeats from "./Page/ViewAvailableSeats";
-import Signin1 from "../src/Page/Signin";
 
 function App() {
   return (
@@ -35,7 +34,6 @@ function App() {
           <Route path="/bookflight" element={<Booking />} />
           <Route path="/changepassword" element={<ChangePassword />} />
           <Route path="/viewavailableseats" element={<ViewAvailableSeats />} />
-          <Route path="/h" element={<Signin1 />} />
         </Routes>
       </BrowserRouter>
     </div>
