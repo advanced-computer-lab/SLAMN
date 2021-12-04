@@ -10,6 +10,30 @@ const reservation = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  DepartureFlightNumber: {
+    type: String,
+    required: true,
+  },
+  ArrivalFlightNumber: {
+    type: String,
+    required: true,
+  },
+  CabinClass: {
+    type: String,
+    require: true,
+  },
+  NumberOfChildren: {
+    type: Number,
+    require: true,
+  },
+  NumberOfAdults: {
+    type: Number,
+    require: true,
+  },
+  totalPrice: {
+    type: Number,
+    require: true,
+  },
 });
 reservation.set("toJSON", { virtuals: true });
 reservation.set("toObject", { virtuals: true });
