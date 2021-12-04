@@ -9,6 +9,7 @@ import DeleteFlight from "../src/Page/DeleteFight";
 import ViewAllFlights from "./Page/ViewAllFlights";
 import Homepage from "./Page/WelcomePage";
 import ViewAvailableSeats from "./Page/ViewAvailableSeats";
+import UserSearchFlight from "./Page/UserSearchFlight";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/signin" element={<Signin />} />
           <Route path="/viewallflights" element={<ViewAllFlights />} />
           <Route path="/viewavailableseats" element={<ViewAvailableSeats />} />
+          <Route path="/search" element={<UserSearchFlight />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -8,7 +8,7 @@ import ViewAllFlights from "./Page/ViewAllFlights";
 
 ReactDOM.render(
   <React.StrictMode>
-    <UserSearchFlight />
+    <App />
   </React.StrictMode>,
   document.getElementById("root")
 );
