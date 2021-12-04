@@ -63,7 +63,7 @@ const signUp = async (req, res) => {
       });
     } else {
       const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(user.Password, salt);
+      user.Password = await bcrypt.hash(user.Password, salt);
       console.log(user);
       const reservations = [];
       const summaries = [];

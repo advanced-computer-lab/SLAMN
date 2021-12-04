@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config;
 
 const validateUser = (req, res, next) => {
-  const token = req.headers("auth");
+  const token = req.headers["auth"];
   if (!token) {
     return res.json({
       statusCode: 1,
