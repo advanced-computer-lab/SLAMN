@@ -3,7 +3,7 @@ const User = require("../Models/UserModel");
 
 const getFlights = async (req, res) => {
   try {
-    const data = await Flights.find({});
+    const data = await Flights.find(req.body);
     return res.json({
       statusCode: 0,
       message: "Success",
