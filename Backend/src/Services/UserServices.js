@@ -107,8 +107,6 @@ const viewAvailableSeats = async (req, res) => {
   }
 };
 
-
-
 const createFlightReservation = async (req, res) => {
   try {
     console.log(req.body);
@@ -189,9 +187,6 @@ await User.findOneAndUpdate({_id: userData._id},
   }
 };
 
-
-
-
 const deleteReservation = async (req, res) => {
   try {
  /*const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
@@ -238,17 +233,17 @@ const createSummary= async (req, res) => {
     
  /*const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
     const userData = payload.id;*/
-    const userData=await User.findOne({_id:"61a7780f866bf0ec6787692a"});
+    const userData=await User.findOne({_id:"61a779f2840b32d7a8b789a1"});
     const arrivalFlight=await Flight.findOne({FlightNumber:req.body.ArrivalFlightNumber});
     const departureFlight=await Flight.findOne({FlightNumber:req.body.DepartureFlightNumber});
     const totalPrice=arrivalFlight.Price+departureFlight.Price;
-
+    // console.log(departureFlight);
+    // console.log(arrivalFlight);
+    
     if(userData){
       const sumUP=await Summary.create({
-        //DepartueFlightNumber:departureFlight.FlightNumber,
-        //ArrivalFlightNumber:arrivalFlight.FlightNumber,
-        DepartueFlightNumber:2,
-        ArrivalFlightNumber:3,
+        DepartureFlightNumber:departureFlight.FlightNumber,
+        ArrivalFlightNumber:arrivalFlight.FlightNumber,
         DepartureDepartureDate:departureFlight.DepartureDate,
         DepartureArrivalDate:departureFlight.ArrivalDate,
         ArrivalDepartureDate:arrivalFlight.DepartureDate,
@@ -274,12 +269,13 @@ const createSummary= async (req, res) => {
           Summaries:userData.Summaries ,
         },
         Price:totalPrice});
+        
       userData.Summaries.push(sumUP);
              
 await User.findOneAndUpdate({_id: userData._id}, 
   userData, null)
      .catch((err) => res.status(400).json("Error:" + err));
-      console.log(sumUp);
+      // console.log(sumUP);
     }
     else {
       return res.json({
@@ -291,7 +287,8 @@ await User.findOneAndUpdate({_id: userData._id},
       statusCode: 0,
       message: "Success",
     });
-  } catch (exception) {
+  }
+   catch (exception) {
     console.log(exception);
     return res.json({
       statusCode: 1,
@@ -300,16 +297,49 @@ await User.findOneAndUpdate({_id: userData._id},
   }
 };
 
+
+
+
 const getSummary = async (req, res) => {
   
 try {
   const arrivalFlight=await Flight.findOne({FlightNumber:req.body.ArrivalFlightNumber});
   const departureFlight=await Flight.findOne({FlightNumber:req.body.DepartureFlightNumber}); 
-  const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
-  const userData = payload.id;
+  /*const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
+    const userData = payload.id;*/
+    const userData=await User.findOne({_id:"61a7780f866bf0ec6787692a"});
   if(userData) {
-    const data = await userData.Summaries.find({ArrivalFlightNumber:arrivalFlight.FlightNumber,DepartureFlight:departureFlight.FlightNumber});
-  return res.json({
+    // const data = await userData.Summaries.find({ArrivalFlightNumber:arrivalFlight.FlightNumber,DepartureFlight:departureFlight.FlightNumber});
+    var data;
+    console.log(userData.Summaries);
+    
+    userData.Summaries.forEach(element => {
+      var initialdata= Summary.find({_id:element._id});
+      //console.log(initialdata);
+      if(initialdata.ArrivalFlightNumber==arrivalFlight.FlightNumber && initialdata.DepartureFlightNumber==departureFlight.FlightNumber)
+          {
+            data={
+                      DepartureFlightNumber:initialdata.DepartureFlightNumber,
+                      ArrivalFlightNumber:initialdata.ArrivalFlightNumber,
+                      DepartureDepartureDate:initialdata.DepartureDepartureDate,
+                      DepartureArrivalDate:initialdata.DepartureArrivalDate ,
+                      ArrivalDepartureDate:initialdata.ArrivalDepartureDate ,
+                      ArrivalArrivalDate:initialdata.ArrivalArrivalDate,
+                      DepartureDepartureTime:initialdata.DepartureDepartureTime,
+                      DepartureArrivalTime:initialdata.DepartureArrivalTime ,
+                      ArrivalDepartureTime:initialdata.ArrivalDepartureTime,
+                      ArrivalArrivalTime:initialdata.ArrivalArrivalTime ,
+                      DeparturePrice:initialdata.DeparturePrice,
+                      ArrivalPrice:initialdata.ArrivalPrice ,
+                      CabinClass:initialdata.CabinClass,
+                      SeatNumber:initialdata.SeatNumber,
+                      Price:initialdata.Price,
+                      User:initialdata.User};
+                   
+                    }
+    });
+    
+    return res.json({
     statusCode: 0,
     message: "Success",
     data: data,

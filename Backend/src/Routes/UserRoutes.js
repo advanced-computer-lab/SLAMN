@@ -21,6 +21,8 @@ router
   .post(
     UserValidation.validateAddSummary,
      UserServices.createSummary);
+
+
 router.route("/getSummary").post(UserServices.getSummary);
 
 router

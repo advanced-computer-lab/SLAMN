@@ -100,9 +100,9 @@ const validateDeleteFlightReservation = (req, res, next) => {
 
 const validateAddSummary = (req, res, next) => {
   const schema = Joi.object({
-    DepartureFlightNumber: Joi.number().required(),
     ArrivalFlightNumber: Joi.number().required(),
-    seat: Joi.number().required(),
+    DepartureFlightNumber: Joi.number().required(),
+    seat: Joi.string().required(),
     cabin: Joi.string().required()
   }).required();
 
