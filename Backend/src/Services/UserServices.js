@@ -25,6 +25,7 @@ const signIn = async (req, res) => {
           }
         );
         res.set("auth", token);
+        console.log(token,"tokennnnn")
         return res.json({
           statusCode: 0,
           message: "Success",

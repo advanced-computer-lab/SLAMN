@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     fontSize: "2vw",
   },
   airplane: {
-    marginTop: "0.2vw",
+    marginTop: "0.4vw",
   },
 });
 

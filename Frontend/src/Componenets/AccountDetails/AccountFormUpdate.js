@@ -188,7 +188,7 @@ export default function AccountForm(props) {
     }
     if (x === 0) {
       axios
-        .post("http://localhost:8000/flights/updateFlight", {
+        .post("http://localhost:8000/users/updateFlight", {
           FirstName: props.first,
           LastName: props.last,
           Email: props.emails,
@@ -196,7 +196,9 @@ export default function AccountForm(props) {
         })
         .then(function (response) {
           console.log(response);
-          window.location = "/account";
+          if (response.data.message === "Success") {
+            window.location = "/account";
+          }
         });
     }
   };
