@@ -27,7 +27,7 @@ const useStyles = makeStyles({
     color: "grey",
   },
   second2: {
-    marginLeft: "0.9vw",
+    marginLeft: "0.9~vw",
     color: "grey",
   },
   children: {
