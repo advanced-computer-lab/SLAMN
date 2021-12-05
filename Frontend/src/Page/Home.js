@@ -12,10 +12,7 @@ export default function Home() {
   return (
     <div>
       <NavBar />
-      <Card />
-
       <Passenger />
-
       <DatePicker />
     </div>
   );

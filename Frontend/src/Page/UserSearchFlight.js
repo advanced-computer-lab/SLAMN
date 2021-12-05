@@ -133,8 +133,9 @@ export default function UserSearchFlight() {
     if (prop === "ArrivalDate") setArrivalDate(event.target.value);
     if (prop === "DepartureDate") setDepartureDate(event.target.value);
   };
-  const handleChangeCabin = (event) => {
-    setCabin(event.target.value);
+  const handleChangeCabin = (e) => {
+    console.log(e.target.value);
+    setCabin(e.target.value);
   };
   const handleChange2 = (event, nextView) => {
     setView(nextView);
@@ -184,6 +185,7 @@ export default function UserSearchFlight() {
           items={["Economy", "Business", "First"]}
           placeholder={"Cabin"}
           value={cabin}
+          setCabin={setCabin}
           onChange={(e) => {
             handleChangeCabin(e);
           }}
@@ -220,7 +222,7 @@ export default function UserSearchFlight() {
               ArrivalTime: n.ArrivalTime,
               ArrivalDate: n.ArrivalDate,
               passengers: passengers,
-              cabin: cabin,
+              Cabin: cabin,
               passengerslist: passengerslist,
             }}
             setPopup={setPopup}

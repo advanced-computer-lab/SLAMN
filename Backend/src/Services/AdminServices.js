@@ -20,7 +20,15 @@ const getFlights = async (req, res) => {
 
 const createFlight = async (req, res) => {
   try {
-    console.log(req.body);
+    const user = req.payload.id;
+    const valid = await User.findOne({ _id: user });
+    if (valid.Admin === false) {
+      return res.json({
+        statusCode: 1,
+        error: "Not an Admin",
+      });
+    }
+    console.log(req.payload, "Payload", valid);
     const Eseats = req.body.EconomySeats;
     const Bseats = req.body.BusinessSeats;
     const Fseats = req.body.FirstClassSeats;

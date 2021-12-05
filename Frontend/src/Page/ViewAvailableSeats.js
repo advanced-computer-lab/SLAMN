@@ -113,7 +113,7 @@ const useStyles = makeStyles(() => ({
 export default function ViewAvailableSeats(props) {
   const classes = useStyles();
   const [reservation, setReservation] = useContext(UserInfo);
-  const [cabin, setCabin] = React.useState(reservation.cabin);
+  const [cabin, setCabin] = React.useState(reservation.Cabin);
   const [price, setPrice] = React.useState(reservation.price);
   const [passengers, setPassengers] = React.useState(
     reservation.passengerslist
@@ -122,17 +122,78 @@ export default function ViewAvailableSeats(props) {
     reservation.passengerslist.length
   );
   const [seatsArray, setSeatsArray] = React.useState([]);
-
+  var array = [];
   useEffect(() => {
+    console.log(reservation);
     axios
-      .post("http://localhost:8000/users/viewAvailableSeats", {
-        FlightNumber: reservation.FlightNumber,
-        Cabin: cabin,
-      })
+      .post(
+        "http://localhost:8000/users/viewAvailableSeats",
+
+        {
+          FlightNumber: "" + reservation.FlightNumber,
+          Cabin: reservation.Cabin,
+        },
+        { headers: { auth: window.localStorage.getItem("token") } }
+      )
       .then(function (response) {
         console.log(response);
+        setSeatsArray(response.data.seats);
+        {
+          if (response.data.seats.length != 0) {
+            console.log("MSH FADYY");
+            {
+              var i = 1;
+              var newArray = [];
+              var a = [];
+              for (i; i <= response.data.seats.length; i++) {
+                if (i % 6 === 0) {
+                  a.push({
+                    number: response.data.seats[i - 1].number,
+                    isReserved: response.data.seats[i - 1].isReserved,
+                  });
+                  newArray.push(a);
+                  a = [];
+                } else {
+                  a.push({
+                    number: response.data.seats[i - 1].number,
+                    isReserved: response.data.seats[i - 1].isReserved,
+                  });
+                }
+              }
+              if ((i - 1) % 6 != 0) {
+                newArray.push(a);
+              }
+              array = newArray;
+              console.log(array);
+            }
+          }
+        }
       });
   }, []);
+
+  const createArray = () => {
+    if (seatsArray.length != 0) {
+      console.log("MSH FADYY");
+      {
+        var i = 0;
+        var newArray = [];
+        var a = [];
+        for (i; i < seatsArray.length; i++) {
+          if ((i + 1) % 6 === 0) {
+            a.push(seatsArray[i]);
+            newArray.push(a);
+            a = [];
+          }
+          a.push(seatsArray[i]);
+        }
+        if (a != []) {
+          newArray.push(a);
+        }
+        array = newArray;
+        console.log(newArray);
+      }
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -180,6 +241,7 @@ export default function ViewAvailableSeats(props) {
             seatsnumber={seatsNumber}
             setSeats={setPassengers}
             seats={passengers}
+            array={array}
           />
           <div className={classes.pricediv}>
             <div className={classes.total}>Total Price:</div>

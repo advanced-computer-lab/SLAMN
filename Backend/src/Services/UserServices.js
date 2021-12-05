@@ -1,7 +1,7 @@
 const User = require("../Models/UserModel");
 const Summary = require("../Models/SummaryModel");
 const Reservation = require("../Models/FlightReservation");
-const Flight = require("../Models/FlightModel");
+const Flights = require("../Models/FlightModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config;
@@ -97,8 +97,43 @@ const signUp = async (req, res) => {
 
 const viewAvailableSeats = async (req, res) => {
   try {
-    cabin = req.Cabin;
-    flight = req.FlightNumber;
+    const cabin = req.body.Cabin;
+    const flightnumber = req.body.FlightNumber;
+    const flight = await Flights.findOne({ FlightNumber: flightnumber });
+    console.log(flight, "theFlight");
+    if (!flight) {
+      return res.json({
+        statusCode: 1,
+        error: "Invalid FlightNumber",
+      });
+    } else {
+      if (cabin === "Economy") {
+        return res.json({
+          statusCode: 0,
+          message: "flight found",
+          seats: flight.EconomySeatsList,
+        });
+      }
+      if (cabin === "Business") {
+        return res.json({
+          statusCode: 0,
+          message: "flight found",
+          seats: flight.BusinessSeatsList,
+        });
+      }
+      if (cabin === "First") {
+        return res.json({
+          statusCode: 0,
+          message: "flight found",
+          seats: flight.FirstSeatsList,
+        });
+      } else {
+        return res.json({
+          statusCode: 1,
+          error: "Invalid Cabin Class",
+        });
+      }
+    }
   } catch (exception) {
     return res.json({
       statusCode: 1,
@@ -114,16 +149,13 @@ const selectSeats = async (req, res) => {
     const flightnum = req.body.FlightNumber;
     const flight = await Flights.findOne({ FlightNumber: flightnum });
     if (cabin === "Economy") {
-      var i = 1;
-      const Eseats = flight.EconomySeatsList;
+      var i = 0;
+      var Eseats = flight.EconomySeatsList;
       for (i; i < Eseats.length; i++) {
         if (selectedSeat === Eseats[i].Number) {
           if (Eseats[i].isReserved === false) {
             Eseats[i].isReserved = true;
-            return res.json({
-              statusCode: 0,
-              message: "Seat Reserved Successfully",
-            });
+            break;
           } else {
             return res.json({
               statusCode: 1,
@@ -134,16 +166,13 @@ const selectSeats = async (req, res) => {
       }
     } else {
       if (cabin === "Business") {
-        var i = 1;
-        const Bseats = flight.BusinessSeatsList;
+        var i = 0;
+        var Bseats = flight.BusinessSeatsList;
         for (i; i < Bseats.length; i++) {
-          if (selectedSeat === Bseats[i].Number) {
+          if (selectedSeat === Bseats[i].number) {
             if (Bseats[i].isReserved === false) {
               Bseats[i].isReserved = true;
-              return res.json({
-                statusCode: 0,
-                message: "Seat Reserved Successfully",
-              });
+              break;
             } else {
               return res.json({
                 statusCode: 1,
@@ -154,16 +183,13 @@ const selectSeats = async (req, res) => {
         }
       } else {
         if (cabin === "FirstClass") {
-          var i = 1;
-          const Fseats = flight.FirstSeatsList;
+          var i = 0;
+          var Fseats = flight.FirstSeatsList;
           for (i; i < Fseats.length; i++) {
-            if (selectedSeat === Fseats[i].Number) {
+            if (selectedSeat === Fseats[i].number) {
               if (Fseats[i].isReserved === false) {
                 Fseats[i].isReserved = true;
-                return res.json({
-                  statusCode: 0,
-                  message: "Seat Reserved Successfully",
-                });
+                break;
               } else {
                 return res.json({
                   statusCode: 1,
@@ -175,6 +201,36 @@ const selectSeats = async (req, res) => {
         }
       }
     }
+    Flights.updateOne(
+      { FlightNumber: req.body.FlightNumber },
+      {
+        $set: {
+          FlightNumber: flight.FlightNumber,
+          DepartureDate: flight.DepartureDate,
+          ArrivalDate: flight.ArrivalDate,
+          DepartureTime: flight.DepartureTime,
+          ArrivalTime: flight.ArrivalTime,
+          EconomySeats: flight.EconomySeats,
+          BusinessSeats: flight.BusinessSeats,
+          FirstClassSeats: flight.FirstClassSeats,
+          ArrivalAirport: flight.ArrivalAirport,
+          DepartureAirport: flight.DepartureAirport,
+          isDeparture: flight.isDeparture,
+          Price: flight.Price,
+          TripDuration: flight.TripDuration,
+          EconomySeatsList: Eseats,
+          BusinessSeatsList: Bseats,
+          FirstSeatsList: Fseats,
+        },
+      }
+    )
+      .then(() =>
+        res.json({
+          statusCode: 0,
+          message: "Seat Reserved Successfully and FlightUpdated",
+        })
+      )
+      .catch((err) => res.status(400).json("Error:" + err));
   } catch (exception) {}
 };
 
@@ -276,60 +332,51 @@ const deselectSeats = async (req, res) => {
     const flightnum = req.body.FlightNumber;
     const flight = await Flights.findOne({ FlightNumber: flightnum });
     if (cabin === "Economy") {
-      var i = 1;
-      const Eseats = flight.EconomySeatsList;
+      var i = 0;
+      var Eseats = flight.EconomySeatsList;
       for (i; i < Eseats.length; i++) {
         if (selectedSeat === Eseats[i].Number) {
           if (Eseats[i].isReserved === true) {
             Eseats[i].isReserved = false;
-            return res.json({
-              statusCode: 0,
-              message: "Seat deselected Successfully",
-            });
+            break;
           } else {
             return res.json({
               statusCode: 1,
-              error: "This Seat is not already selected",
+              error: "This Seat is reserved please choose another seat",
             });
           }
         }
       }
     } else {
       if (cabin === "Business") {
-        var i = 1;
-        const Bseats = flight.BusinessSeatsList;
+        var i = 0;
+        var Bseats = flight.BusinessSeatsList;
         for (i; i < Bseats.length; i++) {
-          if (selectedSeat === Bseats[i].Number) {
+          if (selectedSeat === Bseats[i].number) {
             if (Bseats[i].isReserved === true) {
               Bseats[i].isReserved = false;
-              return res.json({
-                statusCode: 0,
-                message: "Seat deselected Successfully",
-              });
+              break;
             } else {
               return res.json({
                 statusCode: 1,
-                error: "This Seat is not already selected",
+                error: "This Seat is reserved please choose another seat",
               });
             }
           }
         }
       } else {
         if (cabin === "FirstClass") {
-          var i = 1;
-          const Fseats = flight.FirstSeatsList;
+          var i = 0;
+          var Fseats = flight.FirstSeatsList;
           for (i; i < Fseats.length; i++) {
-            if (selectedSeat === Fseats[i].Number) {
+            if (selectedSeat === Fseats[i].number) {
               if (Fseats[i].isReserved === true) {
                 Fseats[i].isReserved = false;
-                return res.json({
-                  statusCode: 0,
-                  message: "Seat deselected Successfully",
-                });
+                break;
               } else {
                 return res.json({
                   statusCode: 1,
-                  Error: "This Seat is not already selected",
+                  Error: "This Seat is not reserved",
                 });
               }
             }
@@ -337,6 +384,36 @@ const deselectSeats = async (req, res) => {
         }
       }
     }
+    Flights.updateOne(
+      { FlightNumber: req.body.FlightNumber },
+      {
+        $set: {
+          FlightNumber: flight.FlightNumber,
+          DepartureDate: flight.DepartureDate,
+          ArrivalDate: flight.ArrivalDate,
+          DepartureTime: flight.DepartureTime,
+          ArrivalTime: flight.ArrivalTime,
+          EconomySeats: flight.EconomySeats,
+          BusinessSeats: flight.BusinessSeats,
+          FirstClassSeats: flight.FirstClassSeats,
+          ArrivalAirport: flight.ArrivalAirport,
+          DepartureAirport: flight.DepartureAirport,
+          isDeparture: flight.isDeparture,
+          Price: flight.Price,
+          TripDuration: flight.TripDuration,
+          EconomySeatsList: Eseats,
+          BusinessSeatsList: Bseats,
+          FirstSeatsList: Fseats,
+        },
+      }
+    )
+      .then(() =>
+        res.json({
+          statusCode: 0,
+          message: "Seat Deselected Successfully and FlightUpdated",
+        })
+      )
+      .catch((err) => res.status(400).json("Error:" + err));
   } catch (exception) {}
 };
 

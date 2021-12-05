@@ -57,7 +57,7 @@ export default function Signin() {
       })
       .then((res) => {
         console.log(res);
-        console.log("this " + "  " + res.headers.auth);
+        console.log("this " + "  " + res.headers);
         window.localStorage.setItem("token", res.headers.auth);
         console.log(window.localStorage);
         if (res.data.message === "Success") {
