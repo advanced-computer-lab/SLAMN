@@ -14,27 +14,44 @@ import UpdateAccountDeatils from "../src/Page/UpdateAccount";
 import Booking from "../src/Page/Booking";
 import ChangePassword from "../src/Page/ChangePassword";
 import ViewAvailableSeats from "./Page/ViewAvailableSeats";
+import UserSearchFlight from "./Page/UserSearchFlight";
+import UserInfo from "./Componenets/Seats/SeatReservationinfo";
 
 function App() {
+  const [reservation, setReservation] = React.useState({
+    Cabin: "",
+    FlightNumber: "",
+    passengerslist: [],
+    price: 0,
+    DepartureAirport: "",
+    ArrivalAirport: "",
+  });
+
   return (
     <div>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Homepage />} />
-          <Route path="/updateflight" element={<Update />} />
-          <Route path="/homeadmin" element={<AdminHome />} />
-          <Route path="/addflight" element={<CreateFlight />} />
-          <Route path="/deleteflight" element={<DeleteFlight />} />
-          <Route path="/signin" element={<Signin />} />
-          <Route path="/viewallflights" element={<ViewAllFlights />} />
+        <UserInfo.Provider value={[reservation, setReservation]}>
+          <Routes>
+            <Route path="/" element={<Homepage />} />
+            <Route path="/updateflight" element={<Update />} />
+            <Route path="/homeadmin" element={<AdminHome />} />
+            <Route path="/addflight" element={<CreateFlight />} />
+            <Route path="/deleteflight" element={<DeleteFlight />} />
+            <Route path="/signin" element={<Signin />} />
+            <Route path="/viewallflights" element={<ViewAllFlights />} />
+            <Route path="/search" element={<UserSearchFlight />} />
 
-          <Route path="/home" element={<Home />} />
-          <Route path="/account" element={<AccountDetails />} />
-          <Route path="/updateaccount" element={<UpdateAccountDeatils />} />
-          <Route path="/bookflight" element={<Booking />} />
-          <Route path="/changepassword" element={<ChangePassword />} />
-          <Route path="/viewavailableseats" element={<ViewAvailableSeats />} />
-        </Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/account" element={<AccountDetails />} />
+            <Route path="/updateaccount" element={<UpdateAccountDeatils />} />
+            <Route path="/bookflight" element={<Booking />} />
+            <Route path="/changepassword" element={<ChangePassword />} />
+            <Route
+              path="/viewavailableseats"
+              element={<ViewAvailableSeats />}
+            />
+          </Routes>
+        </UserInfo.Provider>
       </BrowserRouter>
     </div>
   );

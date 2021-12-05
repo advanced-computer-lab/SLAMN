@@ -39,7 +39,7 @@ router
 router
   .route("/signup")
   .post(UserValidation.validateSignup, UserServices.signUp);
-/*
+
 router
   .route("/viewAvailableSeats")
   .post(
@@ -60,8 +60,8 @@ router
   .route("/deselectSeats")
   .post(
     authentication.validateUser,
-    UserValidation.validateDeselection,
+    UserValidation.validateSelection,
     UserServices.deselectSeats
-  );*/
+  );
 
 module.exports = router;

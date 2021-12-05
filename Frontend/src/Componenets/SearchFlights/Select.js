@@ -33,27 +33,75 @@ const useStyles = makeStyles({
   value2: { marginTop: "0.45vw", fontSize: "1.5vw", marginLeft: "0.5vw" },
 });
 
-export default function Select() {
+export default function Select(props) {
   const classes = useStyles();
   const [adultNumber, setAdultNumber] = useState(0);
   const [childNumber, setChildNumber] = useState(0);
 
+  const updateList = (list, setPassengersList, type) => {
+    var i = 0;
+    var found = false;
+    var newlist = [];
+    for (i; i < list.length; i++) {
+      if (list[i].passengerType === type && found === false) {
+        found = true;
+      } else {
+        if (found === true) {
+          newlist.push({
+            passengerNumber: list[i].passengerNumber - 1,
+            passengerType: list[i].passengerType,
+            passengerSeat: list[i].passengerSeat,
+          });
+        } else {
+          newlist.push(list[i]);
+        }
+      }
+    }
+    setPassengersList(newlist);
+  };
+
+  const addPassenger = (setPassengersList, passengerslist, type) => {
+    var newlist = [];
+    var i = 0;
+    for (i; i < passengerslist.length; i++) {
+      newlist.push(passengerslist[i]);
+    }
+    newlist.push({
+      passengerNumber: i + 1,
+      passengerType: type,
+      passengerSeat: "",
+    });
+    setPassengersList(newlist);
+  };
+
   const handleClickRemoveChild = () => {
     if (childNumber > 0) {
       setChildNumber(childNumber - 1);
+      props.setPassengers(props.passengers - 1);
+      updateList(props.passengerslist, props.setPassengersList, "Child");
+      console.log(props.passengerslist);
     }
   };
   const handleClickAddChild = () => {
+    props.setPassengers(props.passengers + 1);
     setChildNumber(childNumber + 1);
+    addPassenger(props.setPassengersList, props.passengerslist, "Child");
+    console.log(props.passengerslist);
   };
 
   const handleClickRemoveAdult = () => {
     if (adultNumber > 0) {
       setAdultNumber(adultNumber - 1);
+      props.setPassengers(props.passengers - 1);
+      updateList(props.passengerslist, props.setPassengersList, "Adult");
+      console.log(props.passengerslist);
     }
   };
   const handleClickAddAdult = () => {
     setAdultNumber(adultNumber + 1);
+    props.setPassengers(props.passengers + 1);
+    addPassenger(props.setPassengersList, props.passengerslist, "Adult");
+    console.log(props.passengerslist);
   };
 
   return (

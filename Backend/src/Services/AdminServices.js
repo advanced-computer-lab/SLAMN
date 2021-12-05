@@ -3,7 +3,7 @@ const User = require("../Models/UserModel");
 
 const getFlights = async (req, res) => {
   try {
-    const data = await Flights.find({});
+    const data = await Flights.find(req.body);
     return res.json({
       statusCode: 0,
       message: "Success",
@@ -36,21 +36,21 @@ const createFlight = async (req, res) => {
     var i = 1;
     for (i; i <= Eseats; i++) {
       Economylist.push({
-        Number: "E" + i,
+        number: "E" + i,
         isReserved: false,
       });
     }
     var i = 1;
     for (i; i <= Bseats; i++) {
       Businesslist.push({
-        Number: "B" + i,
+        number: "B" + i,
         isReserved: false,
       });
     }
     var i = 1;
     for (i; i <= Fseats; i++) {
       Firstlist.push({
-        Number: "F" + i,
+        number: "F" + i,
         isReserved: false,
       });
     }

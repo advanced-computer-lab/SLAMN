@@ -1,71 +1,113 @@
 import React, { Component } from "react";
+import { useState } from "react";
 
 import SeatPicker from "react-seat-picker";
 
-export default class App extends Component {
-  state = {
-    loading: false,
-  };
-
-  addSeatCallback = ({ row, number, id }, addCb) => {
-    this.setState(
-      {
-        loading: true,
-      },
-      async () => {
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        console.log(`Added seat ${number}, row ${row}, id ${id}`);
-        const newTooltip = `tooltip for id-${id} added by callback`;
-        addCb(row, number, id, newTooltip);
-        this.setState({ loading: false });
+export default function Seatpicker(props) {
+  const [loading, setLoading] = React.useState(false);
+  const array = [
+    [
+      { number: "E1", isReserved: false },
+      { number: "E2", isReserved: false },
+      { number: "E3", isReserved: true },
+      { number: "E4", isReserved: false },
+      { number: "E5", isReserved: false },
+      { number: "E6", isReserved: false },
+    ],
+    [
+      { number: "E7", isReserved: false },
+      { number: "E8", isReserved: false },
+      { number: "E9", isReserved: false },
+      { number: "E10", isReserved: false },
+      { number: "E11", isReserved: false },
+      { number: "E12", isReserved: false },
+    ],
+    [
+      { number: "E13", isReserved: false },
+      { number: "E14", isReserved: true },
+      { number: "E15", isReserved: false },
+      { number: "E16", isReserved: true },
+      { number: "E17", isReserved: false },
+      { number: "E18", isReserved: false },
+    ],
+  ];
+  const addSeatCallback = async ({ row, number }, addCb) => {
+    setLoading(true);
+    {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      console.log(`Added seat , row ${row}, id ${number}`);
+      const newTooltip = `tooltip for id-${number} added by callback`;
+      addCb(row, number, newTooltip);
+      setLoading(false);
+    }
+    var i = 0;
+    var newseats = [];
+    var found = false;
+    for (i; i < props.seats.length; i++) {
+      if (props.seats[i].passengerSeat === "" && !found) {
+        newseats.push({
+          passengerNumber: i + 1,
+          passengerType: props.seats[i].passengerType,
+          passengerSeat: number,
+        });
+        found = true;
+      } else {
+        newseats.push(props.seats[i]);
       }
-    );
+    }
+    props.setSeats(newseats);
   };
 
-  addSeatCallbackContinousCase = (
+  const addSeatCallbackContinousCase = async (
     { row, number, id },
     addCb,
     params,
     removeCb
   ) => {
-    this.setState(
-      {
-        loading: true,
-      },
-      async () => {
-        if (removeCb) {
-          await new Promise((resolve) => setTimeout(resolve, 750));
-          console.log(
-            `Removed seat ${params.number}, row ${params.row}, id ${params.id}`
-          );
-          removeCb(params.row, params.number);
-        }
+    setLoading(true);
+    {
+      if (removeCb) {
         await new Promise((resolve) => setTimeout(resolve, 750));
-        console.log(`Added seat ${number}, row ${row}, id ${id}`);
-        const newTooltip = `tooltip for id-${id} added by callback`;
-        addCb(row, number, id, newTooltip);
-        this.setState({ loading: false });
+        console.log(
+          `Removed seat ${params.number}, row ${params.row}, id ${params.id}`
+        );
+        removeCb(params.row, params.number);
       }
-    );
+      await new Promise((resolve) => setTimeout(resolve, 750));
+      console.log(`Added seat ${number}, row ${row}, id ${id}`);
+      const newTooltip = `tooltip for id-${id} added by callback`;
+      addCb(row, number, id, newTooltip);
+      setLoading(false);
+    }
   };
 
-  removeSeatCallback = ({ row, number, id }, removeCb) => {
-    this.setState(
-      {
-        loading: true,
-      },
-      async () => {
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        console.log(`Removed seat ${number}, row ${row}, id ${id}`);
-        // A value of null will reset the tooltip to the original while '' will hide the tooltip
-        const newTooltip = ["A", "B", "C"].includes(row) ? null : "";
-        removeCb(row, number, newTooltip);
-        this.setState({ loading: false });
+  const removeSeatCallback = async ({ row, number }, removeCb) => {
+    setLoading(true);
+    {
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      console.log(`Removed seat , row ${row}, id ${number}`);
+      // A value of null will reset the tooltip to the original while '' will hide the tooltip
+      const newTooltip = ["A", "B", "C"].includes(row) ? null : "";
+      removeCb(row, number, newTooltip);
+      setLoading(false);
+    }
+    var i = 0;
+    var newseats = [];
+    for (i; i < props.seats.length; i++) {
+      if (props.seats[i].passengerSeat === number) {
+        newseats.push({
+          passengerNumber: i + 1,
+          passengerType: props.seats[i].passengerType,
+          passengerSeat: "",
+        });
+      } else {
+        newseats.push(props.seats[i]);
       }
-    );
+    }
+    props.setSeats(newseats);
   };
 
-  render() {
+  {
     const rows = [
       [
         { id: 1, number: 1, isSelected: true, tooltip: "Reserved by you" },
@@ -129,15 +171,14 @@ export default class App extends Component {
         { id: 30, number: 6, isReserved: true },
       ],
     ];
-    const { loading } = this.state;
     return (
       <div>
-        <div style={{ marginTop: "100px" }}>
+        <div style={{ marginTop: "3vw", height: "20vw" }}>
           <SeatPicker
-            addSeatCallback={this.addSeatCallback}
-            removeSeatCallback={this.removeSeatCallback}
-            rows={rows}
-            maxReservableSeats={3}
+            addSeatCallback={addSeatCallback}
+            removeSeatCallback={removeSeatCallback}
+            rows={array}
+            maxReservableSeats={props.seats.length}
             alpha
             visible
             selectedByDefault
