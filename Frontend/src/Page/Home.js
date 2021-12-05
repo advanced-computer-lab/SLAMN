@@ -7,13 +7,13 @@ import AccountForm from "../Componenets/AccountDetails/AccountForm";
 import Card from "../Componenets/ViewFlights/Card";
 import Passenger from "../Componenets/Reservation/Passenger";
 import DatePicker from "../Componenets/Reservation/DatePicker";
+import Search from "../Page/UserSearchFlight";
 
 export default function Home() {
   return (
     <div>
       <NavBar />
-      <Passenger />
-      <DatePicker />
+      <Search />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { IconButton } from "@material-ui/core";
 import Logo from "../General/Logo";
 import LogoUser from "../NavBar/PopUpNavBar";
+import HomeIcon from "@mui/icons-material/Home";
 
 const useStyles = makeStyles({
   root: {
@@ -24,6 +25,14 @@ const useStyles = makeStyles({
     marginLeft: "2.2vw",
   },
   HelpBlur: { color: "white", marginTop: "1.6vw", marginLeft: "2.2vw" },
+
+  loginFocus: {
+    backgroundColor: "white!important",
+    height: "2vw",
+    width: "2vw",
+    marginTop: "1vw",
+    //marginLeft: "69vw",
+  },
 });
 
 export default function NavBar() {
@@ -46,6 +55,17 @@ export default function NavBar() {
       </div>
 
       <div></div>
+      <div>
+        <IconButton className={classes.loginFocus}>
+          {" "}
+          <HomeIcon
+            style={{ color: "#005dad" }}
+            onClick={() => {
+              window.location = "/home";
+            }}
+          />
+        </IconButton>
+      </div>
 
       <div className={classes.logo}>
         <LogoUser />

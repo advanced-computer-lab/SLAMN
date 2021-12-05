@@ -178,7 +178,7 @@ export default function Card(props) {
             { headers: { auth: window.localStorage.getItem("token") } }
           )
           .then(function (response) {
-            console.log(response);
+            console.log(response, ".......................");
             if (response.data.seats.length != 0) {
               console.log("MSH FADYY");
               {

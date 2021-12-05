@@ -30,6 +30,9 @@ export default function List(props) {
   const handleClickAccount = () => {
     window.location = "/account";
   };
+  const handleClickWork = () => {
+    window.location = "/viewbookings";
+  };
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -69,7 +72,7 @@ export default function List(props) {
           <MenuItem
             onMouseOut={() => setWork(false)}
             onMouseOver={() => setWork(true)}
-            onClick={() => setWork(true)}
+            onClick={(() => setWork(true), handleClickWork)}
             disabled={props.disabled}
           >
             <div>

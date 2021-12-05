@@ -107,13 +107,16 @@ export default function Signin() {
           if (res.data.message === "Success") {
             setemailerror(false);
             setpassworderror(false);
+            console.log("innnnnnnnnnnnn");
             window.location = "/home";
           }
           if (res.data.message === "Invalid Password") {
             setpassworderror(true);
             setpasswordtext("Invalid Password");
+            console.log("error");
           }
           if (res.data.message === "Invalid Email") {
+            console.log("error");
             setemailerror(true);
             setemailtext("Invalid Email");
           }

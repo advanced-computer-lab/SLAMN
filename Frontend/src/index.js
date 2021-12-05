@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import UserSearchFlight from "./Page/UserSearchFlight";
 import ViewAllFlights from "./Page/ViewAllFlights";
 import Card from "../src/Componenets/ViewFlights/Card";
+import Summary from "../src/Componenets/Reservation/Summary";
 ReactDOM.render(
   <React.StrictMode>
     <App />

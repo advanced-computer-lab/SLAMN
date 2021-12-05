@@ -649,7 +649,87 @@ const changePassword = async (req, res) => {
     });
   }
 };
+const getFutureReservations = async (req, res) => {
+  try {
+    const valueOfId = req.payload.id;
+    const userData = await User.findOne({ _id: valueOfId });
 
+    // const userData=await User.findOne({ _id: "61a7780f866bf0ec6787692a"});
+    var date = new Date();
+    console.log(date, "dateeeee");
+
+    if (userData) {
+      console.log(userData);
+      let reservations = await Reservation.find({ User: userData });
+      let result = [];
+      var reservationresult;
+      //console.log(reservations);
+      const arr = reservations.map((res) => res.DepartureFlightNumber);
+      console.log(arr);
+      for (var i = 0; i < arr.length; i++) {
+        var flight = await Flights.findOne({ FlightNumber: arr[i] });
+        console.log(flight.DepartureDate);
+        if (flight.DepartureDate > req.body.date) {
+          reservationresult = await Reservation.find({
+            User: userData,
+            DepartureFlightNumber: flight.FlightNumber,
+          });
+          result.push(reservationresult);
+          console.log("dakhal");
+        }
+      }
+
+      console.log(result);
+
+      return res.json({
+        statusCode: 0,
+        message: "Success",
+        data: result,
+      });
+    } else {
+      return res.json({
+        statusCode: 1,
+        error: "sign in please",
+      });
+    }
+  } catch (exception) {
+    console.log(exception);
+    return res.json({
+      statusCode: 1,
+      error: "exception",
+    });
+  }
+};
+const sendEmail = (req, res) => {
+  let userEmail = req.body.email;
+  let emailSubject = req.body.emailSubject;
+  let emailBody = req.body.emailBody;
+
+  let transporter = nodemailer.createTransport({
+    service: "outlook",
+    auth: {
+      user: "slamndamn@outlook.com",
+      pass: "slamn123",
+    },
+  });
+
+  message = req.bosy.message;
+
+  let mailOptions = {
+    from: "salmn@outlook.com",
+    to: userEmail,
+    subject: emailSubject,
+    text: emailBody,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      return;
+    }
+    res.json(info);
+  });
+};
 module.exports = {
   signIn,
   signUp,
@@ -660,7 +740,9 @@ module.exports = {
   getSummary,
   updateAccount,
   displayaccount,
-  changePassword,
   selectSeats,
   deselectSeats,
+  sendEmail,
+  getFutureReservations,
+  changePassword,
 };

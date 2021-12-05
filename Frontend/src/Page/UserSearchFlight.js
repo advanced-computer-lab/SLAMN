@@ -119,6 +119,8 @@ export default function UserSearchFlight() {
         console.log(res, "RESPONSEEEE");
         setFlights(res.data.data);
       });
+
+    console.log(flights, "flightsssssssssssssssssssss");
   };
   const handleClick2 = (e) => {
     setOpen(true);

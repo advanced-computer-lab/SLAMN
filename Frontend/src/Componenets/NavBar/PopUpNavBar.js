@@ -48,6 +48,10 @@ export default function PopUpNavBar(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleClickBooking = () => {
+    window.location = "/viewbookings";
+  };
   return (
     <React.Fragment>
       <Box sx={{ display: "flex", alignItems: "center", textAlign: "center" }}>
@@ -98,7 +102,7 @@ export default function PopUpNavBar(props) {
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <MenuItem>
+        <MenuItem onClick={handleClickBooking}>
           <ListItemIcon>
             <WorkIcon fontSize="small" />
           </ListItemIcon>
