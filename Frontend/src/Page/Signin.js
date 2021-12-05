@@ -7,9 +7,12 @@ import { useState } from "react";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Link from "@material-ui/core/Link";
+import CloseIcon from "@mui/icons-material/Close";
 
 import axios from "axios";
+import { filledInputClasses } from "@mui/material";
 const useStyles = makeStyles((theme) => ({
+  display: { display: "flex" },
   avatar: {
     margin: theme.spacing(1),
     backgroundColor: "#005dad",
@@ -17,11 +20,13 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "48vw",
   },
   text2: {
-    marginLeft: "37vw",
+    marginLeft: "38vw",
+    marginTop: "2vw",
     width: "23vw !important",
   },
   text1: {
-    marginLeft: "37vw",
+    marginLeft: "38vw",
+    marginTop: "2vw",
     width: "23vw !important",
   },
   button: {
@@ -34,12 +39,30 @@ const useStyles = makeStyles((theme) => ({
   link: {
     marginLeft: "49vw",
   },
+  emailicon: { marginTop: "2.35vw", marginLeft: "1vw" },
+  erroremailerror: { marginTop: "2.2vw", color: "crimson" },
+  emailwithout: { marginTop: "2vw", color: "white" },
+  errorfirst: { marginTop: "2.2vw", color: "crimson" },
+  passworderrors: { marginTop: "2.2vw", color: "crimson" },
+  passwordicon: { marginTop: "2.35vw", marginLeft: "1vw" },
+  passwordwithout: { marginTop: "2vw", color: "white" },
 }));
 
 export default function Signin() {
   const classes = useStyles();
   const [password, setPassword] = React.useState("");
   const [email, setEmail] = React.useState("");
+  const [passworderror, setpassworderror] = useState(false);
+  const [passwordtext, setpasswordtext] = useState("");
+  const [emailtext, setemailtext] = useState("");
+  const [emailerror, setemailerror] = useState(false);
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+  };
   const onChangePassword = (e) => {
     setPassword(e.target.value);
   };
@@ -47,26 +70,58 @@ export default function Signin() {
     setEmail(e.target.value);
   };
   const handleLogin = (e) => {
-    console.log(email, "email");
-    console.log(password, "pass");
-
-    axios
-      .post("http://localhost:8000/users/signin", {
-        Email: email,
-        Password: password,
-      })
-      .then((res) => {
-        console.log(res);
-        console.log("this " + "  " + res.headers.auth);
-        window.localStorage.setItem("token", res.headers.auth);
-        console.log(window.localStorage);
-        if (res.data.message === "Success") {
-          window.location = "/home";
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    var x = 2;
+    if (email === "") {
+      console.log(email);
+      setemailerror(true);
+      setemailtext("Email could not be left empty ");
+    } else {
+      if (!validateEmail(email)) {
+        setemailerror(true);
+        setemailtext("Email should be in xxxx@y.com format");
+      } else {
+        setemailerror(false);
+        x--;
+      }
+    }
+    if (password === "") {
+      console.log("innnnnnnn");
+      setpassworderror(true);
+      setpasswordtext("Password cannot be left empty");
+    } else {
+      console.log("out");
+      setpassworderror(false);
+      x--;
+    }
+    if (x == 0) {
+      axios
+        .post("http://localhost:8000/users/signin", {
+          Email: email,
+          Password: password,
+        })
+        .then((res) => {
+          console.log(res);
+          console.log("this " + "  " + res.headers.auth);
+          window.localStorage.setItem("token", res.headers.auth);
+          console.log(window.localStorage);
+          if (res.data.message === "Success") {
+            setemailerror(false);
+            setpassworderror(false);
+            window.location = "/home";
+          }
+          if (res.data.message === "Invalid Password") {
+            setpassworderror(true);
+            setpasswordtext("Invalid Password");
+          }
+          if (res.data.message === "Invalid Email") {
+            setemailerror(true);
+            setemailtext("Invalid Email");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (
@@ -76,36 +131,65 @@ export default function Signin() {
           <LockOutlinedIcon style={{ color: "#ffd633" }} />
         </Avatar>
         <Typography className={classes.title} component="h1" variant="h5">
-          Sign in
+          Sign In
         </Typography>
       </div>
-      <div className={classes.text1}>
-        <TextField
-          variant="outlined"
-          margin="normal"
-          fullWidth
-          required
-          id="email"
-          label="Email Address"
-          name="email"
-          autoComplete="email"
-          autoFocus
-          onChange={onChangeEmail}
+      <div className={classes.display}>
+        <div className={classes.text1}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Email Address"
+            name="email"
+            autoComplete="email"
+            autoFocus
+            onChange={onChangeEmail}
+            error={emailerror}
+          />
+        </div>
+        <CloseIcon
+          style={emailerror ? { color: "crimson" } : { color: "white" }}
+          fontSize="xsmall"
+          className={classes.emailicon}
         />
+        <div
+          className={
+            emailerror ? classes.erroremailerror : classes.emailwithout
+          }
+        >
+          {emailtext}
+        </div>
       </div>
-      <div className={classes.text2}>
-        <TextField
-          variant="outlined"
-          margin="normal"
-          required
-          fullWidth
-          name="password"
-          label="Password"
-          type="password"
-          id="password"
-          autoComplete="current-password"
-          onChange={onChangePassword}
+      <div className={classes.display}>
+        <div className={classes.text2}>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            onChange={onChangePassword}
+            error={passworderror}
+          />
+        </div>
+        <CloseIcon
+          style={passworderror ? { color: "crimson" } : { color: "white" }}
+          fontSize="xsmall"
+          className={classes.passwordicon}
         />
+        <div
+          className={
+            passworderror ? classes.passworderrors : classes.passwordwithout
+          }
+        >
+          {passwordtext}
+        </div>
       </div>
       <div className={classes.button}>
         <Button

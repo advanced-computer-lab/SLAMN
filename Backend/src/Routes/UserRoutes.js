@@ -26,11 +26,25 @@ router.route("/getSummary").post(UserServices.getSummary);
 
 router
   .route("/updateAccount")
-  .post(UserValidation.validateUpdateAccount, UserServices.updateAccount);
+  .post(
+    UserValidation.validateUpdateAccount,
+    authentication.validateUser,
+    UserServices.updateAccount
+  );
+
+router.route("/displayaccount").post(
+  authentication.validateUser,
+
+  UserServices.displayaccount
+);
 
 router
-  .route("/displayaccount")
-  .post(authentication.validateUser, UserServices.displayaccount);
+  .route("/changepassword")
+  .post(
+    UserValidation.validatePassword,
+    authentication.validateUser,
+    UserServices.changePassword
+  );
 
 router
   .route("/signin")
@@ -39,29 +53,5 @@ router
 router
   .route("/signup")
   .post(UserValidation.validateSignup, UserServices.signUp);
-/*
-router
-  .route("/viewAvailableSeats")
-  .post(
-    authentication.validateUser,
-    UserValidation.validateSeats,
-    UserServices.viewAvailableSeats
-  );
-
-router
-  .route("/selectSeats")
-  .post(
-    authentication.validateUser,
-    UserValidation.validateSelection,
-    UserServices.selectSeats
-  );
-
-router
-  .route("/deselectSeats")
-  .post(
-    authentication.validateUser,
-    UserValidation.validateDeselection,
-    UserServices.deselectSeats
-  );*/
 
 module.exports = router;

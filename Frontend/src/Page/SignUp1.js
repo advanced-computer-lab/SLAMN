@@ -14,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useState } from "react";
 import SnackBar from "../Componenets/General/SnackBar";
+import { useNavigate } from "react-router-dom";
 
 import axios from "axios";
 
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: "#005dad",
+    backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -50,10 +51,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Signin() {
+export default function SignUp() {
+  const navigate = useNavigate();
   const classes = useStyles();
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [email, setEmail] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [passportNumber, setPassportNumber] = useState("");
   const [open1, setOpen1] = useState(false);
   const [error, seterror] = useState("");
   const handleOpen1 = () => {
@@ -63,20 +70,24 @@ export default function Signin() {
   const handleClose1 = () => {
     setOpen1(false);
   };
-  const handleLogin = (e) => {
+  const handleRegistration = (e) => {
     console.log("email", "passssssssssss");
 
     axios
-      .post("http://localhost:8000/users/signin", {
+      .post("http://localhost:8000/users/signup", {
         Email: email,
         Password: password,
+        FirstName: firstName,
+        LastName: lastName,
+        Phone: phone,
+        PassportNumber: passportNumber,
       })
       .then(function (response) {
         console.log(response);
         console.log("yalllllllllaa");
       });
 
-    window.location = "/home";
+    navigate("/signin");
   };
 
   const onChangePassword = (e) => {
@@ -85,16 +96,31 @@ export default function Signin() {
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
   };
+  const onChangeConfirmPassword = (e) => {
+    setConfirmPassword(e.target.value);
+  };
+  const onChangeFirstName = (e) => {
+    setFirstName(e.target.value);
+  };
+  const onChangeLastName = (e) => {
+    setLastName(e.target.value);
+  };
+  const onChangePhone = (e) => {
+    setPhone(e.target.value);
+  };
+  const onChangePassportNumber = (e) => {
+    setPassportNumber(e.target.value);
+  };
 
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <LockOutlinedIcon style={{ color: "#ffd633" }} />
+          <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign up
         </Typography>
         <form className={classes.form} noValidate>
           <TextField
@@ -107,7 +133,7 @@ export default function Signin() {
             name="email"
             autoComplete="email"
             autoFocus
-            onChange={onChangePassword}
+            onChange={onChangeEmail}
           />
           <TextField
             variant="outlined"
@@ -118,33 +144,80 @@ export default function Signin() {
             label="Password"
             type="password"
             id="password"
-            autoComplete="current-password"
-            onChange={onChangeEmail}
+            onChange={onChangePassword}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="confirmPassword"
+            label="Confirm Password"
+            type="password"
+            name="confirmPassword"
+            autoFocus
+            onChange={onChangeConfirmPassword}
           />
+          <span backgroundColor="red">
+            {confirmPassword.touched && password == confirmPassword
+              ? ""
+              : "Password mismatch"}
+          </span>
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="firstName"
+            label="First Name"
+            name="firstName"
+            autoFocus
+            onChange={onChangeFirstName}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="lastName"
+            label="Last Name"
+            name="lastName"
+            autoFocus
+            onChange={onChangeLastName}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="phone"
+            label="Phone Number"
+            name="phone"
+            autoFocus
+            onChange={onChangePhone}
+          />
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="passportNumber"
+            label="Passport Number"
+            name="passportNumber"
+            autoFocus
+            onChange={onChangePassportNumber}
+          />
+
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={handleLogin}
-            style={{ backgroundColor: "#005dad" }}
+            onClick={handleRegistration}
           >
-            Sign In
+            Sign Up
           </Button>
-
-          <Grid container>
-            <Grid item xs></Grid>
-            <Grid item>
-              <Link href="signup" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
       <Box mt={8}>

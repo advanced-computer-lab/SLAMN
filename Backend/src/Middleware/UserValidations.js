@@ -37,6 +37,21 @@ const validateSignup = (req, res, next) => {
   }
   return next();
 };
+const validatePassword = (req, res, next) => {
+  const schema = Joi.object({
+    Password: Joi.string().required(),
+    newPassword: Joi.string().required(),
+  }).required();
+
+  const isValid = schema.validate(req.body);
+  if (isValid.error) {
+    return res.json({
+      statusCode: 1,
+      error: isValid.error.details[0].message,
+    });
+  }
+  return next();
+};
 
 const validateSeats = (req, res, next) => {
   const schema = Joi.object({
@@ -151,4 +166,5 @@ module.exports = {
   validateUpdateAccount,
   validateSeats,
   validateSelection,
+  validatePassword,
 };

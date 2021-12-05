@@ -10,7 +10,7 @@ const useStyles = makeStyles({
     marginLeft: "2vw",
     backgroundColor: "white",
     width: "60vw",
-    height: "15vw",
+    height: "25vw",
     padding: "0.5vw",
     borderRadius: "0.5vw !important",
     boxShadow: "1px 1.6px 1px #9E9E9E",
@@ -31,14 +31,8 @@ const useStyles = makeStyles({
     marginTop: "1vw",
     fontSize: "1.5vw",
     marginLeft: "1vw",
-    fontWeight: "400",
   },
-  title: {
-    marginTop: "1vw",
-    fontSize: "1.5vw",
-    marginLeft: "1vw",
-    fontWeight: "400",
-  },
+
   dep: { fontSize: "0.9vw", marginTop: "1.2vw", marginLeft: "0.5vw" },
   depicon: { marginTop: "1vw", marginLeft: "1vw" },
   tim1dep: {
@@ -131,15 +125,12 @@ const useStyles = makeStyles({
   },
 });
 
-export default function BookingDetails() {
+export default function BookingDetails2() {
   const classes = useStyles();
   return (
     <div className={classes.root}>
       <div className={classes.block}></div>
-      <div className={classes.display}>
-        <div className={classes.title}>Itinerary:</div>
-        <div className={classes.flight}>flight</div>
-      </div>
+      <div className={classes.flight}>flight</div>
       <div className={classes.display}>
         <FlightTakeoffIcon
           className={classes.depicon}
@@ -166,6 +157,39 @@ export default function BookingDetails() {
           </div>
           <div className={classes.dep12info}>Thu, 09 Dec</div>
           <div className={classes.dep12info}>Cairo International Airport </div>
+        </div>
+      </div>
+      <Divider className={classes.divider} />
+      <div className={classes.display}>
+        <FlightLandIcon
+          className={classes.arrivalicon}
+          style={{ color: "#005dad" }}
+        />
+        <div className={classes.arrival}>Arrival</div>
+        <div className={classes.flightnumber2}>SLAMN Airlines T12KM</div>
+      </div>
+      <div className={classes.display}>
+        <div>
+          <div className={classes.display}>
+            <div className={classes.tim1arrival}>08:15</div>
+            <div className={classes.count1arrival}> CAI</div>
+          </div>
+
+          <div className={classes.arrival1info}>Thu, 09 Dec</div>
+          <div className={classes.arrival1info}>
+            Cairo International Airport{" "}
+          </div>
+        </div>
+
+        <div>
+          <div className={classes.display}>
+            <div className={classes.tim2arrival}>08:15</div>
+            <div className={classes.count2arrival}> CAI</div>
+          </div>
+          <div className={classes.arrival12info}>Thu, 09 Dec</div>
+          <div className={classes.arrival12info}>
+            Cairo International Airport{" "}
+          </div>
         </div>
       </div>
       <Divider className={classes.divider} />

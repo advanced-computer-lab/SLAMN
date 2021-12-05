@@ -62,35 +62,8 @@ export default function UpdateAccount() {
   const [email, setEmail] = useState("");
   const [passport, setPassport] = useState("");
   const headers = window.localStorage.getItem("token");
-  const [first, setFirst] = React.useState("");
-  const [last, setLast] = React.useState("");
-  const [emails, setEmails] = React.useState("");
-  const [pass, setPass] = React.useState("");
 
-  useEffect(() => {
-    console.log(headers, "headersssssssssss");
-    axios
-      .post(
-        "http://localhost:8000/users/displayaccount",
-        {},
-        {
-          headers: {
-            auth: headers,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data.user.FirstName);
-        setFirst(res.data.user.FirstName);
-        setLast(res.data.user.LastName);
-        setEmails(res.data.user.Email);
-        setPass(res.data.user.PassportNumber);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
-
+  const name = window.localStorage.getItem("name");
   const onChangeFirstName = (e) => {
     setFirstName(e.target.value);
   };
@@ -99,16 +72,20 @@ export default function UpdateAccount() {
   };
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
+    console.log(e.target.value, "emiallllllll");
+    console.log(e.target.value, "emiallllllll");
   };
   const onChangePassport = (e) => {
+    console.log(e.target.value, "whhhhhh");
     setPassport(e.target.value);
+    console.log(passport, "noooooooooooooooooooooooooo");
   };
   return (
     <div className={classes.root}>
       <NavBar />
       <div className={classes.welcome}>
         <div className={classes.welcometitle}>
-          Welcome to your account , {first}!
+          Welcome to your account , {name}!
         </div>
       </div>
       <div className={classes.form}>
@@ -125,10 +102,6 @@ export default function UpdateAccount() {
             last={lastName}
             emails={email}
             passports={passport}
-            firstname={first}
-            lastname={last}
-            email={email}
-            passport={pass}
           />
         </div>
       </div>

@@ -5,6 +5,7 @@ import List from "../Componenets/AccountDetails/List";
 import Accountform from "../Componenets/AccountDetails/ChangePassword";
 import Button from "../Componenets/General/BasicButton";
 import { useState } from "react";
+import axios from "axios";
 
 const useStyles = makeStyles({
   root: {
@@ -61,15 +62,23 @@ const useStyles = makeStyles({
 
 export default function ChangePassword() {
   const classes = useStyles();
+  const [oldpassword, setoldPassword] = useState("");
+  const [errorold, seterrorold] = useState(false);
+  const [erroroldconfrim, seterroroldconfrim] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setconfirmPassword] = useState("");
   const [errorpass, seterrorpass] = useState(false);
   const [errorpassconfrim, seterrorpassconfrim] = useState(false);
   const [pass, setPass] = useState("");
   const [confirmPass, setconfirmPass] = useState("");
+  const headers = window.localStorage.getItem("token");
+  const name = window.localStorage.getItem("name");
 
   const onChangePasssword = (e) => {
     setPassword(e.target.value);
+  };
+  const onChangeOldPasssword = (e) => {
+    setoldPassword(e.target.value);
   };
   const onChangeConfirmPassword = (e) => {
     setconfirmPassword(e.target.value);
@@ -78,20 +87,56 @@ export default function ChangePassword() {
     window.location = "/account";
   };
   const onClickPassword = () => {
+    var x = 3;
+    if (oldpassword === "") {
+      seterrorold(true);
+      seterroroldconfrim("Password cannot be left empty");
+    } else {
+      seterrorold(false);
+      x--;
+    }
     if (password === "") {
       seterrorpass(true);
       setPass("Password cannot be left empty");
     } else {
       seterrorpass(false);
+      x--;
     }
-    if (confirmPass === "") {
+
+    if (!(confirmPassword === password)) {
       seterrorpassconfrim(true);
-      setconfirmPass("Confirm password cannot be left empty");
-    } else if (!(confirmPassword === password)) {
-      seterrorpassconfrim(true);
-      setconfirmPass("Confirm password is not the same ");
+      setconfirmPass("Confirm password is not the same as password");
     } else {
       seterrorpassconfrim(false);
+      x--;
+    }
+    if (x === 0) {
+      console.log("in babbyyy");
+      axios
+        .post(
+          "http://localhost:8000/users/changepassword",
+          {
+            Password: oldpassword,
+            newPassword: password,
+          },
+          {
+            headers: {
+              auth: headers,
+            },
+          }
+        )
+        .then(function (response) {
+          console.log(response.data.message, "messageeeee");
+          if (response.data.message === "success") {
+            seterrorold(false);
+            window.location = "/account";
+          }
+          if (response.data.message === "old password is wrong") {
+            seterrorold(true);
+            seterroroldconfrim("old password does not match");
+            console.log(erroroldconfrim, "errorrrrrrrrr");
+          }
+        });
     }
   };
 
@@ -100,7 +145,7 @@ export default function ChangePassword() {
       <NavBar />
       <div className={classes.welcome}>
         <div className={classes.welcometitle}>
-          Welcome to your account , xxx !
+          Welcome to your account , {name} !
         </div>
       </div>
 
@@ -116,6 +161,9 @@ export default function ChangePassword() {
             errorpassconfrim={errorpassconfrim}
             errorpasserror={pass}
             errorpassconfirmerror={confirmPass}
+            oldpassword={onChangeOldPasssword}
+            errorold={errorold}
+            erroroldconfirm={erroroldconfrim}
           />
         </div>
       </div>

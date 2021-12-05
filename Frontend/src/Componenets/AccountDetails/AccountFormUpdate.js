@@ -5,7 +5,7 @@ import Textfield from "../AccountDetails/Textfields";
 import Button from "../General/BasicButton";
 import CloseIcon from "@mui/icons-material/Close";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 const useStyles = makeStyles({
   root: {
     backgroundColor: "white",
@@ -31,7 +31,7 @@ const useStyles = makeStyles({
   },
   firstNameValue: {
     fontWeight: "bolder",
-    //marginTop: "1.5vw",
+    marginTop: "1.5vw",
     fontSize: "1vw",
 
     marginLeft: "9.8vw",
@@ -46,6 +46,7 @@ const useStyles = makeStyles({
     fontWeight: "bolder",
     marginTop: "-1vw",
     fontSize: "1vw",
+    marginTop: "1.5vw",
 
     marginLeft: "9.9vw",
   },
@@ -60,7 +61,7 @@ const useStyles = makeStyles({
     fontWeight: "bolder",
     marginTop: "-1vw",
     fontSize: "1vw",
-
+    marginTop: "1.5vw",
     marginLeft: "12.1vw",
   },
   passport: {
@@ -74,6 +75,7 @@ const useStyles = makeStyles({
     fontWeight: "bolder",
     marginTop: "-1vw",
     fontSize: "1vw",
+    marginTop: "1.5vw",
 
     marginLeft: "6.8vw",
     marginBottom: "2vw",
@@ -93,18 +95,18 @@ const useStyles = makeStyles({
     width: "2vw !important",
     color: "blue !important",
   },
-  errofirsticon: { marginTop: "2.35vw" },
-  errofirst: { marginTop: "2vw", color: "crimson" },
+  errofirsticon: { marginTop: "2.35vw", marginLeft: "1vw" },
+  errofirst: { marginTop: "2.2vw", color: "crimson" },
   first: { marginTop: "2vw", color: "white" },
-  errorlastname: { marginTop: "1vw", color: "crimson" },
+  errorlastname: { marginTop: "2.2vw", color: "crimson" },
   lastwithout: { marginTop: "1vw", color: "white" },
-  errolasticon: { marginTop: "1.35vw" },
-  erroremail: { marginTop: "1vw", color: "crimson" },
+  errolasticon: { marginTop: "2.35vw", marginLeft: "1vw" },
+  erroremail: { marginTop: "2vw", color: "crimson" },
   emails: { marginTop: "1vw", color: "white" },
-  erroemailicon: { marginTop: "1.35vw" },
-  errorpass: { marginTop: "1vw", color: "crimson" },
-  passports: { marginTop: "1vw", color: "white" },
-  erropassicon: { marginTop: "1.35vw" },
+  erroemailicon: { marginTop: "2.35vw", marginLeft: "1vw" },
+  errorpass: { marginTop: "2.1vw", color: "crimson" },
+  passports: { marginTop: "2vw", color: "white" },
+  erropassicon: { marginTop: "2.35vw", marginLeft: "1vw" },
 
   display2: {
     display: "flex",
@@ -113,6 +115,7 @@ const useStyles = makeStyles({
 });
 export default function AccountForm(props) {
   const classes = useStyles();
+  const headers = window.localStorage.getItem("token");
   const [update, setupdate] = React.useState(false);
   const [errorfirst, setErrorfirst] = React.useState(false);
   const [errormessageFirst, seterrormessageFirst] = React.useState("");
@@ -126,6 +129,16 @@ export default function AccountForm(props) {
   const [errorpass, setErrorpass] = React.useState(false);
   const [errormessagePass, seterrormessagePass] = React.useState("");
 
+  const [first, setFirst] = React.useState("");
+  const [last, setLast] = React.useState("");
+  const [emails, setEmails] = React.useState("");
+  const [pass, setPass] = React.useState("");
+
+  const name = window.localStorage.getItem("name");
+  const lastname = window.localStorage.getItem("lastname");
+  const email = window.localStorage.getItem("email");
+  const passport = window.localStorage.getItem("passportNumber");
+
   const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
@@ -135,7 +148,12 @@ export default function AccountForm(props) {
   };
 
   const OnClickUpdate = () => {
+    console.log(props.firstname, "whatttttttttt ba2aaaaaaaaaaaa");
     let x = 4;
+    console.log(props.first, "firstttttt");
+    console.log(props.last, "last");
+    console.log(props.passports, "pass");
+    console.log(props.emails, "email");
     //window.location = "/updateaccount";
     if (props.first === "") {
       console.log("what happended");
@@ -151,6 +169,7 @@ export default function AccountForm(props) {
     }
 
     if (props.emails === "") {
+      console.log(props.emails);
       setErroremail(true);
       seterrormessageEmail("Email could not be left empty ");
     } else {
@@ -163,6 +182,7 @@ export default function AccountForm(props) {
       }
     }
     if (props.passports === "") {
+      console.log(props.passports, "passsssssssssssssssssssssssssssssssssssss");
       setErrorpass(true);
       seterrormessagePass("PassportNumber cannot be left empty");
     } else {
@@ -190,15 +210,23 @@ export default function AccountForm(props) {
     if (x === 0) {
       console.log("INNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN");
       axios
-        .post("http://localhost:8000/users/updateFlight", {
-          FirstName: props.first,
-          LastName: props.last,
-          Email: props.emails,
-          PassportNumber: props.passports,
-        })
+        .post(
+          "http://localhost:8000/users/updateAccount",
+          {
+            FirstName: props.first,
+            LastName: props.last,
+            Email: props.emails,
+            PassportNumber: props.passports,
+          },
+          {
+            headers: {
+              auth: headers,
+            },
+          }
+        )
         .then(function (response) {
           console.log(response);
-          if (response.data.message === "Success") {
+          if (response.data.message === "success") {
             window.location = "/account";
           }
         });
@@ -219,7 +247,7 @@ export default function AccountForm(props) {
           <Textfield
             error={errorfirst}
             onChange={props.firstName}
-            defaultValue={props.firstname}
+            defaultValue={name}
           />
         </div>
 
@@ -240,7 +268,7 @@ export default function AccountForm(props) {
             error={errorlast}
             className={classes.text}
             onChange={props.lastName}
-            defaultValue={props.lastname}
+            defaultValue={lastname}
           />
         </div>
         <CloseIcon
@@ -261,7 +289,7 @@ export default function AccountForm(props) {
           <Textfield
             error={erroremail}
             onChange={props.email}
-            defaultValue={props.email}
+            defaultValue={email}
           />
         </div>
         <CloseIcon
@@ -280,7 +308,7 @@ export default function AccountForm(props) {
           <Textfield
             error={errorpass}
             onChange={props.passport}
-            defaultValue={props.passport}
+            defaultValue={passport}
           />
         </div>
         <CloseIcon

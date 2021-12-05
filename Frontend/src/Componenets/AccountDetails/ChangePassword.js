@@ -8,7 +8,7 @@ const useStyles = makeStyles({
   root: {
     backgroundColor: "white",
     width: "60vw",
-    height: "20vw",
+    height: "25vw",
     padding: "0.5vw",
     borderRadius: "0.5vw !important",
     boxShadow: "1px 3px 1px #9E9E9E",
@@ -21,21 +21,47 @@ const useStyles = makeStyles({
     marginLeft: "1.5vw",
     marginTop: "2vw",
   },
+  PassNameValue: {
+    fontWeight: "bolder",
+    marginTop: "1.5vw",
+    fontSize: "1vw",
+
+    marginLeft: "3vw !important",
+  },
+  Pass: {
+    marginTop: "1vw",
+    fontSize: "1vw",
+    fontWeight: "revert",
+    marginLeft: "1.5vw",
+  },
+  oldpass: {
+    marginTop: "2.5vw",
+    fontSize: "1vw",
+    fontWeight: "revert",
+    marginLeft: "1.4vw",
+  },
+  oldpassValue: {
+    fontWeight: "bolder",
+    marginTop: "1.5vw",
+    fontSize: "1vw",
+
+    marginLeft: "8vw !important",
+  },
   firstName: {
-    marginTop: "2vw",
+    marginTop: "2.5vw",
     fontSize: "1vw",
     fontWeight: "revert",
     marginLeft: "1.5vw",
   },
   firstNameValue: {
     fontWeight: "bolder",
-    //marginTop: "1.5vw",
+    marginTop: "1.5vw",
     fontSize: "1vw",
 
-    marginLeft: "9.8vw",
+    marginLeft: "7.6vw",
   },
   lastName: {
-    marginTop: "1vw",
+    marginTop: "2.5vw",
     fontSize: "1vw",
     fontWeight: "revert",
     marginLeft: "1.5vw",
@@ -44,7 +70,7 @@ const useStyles = makeStyles({
     fontWeight: "bolder",
     marginTop: "-1vw",
     fontSize: "1vw",
-
+    marginTop: "1.5vw",
     marginLeft: "6vw",
   },
 
@@ -63,18 +89,19 @@ const useStyles = makeStyles({
     width: "2vw !important",
     color: "blue !important",
   },
-  errofirsticon: { marginTop: "2.35vw" },
-  errofirst: { marginTop: "2vw", color: "crimson" },
+  erroPassicon: { marginTop: "2.5vw", marginLeft: "1vw" },
+  erroPass: { marginTop: "2.3vw", color: "crimson" },
+  Pass: { marginTop: "2vw", color: "white" },
+  errofirsticon: { marginTop: "2.5vw", marginLeft: "1vw" },
+  errofirst: { marginTop: "2.3vw", color: "crimson" },
   first: { marginTop: "2vw", color: "white" },
-  errorlastname: { marginTop: "1vw", color: "crimson" },
+  errorlastname: { marginTop: "2.3vw", color: "crimson" },
   lastwithout: { marginTop: "1vw", color: "white" },
-  errolasticon: { marginTop: "1.35vw" },
-  erroremail: { marginTop: "1vw", color: "crimson" },
-  emails: { marginTop: "1vw", color: "white" },
-  erroemailicon: { marginTop: "1.35vw" },
-  errorpass: { marginTop: "1vw", color: "crimson" },
-  passports: { marginTop: "1vw", color: "white" },
-  erropassicon: { marginTop: "1.35vw" },
+  errolasticon: { marginTop: "1.35vw", marginTop: "2.5vw", marginLeft: "1vw" },
+
+  divider: {
+    marginTop: "1vw !important",
+  },
 });
 
 export default function ChangePassword(props) {
@@ -103,9 +130,29 @@ export default function ChangePassword(props) {
   return (
     <div className={classes.root}>
       <div className={classes.title}>Account Details</div>
+      <div className={classes.display}>
+        <div className={classes.oldpass}>Old Password</div>
+        <div className={classes.oldpassValue}>
+          {" "}
+          <Textfield
+            error={props.errorpass}
+            onChange={props.oldpassword}
+            type={"password"}
+          />
+        </div>
+
+        <CloseIcon
+          style={props.errorold ? { color: "crimson" } : { color: "white" }}
+          fontSize="xsmall"
+          className={classes.erroPassicon}
+        />
+        <div className={props.errorold ? classes.erroPass : classes.Pass}>
+          {props.erroroldconfirm}
+        </div>
+      </div>
 
       <div className={classes.display}>
-        <div className={classes.firstName}>Password</div>
+        <div className={classes.firstName}>New Password</div>
         <div className={classes.firstNameValue}>
           {" "}
           <Textfield
@@ -151,7 +198,7 @@ export default function ChangePassword(props) {
         </div>
       </div>
 
-      <Divider />
+      <Divider className={classes.divider} />
       <div
         className={classes.button}
         onMouseOver={() => setupdate(true)}

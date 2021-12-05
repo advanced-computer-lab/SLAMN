@@ -20,6 +20,7 @@ export default function Textfields(props) {
         color={props.color}
         error={props.error}
         type={props.type}
+        defaultValue={props.defaultValue}
       />
     </Box>
   );

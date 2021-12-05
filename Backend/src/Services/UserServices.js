@@ -37,13 +37,13 @@ const signIn = async (req, res) => {
       } else {
         return res.json({
           statusCode: 1,
-          error: "Invalid Password",
+          message: "Invalid Password",
         });
       }
     } else {
       return res.json({
         statusCode: 1,
-        error: "Invalid Email",
+        message: "Invalid Email",
       });
     }
   } catch (exception) {
@@ -57,16 +57,20 @@ const signIn = async (req, res) => {
 
 const signUp = async (req, res) => {
   try {
-    const user = req.body;
-    const data = await User.findOne({ Email: user.Email });
+    const email = req.body.Email;
+    user = req.body;
+
+    const data = await User.findOne({ Email: email });
     if (data) {
+      console.log("in if");
       return res.json({
         statusCode: 1,
-        error: "Invalid Email,this email already exists",
+        message: "Invalid Email,this email already exists",
       });
     } else {
+      console.log("in else");
       const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(user.Password, salt);
+      user.Password = await bcrypt.hash(user.Password, salt);
       console.log(user);
       const reservations = [];
       const summaries = [];
@@ -487,22 +491,32 @@ const getSummary = async (req, res) => {
 };
 
 const updateAccount = async (req, res) => {
-  const UpdatedUser = {
-    FirstName: req.body.FirstName,
-    LastName: req.body.LastName,
-    Email: req.body.Email,
+  console.log("innnnnn");
+  const valueOfId = req.payload.id;
+  console.log(valueOfId, "whatttt");
 
-    PassportNumber: req.body.PassportNumber,
-    Password: req.body.Password,
-  };
-
-  await User.findOneAndUpdate(
-    { PassportNumber: req.body.PassportNumber },
-    UpdatedUser,
-    null
-  )
-    .then(() => res.json(UpdatedUser))
-    .catch((err) => res.status(400).json("Error:" + err));
+  User.findByIdAndUpdate(
+    valueOfId,
+    {
+      FirstName: req.body.FirstName,
+      LastName: req.body.LastName,
+      Email: req.body.Email,
+      PassportNumber: req.body.PassportNumber,
+    },
+    function (err, docs) {
+      if (err) {
+        console.log(err, "erroooooorrr");
+        return res.json({
+          message: " error",
+        });
+      } else {
+        console.log("Updated User : ", docs);
+        return res.json({
+          message: "success",
+        });
+      }
+    }
+  );
 };
 
 const displayaccount = async (req, res) => {
@@ -527,6 +541,37 @@ const displayaccount = async (req, res) => {
     });
   }
 };
+const changePassword = async (req, res) => {
+  const valueOfId = req.payload.id;
+  const password = req.body.Password;
+
+  try {
+    let user = await User.findOne({
+      _id: valueOfId,
+    });
+    if (user) {
+      var result = bcrypt.compareSync(password, user.Password);
+      console.log(result);
+      console.log(user);
+      //
+      if (result) {
+        user.Password = bcrypt.hashSync(req.body.newPassword, 10);
+        user.save();
+        console.log(user);
+
+        return res.json({ message: "success" });
+      } else {
+        return res.json({ message: "old password is wrong" });
+      }
+    }
+  } catch (exception) {
+    console.log(exception);
+    return res.json({
+      statusCode: 1,
+      error: "exception",
+    });
+  }
+};
 
 module.exports = {
   signIn,
@@ -538,4 +583,5 @@ module.exports = {
   getSummary,
   updateAccount,
   displayaccount,
+  changePassword,
 };

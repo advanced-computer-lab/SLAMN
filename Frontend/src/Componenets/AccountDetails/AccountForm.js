@@ -30,7 +30,7 @@ const useStyles = makeStyles({
     marginTop: "1.5vw",
     fontSize: "1vw",
 
-    marginLeft: "5.3vw",
+    marginLeft: "5.2vw",
   },
   lastName: {
     marginTop: "1vw",
@@ -43,7 +43,7 @@ const useStyles = makeStyles({
     marginTop: "1vw",
     fontSize: "1vw",
 
-    marginLeft: "5.5vw",
+    marginLeft: "5.3vw",
   },
   email: {
     marginTop: "1vw",
@@ -57,7 +57,7 @@ const useStyles = makeStyles({
     marginTop: "1vw",
     fontSize: "1vw",
 
-    marginLeft: "7.85vw",
+    marginLeft: "7.6vw",
   },
   passport: {
     marginTop: "1vw",
@@ -71,7 +71,7 @@ const useStyles = makeStyles({
     marginTop: "1vw",
     fontSize: "1vw",
 
-    marginLeft: "2.6vw",
+    marginLeft: "2.21vw",
     marginBottom: "2vw",
   },
   display: {
