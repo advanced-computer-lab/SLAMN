@@ -24,7 +24,7 @@ router
 router
   .route("/createSummary")
   .post(
-    //authentication.validateUser,
+    authentication.validateUser,
     UserValidation.validateAddSummary,
      UserServices.createSummary);
 router.route("/getSummary").post( authentication.validateUser,UserServices.getSummary);
@@ -72,5 +72,12 @@ router
   router
   .route("/sendMail")
   .post( authentication.validateUser,UserServices.sendEmail);
+
+  router
+  .route("/getfutureReservation")
+  .post(
+    authentication.validateUser,
+    UserServices.getFutureReservations
+  );
 
 module.exports = router;
