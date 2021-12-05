@@ -6,18 +6,36 @@ import { makeStyles } from "@material-ui/core/styles";
 
 import { useState } from "react";
 import SnackBar from "../Componenets/General/SnackBar";
+import NavBar from "../Componenets/General/NavBar";
 
 const useStyles = makeStyles({
   space: {
     marginTop: "2vw !important",
     marginLeft: "1vw",
+    background: "#fff",
+    border: " 1px solid #ccc",
+    borderRadius: "0.3vw",
   },
   root: {
-    display: "flex",
+    backgroundColor: "whitesmoke",
   },
   updatebutton: {
     marginTop: "3vw",
     marginLeft: "1vw",
+  },
+  title: {
+    textAlign: "center",
+    width: "30vw",
+    height: "5vw",
+    fontSize: "2vw",
+    border: "1px solid grey",
+    borderRadius: " 1.3vw",
+    position: "relative",
+    top: "2vw",
+    color: "slategray",
+    textAlign: "center",
+    lineHeight: "4vw",
+    margin: "auto",
   },
 });
 
@@ -87,6 +105,8 @@ export default function CreateFlight() {
   };
   return (
     <div>
+      <NavBar />
+      <div className={classes.title}>CREATE FLIGHT</div>
       <div className={classes.root}>
         <div className={classes.space}>
           <TextBox

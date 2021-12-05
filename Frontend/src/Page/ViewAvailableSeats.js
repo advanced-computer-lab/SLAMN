@@ -8,6 +8,7 @@ import Line1 from "../Images/Line.png";
 import Passenger from "../Componenets/Seats/Passenger";
 import UserInfo from "../Componenets/Seats/SeatReservationinfo";
 import { useNavigate } from "react-router";
+import axios from "axios";
 const useStyles = makeStyles(() => ({
   root: {
     width: "60vw",
@@ -134,7 +135,7 @@ export default function ViewAvailableSeats(props) {
     reservation.passengerslist.length
   );
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     console.log(JSON.parse(localStorage.getItem("returnList")), "ELCONFIRMMM");
     if (!JSON.parse(localStorage.getItem("returnList"))) {
       var returnPList = [];
@@ -167,7 +168,6 @@ export default function ViewAvailableSeats(props) {
       );
       history("/bookreturnflight");
     } else {
-      console.log(returnParameters, "LASTTT");
       history("/createsummary");
     }
   };
