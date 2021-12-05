@@ -75,7 +75,8 @@ const validateCreateReservation = (req, res, next) => {
   const schema = Joi.object({
     DepartureFlightNumber: Joi.number().required(),
     ArrivalFlightNumber: Joi.number().required(),
-    CabinClass: Joi.string().required(),
+    DepCabinClass: Joi.string().required(),
+    ArrCabinClass: Joi.string().required(),
     NumberOfChildren: Joi.number().required(),
     NumberOfAdults: Joi.number().required(),
   }).required();

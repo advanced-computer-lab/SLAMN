@@ -237,21 +237,43 @@ const selectSeats = async (req, res) => {
 const createFlightReservation = async (req, res) => {
   try {
     console.log(req.body);
-    /*const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
-    const userData = payload.id;*/
-    const userData = await User.findOne({ _id: "61a7780f866bf0ec6787692a" });
-    const arrivalFlight = await Flight.findOne({
+    const valueOfId = req.payload.id;
+    const userData = await User.findOne({ _id: valueOfId});
+        //  const userData = await User.findOne({ _id: "61acf8804f22c4507b340a83"});
+
+    const arrivalFlight = await Flights.findOne({
       FlightNumber: req.body.ArrivalFlightNumber,
     });
-    const departureFlight = await Flight.findOne({
+    const departureFlight = await Flights.findOne({
       FlightNumber: req.body.DepartureFlightNumber,
     });
-    const Cabinclass = req.body.CabinClass;
+    const DepCabinclass = req.body.DepCabinClass;
+    const ArrCabinclass = req.body.ArrCabinClass;
     var basePrice = arrivalFlight.Price + departureFlight.Price;
     const noOfChildren = req.body.NumberOfChildren;
     const noOfAdults = req.body.NumberOfAdults;
 
-    switch (Cabinclass) {
+    switch (DepCabinclass) {
+      case "Economy": {
+        basePrice = basePrice;
+        break;
+      }
+      case "First Class": {
+        basePrice += 700;
+        break;
+      }
+      case "Business Class": {
+        basePrice += 1000;
+        break;
+      }
+      default: {
+        return res.json({
+          statusCode: 1,
+          error: "Not a valid class",
+        });
+      }
+    }
+    switch (ArrCabinclass) {
       case "Economy": {
         basePrice = basePrice;
         break;
@@ -276,6 +298,8 @@ const createFlightReservation = async (req, res) => {
       const reserve = await Reservation.create({
         DepartureFlightNumber: departureFlight.FlightNumber,
         ArrivalFlightNumber: arrivalFlight.FlightNumber,
+        DepCabinclass: DepCabinclass,
+        ArrCabinclass: ArrCabinclass,
         NumberOfChildren: noOfChildren,
         NumberOfAdults: noOfAdults,
         totalPrice: basePrice * 0.5 * noOfChildren + basePrice * noOfAdults,
@@ -296,6 +320,8 @@ const createFlightReservation = async (req, res) => {
         _id: reserve._id,
         User: reserve.User,
         DepartureFlightNumber: reserve.DepartureFlightNumber,
+        DepCabinclass: reserve.DepCabinclass,
+        ArrCabinclass: reserve.ArrCabinclass,
         ArrivalFlightNumber: reserve.ArrivalFlightNumber,
         CabinClass: reserve.CabinClass,
         NumberOfChildren: reserve.NumberOfChildren,
@@ -458,68 +484,71 @@ const deleteReservation = async (req, res) => {
   }
 };
 
-const createSummary = async (req, res) => {
+const createSummary= async (req, res) => {
   try {
-    /*const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
-    const userData = payload.id;*/
-    const userData = await User.findOne({ _id: "61a7780f866bf0ec6787692a" });
-    const arrivalFlight = await Flight.findOne({
-      FlightNumber: req.body.ArrivalFlightNumber,
-    });
-    const departureFlight = await Flight.findOne({
-      FlightNumber: req.body.DepartureFlightNumber,
-    });
-    const totalPrice = arrivalFlight.Price + departureFlight.Price;
+    
+    const valueOfId = req.payload.id;
 
-    if (userData) {
-      const sumUP = await Summary.create({
-        //DepartueFlightNumber:departureFlight.FlightNumber,
-        //ArrivalFlightNumber:arrivalFlight.FlightNumber,
-        DepartueFlightNumber: 2,
-        ArrivalFlightNumber: 3,
-        DepartureDepartureDate: departureFlight.DepartureDate,
-        DepartureArrivalDate: departureFlight.ArrivalDate,
-        ArrivalDepartureDate: arrivalFlight.DepartureDate,
-        ArrivalArrivalDate: arrivalFlight.ArrivalDate,
-        DepartureDepartureTime: departureFlight.DepartureTime,
-        DepartureArrivalTime: departureFlight.ArrivalTime,
-        ArrivalDepartureTime: arrivalFlight.DepartureTime,
-        ArrivalArrivalTime: arrivalFlight.ArrivalTime,
-        DepartuePrice: departureFlight.Price,
-        ArrivalPrice: arrivalFlight.Price,
-        CabinClass: req.body.cabin,
-        SeatNumber: req.body.seat,
-        User: {
-          _id: userData._id,
-          FirstName: userData.FirstName,
-          LastName: userData.LastName,
-          Email: userData.Email,
-          Phone: userData.Phone,
-          PassportNumber: userData.PassportNumber,
-          Password: userData.Password,
-          Admin: userData.Admin,
-          UserReservations: userData.UserReservations,
-          Summaries: userData.Summaries,
+    const userData=await User.findOne({ _id: valueOfId});
+    // const userData=await User.findOne({ _id: "61aca7254bbab011cefe35e2"});
+    const arrivalFlight=await Flights.findOne({FlightNumber:req.body.ArrivalFlightNumber});
+    const departureFlight=await Flights.findOne({FlightNumber:req.body.DepartureFlightNumber});
+    const totalPrice=arrivalFlight.Price+departureFlight.Price;
+    console.log(departureFlight);
+    console.log(arrivalFlight);
+    
+    if(userData){
+      const sumUP=await Summary.create({
+        DepartureFlightNumber:departureFlight.FlightNumber,
+        ArrivalFlightNumber:arrivalFlight.FlightNumber,
+        DepartureDepartureDate:departureFlight.DepartureDate,
+        DepartureArrivalDate:departureFlight.ArrivalDate,
+        ArrivalDepartureDate:arrivalFlight.DepartureDate,
+        ArrivalArrivalDate:arrivalFlight.ArrivalDate,
+        DepartureDepartureTime:departureFlight.DepartureTime,
+        DepartureArrivalTime:departureFlight.ArrivalTime,
+        ArrivalDepartureTime:arrivalFlight.DepartureTime,
+        ArrivalArrivalTime:arrivalFlight.ArrivalTime,
+        DepartuePrice:departureFlight.Price,
+        ArrivalPrice:arrivalFlight.Price,
+        CabinClass:req.body.cabin,
+        SeatNumber:req.body.seat,//array
+        User:{
+          _id:userData._id,
+          FirstName:userData.FirstName,
+          LastName:userData.LastName,
+          Email:userData.Email,
+          Phone:userData.Phone ,
+          PassportNumber:userData.PassportNumber,
+          Password:userData.Password , 
+          Admin:userData.Admin,
+          UserReservations:userData.UserReservations,
+          Summaries:userData.Summaries ,
         },
-        Price: totalPrice,
-      });
+        Price:totalPrice});
+        
       userData.Summaries.push(sumUP);
+await User.findOneAndUpdate({_id: userData._id}, 
+  userData, null)
+     .catch((err) => res.status(400).json("Error:" + err));
+      
+     //console.log(sumUP) ;    
 
-      await User.findOneAndUpdate({ _id: userData._id }, userData, null).catch(
-        (err) => res.status(400).json("Error:" + err)
-      );
-      console.log(sumUp);
-    } else {
+     return res.json({
+       statusCode: 0,
+       message: "Success",
+       data:sumUP,
+     });
+    }
+    else {
       return res.json({
         statusCode: 1,
         error: "sign in please",
       });
     }
-    return res.json({
-      statusCode: 0,
-      message: "Success",
-    });
-  } catch (exception) {
+  
+  }
+   catch (exception) {
     console.log(exception);
     return res.json({
       statusCode: 1,
@@ -529,31 +558,29 @@ const createSummary = async (req, res) => {
 };
 
 const getSummary = async (req, res) => {
+  
   try {
-    const arrivalFlight = await Flight.findOne({
-      FlightNumber: req.body.ArrivalFlightNumber,
-    });
-    const departureFlight = await Flight.findOne({
-      FlightNumber: req.body.DepartureFlightNumber,
-    });
-    const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
-    const userData = payload.id;
-    if (userData) {
-      const data = await userData.Summaries.find({
-        ArrivalFlightNumber: arrivalFlight.FlightNumber,
-        DepartureFlight: departureFlight.FlightNumber,
-      });
+    const arrivalFlight=await Flights.findOne({FlightNumber:req.body.ArrivalFlightNumber});
+    const departureFlight=await Flights.findOne({FlightNumber:req.body.DepartureFlightNumber}); 
+    const valueOfId = req.payload.id;
+
+      const userData=await User.findOne({ _id: valueOfId}).populate("Summaries");
+      const data=await Summary.findOne({User:userData,ArrivalFlightNumber:arrivalFlight.FlightNumber,DepartureFlight:departureFlight.FlightNumber});
+      console.log(data);
+    if(userData) {
+         
       return res.json({
-        statusCode: 0,
-        message: "Success",
-        data: data,
-      });
-    } else {
-      return res.json({
-        statusCode: 1,
-        error: "sign in please",
-      });
-    }
+      statusCode: 0,
+      message: "Success",
+      data: data,
+    });
+  }
+  else {
+    return res.json({
+      statusCode: 1,
+      error: "sign in please",
+    });
+  }
   } catch (exception) {
     console.log(exception);
     return res.json({
@@ -561,26 +588,28 @@ const getSummary = async (req, res) => {
       error: "exception",
     });
   }
-};
-
-const updateAccount = async (req, res) => {
-  const UpdatedUser = {
-    FirstName: req.body.FirstName,
-    LastName: req.body.LastName,
-    Email: req.body.Email,
-
-    PassportNumber: req.body.PassportNumber,
-    Password: req.body.Password,
   };
 
-  await User.findOneAndUpdate(
-    { PassportNumber: req.body.PassportNumber },
-    UpdatedUser,
-    null
-  )
-    .then(() => res.json(UpdatedUser))
-    .catch((err) => res.status(400).json("Error:" + err));
-};
+  const updateAccount = async (req, res) => {
+    const valueOfId = req.payload.id;
+  
+    const UpdatedUser = {
+      FirstName: req.body.FirstName,
+      LastName: req.body.LastName,
+      Email: req.body.Email,
+  
+      PassportNumber: req.body.PassportNumber,
+      Password: req.body.Password,
+    };
+  
+    await User.findOneAndUpdate(
+      { _id: valueOfId,},
+      UpdatedUser,
+      null
+    )
+      .then(() => res.json(UpdatedUser))
+      .catch((err) => res.status(400).json("Error:" + err));
+  };
 
 const displayaccount = async (req, res) => {
   try {
@@ -605,6 +634,94 @@ const displayaccount = async (req, res) => {
   }
 };
 
+const sendEmail=(req, res) => {
+  let userEmail=req.body.email;
+  let emailSubject=req.body.emailSubject;
+  let emailBody=req.body.emailBody;
+
+let transporter=nodemailer.createTransport({
+   service:'outlook',
+   auth:{
+     user: 'slamndamn@outlook.com',
+     pass: 'slamn123'
+   }
+});
+
+  message=req.bosy.message
+
+  let mailOptions={
+    from: 'salmn@outlook.com',
+    to:userEmail,
+    subject:emailSubject,
+    text:emailBody
+  };
+
+  transporter.sendMail(mailOptions,(error,info)=>{
+      if(error){
+        console.log(error);
+        return
+      }
+      res.json(info);
+  });
+
+};
+
+const getFutureReservations = async (req, res) => {
+  
+  try {
+     
+    const valueOfId = req.payload.id;
+    const userData=await User.findOne({ _id: valueOfId});
+
+    // const userData=await User.findOne({ _id: "61a7780f866bf0ec6787692a"});
+    var current=new Date();
+ 
+    if(userData) {
+      
+   
+    let reservations=await Reservation.find({User:userData});
+    console.log(current);
+    let result=[];
+    var reservationresult;
+    //console.log(reservations);
+    const arr=reservations.map((res)=>res.DepartureFlightNumber);
+    console.log(arr);
+     for(var i=0;i<arr.length;i++)
+     {
+      var flight=await Flights.findOne({FlightNumber:arr[i]});
+      console.log(flight.DepartureDate);
+      if((flight.DepartureDate) > req.body.date){
+
+     
+        reservationresult=await Reservation.find({User:userData,DepartureFlightNumber:flight.FlightNumber});
+        result.push(reservationresult);
+        console.log("dakhal");
+      }
+    };
+    
+      console.log(result);
+
+      return res.json({
+      statusCode: 0,
+      message: "Success",
+      data: result,
+    });
+  }
+  else {
+    return res.json({
+      statusCode: 1,
+      error: "sign in please",
+    });
+  }
+  } catch (exception) {
+    console.log(exception);
+    return res.json({
+      statusCode: 1,
+      error: "exception",
+    });
+  }
+  };
+
 module.exports = {
   signIn,
   signUp,
@@ -617,4 +734,6 @@ module.exports = {
   displayaccount,
   selectSeats,
   deselectSeats,
+  sendEmail,
+  getFutureReservations
 };
