@@ -24,7 +24,7 @@ router
 router
   .route("/createSummary")
   .post(
-    authentication.validateUser,
+    //authentication.validateUser,
     UserValidation.validateAddSummary,
      UserServices.createSummary);
 router.route("/getSummary").post( authentication.validateUser,UserServices.getSummary);

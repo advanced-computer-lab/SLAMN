@@ -464,8 +464,9 @@ const createSummary= async (req, res) => {
     const valueOfId = req.payload.id;
 
     const userData=await User.findOne({ _id: valueOfId});
-    const arrivalFlight=await Flight.findOne({FlightNumber:req.body.ArrivalFlightNumber});
-    const departureFlight=await Flight.findOne({FlightNumber:req.body.DepartureFlightNumber});
+    // const userData=await User.findOne({ _id: "61aca7254bbab011cefe35e2"});
+    const arrivalFlight=await Flights.findOne({FlightNumber:req.body.ArrivalFlightNumber});
+    const departureFlight=await Flights.findOne({FlightNumber:req.body.DepartureFlightNumber});
     const totalPrice=arrivalFlight.Price+departureFlight.Price;
     console.log(departureFlight);
     console.log(arrivalFlight);
@@ -501,11 +502,17 @@ const createSummary= async (req, res) => {
         Price:totalPrice});
         
       userData.Summaries.push(sumUP);
-        console.log(sumUP) ;    
 await User.findOneAndUpdate({_id: userData._id}, 
   userData, null)
      .catch((err) => res.status(400).json("Error:" + err));
-      // console.log(sumUP);
+      
+     //console.log(sumUP) ;    
+
+     return res.json({
+       statusCode: 0,
+       message: "Success",
+       data:sumUP,
+     });
     }
     else {
       return res.json({
@@ -513,11 +520,7 @@ await User.findOneAndUpdate({_id: userData._id},
         error: "sign in please",
       });
     }
-    return res.json({
-      statusCode: 0,
-      message: "Success",
-      data:sumUP,
-    });
+  
   }
    catch (exception) {
     console.log(exception);
