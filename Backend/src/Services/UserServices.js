@@ -286,6 +286,7 @@ await User.findOneAndUpdate({_id: userData._id},
     return res.json({
       statusCode: 0,
       message: "Success",
+      data:sumUP,
     });
   }
    catch (exception) {
@@ -302,63 +303,41 @@ await User.findOneAndUpdate({_id: userData._id},
 
 const getSummary = async (req, res) => {
   
-try {
-  const arrivalFlight=await Flight.findOne({FlightNumber:req.body.ArrivalFlightNumber});
-  const departureFlight=await Flight.findOne({FlightNumber:req.body.DepartureFlightNumber}); 
-  /*const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
-    const userData = payload.id;*/
-    const userData=await User.findOne({_id:"61a7780f866bf0ec6787692a"});
-  if(userData) {
-    // const data = await userData.Summaries.find({ArrivalFlightNumber:arrivalFlight.FlightNumber,DepartureFlight:departureFlight.FlightNumber});
-    var data;
-    console.log(userData.Summaries);
-    
-    userData.Summaries.forEach(element => {
-      var initialdata= Summary.find({_id:element._id});
-      //console.log(initialdata);
-      if(initialdata.ArrivalFlightNumber==arrivalFlight.FlightNumber && initialdata.DepartureFlightNumber==departureFlight.FlightNumber)
-          {
-            data={
-                      DepartureFlightNumber:initialdata.DepartureFlightNumber,
-                      ArrivalFlightNumber:initialdata.ArrivalFlightNumber,
-                      DepartureDepartureDate:initialdata.DepartureDepartureDate,
-                      DepartureArrivalDate:initialdata.DepartureArrivalDate ,
-                      ArrivalDepartureDate:initialdata.ArrivalDepartureDate ,
-                      ArrivalArrivalDate:initialdata.ArrivalArrivalDate,
-                      DepartureDepartureTime:initialdata.DepartureDepartureTime,
-                      DepartureArrivalTime:initialdata.DepartureArrivalTime ,
-                      ArrivalDepartureTime:initialdata.ArrivalDepartureTime,
-                      ArrivalArrivalTime:initialdata.ArrivalArrivalTime ,
-                      DeparturePrice:initialdata.DeparturePrice,
-                      ArrivalPrice:initialdata.ArrivalPrice ,
-                      CabinClass:initialdata.CabinClass,
-                      SeatNumber:initialdata.SeatNumber,
-                      Price:initialdata.Price,
-                      User:initialdata.User};
-                   
-                    }
+  try {
+    const arrivalFlight=await Flight.findOne({FlightNumber:req.body.ArrivalFlightNumber});
+    const departureFlight=await Flight.findOne({FlightNumber:req.body.DepartureFlightNumber}); 
+    /*const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
+      const userData = payload.id;*/
+      const userData=await User.findOne({_id:"61a779f2840b32d7a8b789a1"}).populate("Summaries");
+      const data=await Summary.findOne({User:userData,ArrivalFlightNumber:arrivalFlight.FlightNumber,DepartureFlight:departureFlight.FlightNumber});
+      console.log(data);
+    if(userData) {
+     
+      
+      
+      
+      return res.json({
+      statusCode: 0,
+      message: "Success",
+      data: data,
     });
-    
+  }
+  else {
     return res.json({
-    statusCode: 0,
-    message: "Success",
-    data: data,
-  });
-}
-else {
-  return res.json({
-    statusCode: 1,
-    error: "sign in please",
-  });
-}
-} catch (exception) {
-  console.log(exception);
-  return res.json({
-    statusCode: 1,
-    error: "exception",
-  });
-}
-};
+      statusCode: 1,
+      error: "sign in please",
+    });
+  }
+  } catch (exception) {
+    console.log(exception);
+    return res.json({
+      statusCode: 1,
+      error: "exception",
+    });
+  }
+  };
+  
+  
 
 const updateAccount = async (req, res) =>{
  
