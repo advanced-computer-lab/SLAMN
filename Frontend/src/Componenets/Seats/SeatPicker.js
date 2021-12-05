@@ -6,6 +6,7 @@ import SeatPicker from "react-seat-picker";
 export default function Seatpicker(props) {
   //const seats = window.localStorage.getItem("seats");
   const seats = JSON.parse(localStorage.getItem("seats"));
+  const returnParameters = JSON.parse(localStorage.getItem("returnParameters"));
   // const [array, setArray] = React.useState([]);
   useEffect(() => {
     console.log(seats, "SEATSSSS");
@@ -77,6 +78,25 @@ export default function Seatpicker(props) {
       }
     }
     props.setSeats(newseats);
+    if (returnParameters.isReturn) {
+      localStorage.setItem(
+        "returnParameters",
+        JSON.stringify({
+          Cabin: returnParameters.Cabin,
+          returnPassengersList: newseats,
+          DeparturePassengersList: returnParameters.DeparturePassengersList,
+          passengersNumber: returnParameters.passengersNumber,
+          returnPrice: returnParameters.returnPrice,
+          departurePrice: returnParameters.departurePrice,
+          DepartureAirport: returnParameters.DepartureAirport,
+          ArrivalAirport: returnParameters.ArrivalAirport,
+          isReturn: returnParameters.isReturn,
+          departureCabin: returnParameters.departureCabin,
+          DepartureFlightNumber: returnParameters.DepartureFlightNumber,
+          ReturnFlightNumber: returnParameters.ReturnFlightNumber,
+        })
+      );
+    }
   };
 
   const removeSeatCallback = async ({ row, number }, removeCb) => {
@@ -124,6 +144,25 @@ export default function Seatpicker(props) {
       }
     }
     props.setSeats(newseats);
+    if (returnParameters.isReturn) {
+      localStorage.setItem(
+        "returnParameters",
+        JSON.stringify({
+          Cabin: returnParameters.Cabin,
+          returnPassengersList: newseats,
+          DeparturePassengersList: returnParameters.DeparturePassengersList,
+          passengersNumber: returnParameters.passengersNumber,
+          returnPrice: returnParameters.returnPrice,
+          departurePrice: returnParameters.departurePrice,
+          DepartureAirport: returnParameters.DepartureAirport,
+          ArrivalAirport: returnParameters.ArrivalAirport,
+          isReturn: returnParameters.isReturn,
+          departureCabin: returnParameters.departureCabin,
+          DepartureFlightNumber: returnParameters.DepartureFlightNumber,
+          ReturnFlightNumber: returnParameters.ReturnFlightNumber,
+        })
+      );
+    }
   };
 
   {

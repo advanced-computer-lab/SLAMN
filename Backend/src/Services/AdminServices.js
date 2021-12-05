@@ -73,7 +73,7 @@ const createFlight = async (req, res) => {
       FirstClassSeats: req.body.FirstClassSeats,
       ArrivalAirport: req.body.ArrivalAirport,
       DepartureAirport: req.body.DepartureAirport,
-      isDeparture: req.body.isDeparture,
+      isDeparture: true,
       Price: req.body.Price,
       TripDuration: req.body.TripDuration,
       EconomySeatsList: Economylist,

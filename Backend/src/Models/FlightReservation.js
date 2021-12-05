@@ -18,7 +18,11 @@ const reservation = new Schema({
     type: String,
     required: true,
   },
-  CabinClass: {
+  DepCabinClass: {
+    type: String,
+    require: true,
+  },
+  ArrCabinClass: {
     type: String,
     require: true,
   },
@@ -33,7 +37,7 @@ const reservation = new Schema({
   totalPrice: {
     type: Number,
     require: true,
-  },
+  },//dep arr
 });
 reservation.set("toJSON", { virtuals: true });
 reservation.set("toObject", { virtuals: true });

@@ -58,8 +58,6 @@ export default function Booking() {
   return (
     <div className={classes.root}>
       <NavBar />
-      <div className={classes.blockSearch}></div>
-      <div className={classes.trip}>Your trip to Tunis</div>
       <Bookfirst />
       <ViewAvailableSeats passengers={passengers} />
     </div>

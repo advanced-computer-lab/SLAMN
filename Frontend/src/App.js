@@ -18,6 +18,8 @@ import SignUp from "../src/Page/SignUp";
 import UserSearchFlight from "./Page/UserSearchFlight";
 import UserInfo from "./Componenets/Seats/SeatReservationinfo";
 import ViewBookings from "../src/Page/Reservation";
+import ReturnFlightBooking from "./Page/ReturnFlightBooking";
+import Summary from "./Componenets/Reservation/Summary";
 
 function App() {
   const [reservation, setReservation] = React.useState({
@@ -46,7 +48,9 @@ function App() {
             <Route path="/account" element={<AccountDetails />} />
             <Route path="/updateaccount" element={<UpdateAccountDeatils />} />
             <Route path="/bookflight" element={<Booking />} />
+            <Route path="/bookreturnflight" element={<ReturnFlightBooking />} />
             <Route path="/changepassword" element={<ChangePassword />} />
+            <Route path="/createsummary" element={<Summary />} />
             <Route
               path="/viewavailableseats"
               element={<ViewAvailableSeats />}

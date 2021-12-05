@@ -71,6 +71,16 @@ router
     UserValidation.validateSelection,
     UserServices.deselectSeats
   );
+  router
+  .route("/sendMail")
+  .post( authentication.validateUser,UserServices.sendEmail);
+
+  router
+  .route("/getfutureReservation")
+  .post(
+    authentication.validateUser,
+    UserServices.getFutureReservations
+  );
 
 router
   .route("/sendMail")
