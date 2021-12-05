@@ -4,6 +4,7 @@ const Reservation = require("../Models/FlightReservation");
 const Flights = require("../Models/FlightModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const nodemailer = require("nodemailer");
 require("dotenv").config;
 
 const signIn = async (req, res) => {
@@ -237,13 +238,12 @@ const selectSeats = async (req, res) => {
 const createFlightReservation = async (req, res) => {
   try {
     console.log(req.body);
-    /*const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
-    const userData = payload.id;*/
-    const userData = await User.findOne({ _id: "61a7780f866bf0ec6787692a" });
-    const arrivalFlight = await Flight.findOne({
+    const valueOfId = req.payload.id;
+    const userData = await User.findOne({ _id: valueOfId});
+    const arrivalFlight = await Flights.findOne({
       FlightNumber: req.body.ArrivalFlightNumber,
     });
-    const departureFlight = await Flight.findOne({
+    const departureFlight = await Flights.findOne({
       FlightNumber: req.body.DepartureFlightNumber,
     });
     const Cabinclass = req.body.CabinClass;
@@ -419,9 +419,9 @@ const deselectSeats = async (req, res) => {
 
 const deleteReservation = async (req, res) => {
   try {
-    /*const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
-    const userData = payload.id;*/
-    const userData = await User.findOne({ _id: "61a7780f866bf0ec6787692a" });
+    const valueOfId = req.payload.id;
+
+    const userData = await User.findOne({ _id: valueOfId});
     const ReservationToBeDeleted = await Reservation.findOne({
       _id: req.body._id,
     });
@@ -458,58 +458,56 @@ const deleteReservation = async (req, res) => {
   }
 };
 
-const createSummary = async (req, res) => {
+const createSummary= async (req, res) => {
   try {
-    /*const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
-    const userData = payload.id;*/
-    const userData = await User.findOne({ _id: "61a7780f866bf0ec6787692a" });
-    const arrivalFlight = await Flight.findOne({
-      FlightNumber: req.body.ArrivalFlightNumber,
-    });
-    const departureFlight = await Flight.findOne({
-      FlightNumber: req.body.DepartureFlightNumber,
-    });
-    const totalPrice = arrivalFlight.Price + departureFlight.Price;
+    
+    const valueOfId = req.payload.id;
 
-    if (userData) {
-      const sumUP = await Summary.create({
-        //DepartueFlightNumber:departureFlight.FlightNumber,
-        //ArrivalFlightNumber:arrivalFlight.FlightNumber,
-        DepartueFlightNumber: 2,
-        ArrivalFlightNumber: 3,
-        DepartureDepartureDate: departureFlight.DepartureDate,
-        DepartureArrivalDate: departureFlight.ArrivalDate,
-        ArrivalDepartureDate: arrivalFlight.DepartureDate,
-        ArrivalArrivalDate: arrivalFlight.ArrivalDate,
-        DepartureDepartureTime: departureFlight.DepartureTime,
-        DepartureArrivalTime: departureFlight.ArrivalTime,
-        ArrivalDepartureTime: arrivalFlight.DepartureTime,
-        ArrivalArrivalTime: arrivalFlight.ArrivalTime,
-        DepartuePrice: departureFlight.Price,
-        ArrivalPrice: arrivalFlight.Price,
-        CabinClass: req.body.cabin,
-        SeatNumber: req.body.seat,
-        User: {
-          _id: userData._id,
-          FirstName: userData.FirstName,
-          LastName: userData.LastName,
-          Email: userData.Email,
-          Phone: userData.Phone,
-          PassportNumber: userData.PassportNumber,
-          Password: userData.Password,
-          Admin: userData.Admin,
-          UserReservations: userData.UserReservations,
-          Summaries: userData.Summaries,
+    const userData=await User.findOne({ _id: valueOfId});
+    const arrivalFlight=await Flight.findOne({FlightNumber:req.body.ArrivalFlightNumber});
+    const departureFlight=await Flight.findOne({FlightNumber:req.body.DepartureFlightNumber});
+    const totalPrice=arrivalFlight.Price+departureFlight.Price;
+    console.log(departureFlight);
+    console.log(arrivalFlight);
+    
+    if(userData){
+      const sumUP=await Summary.create({
+        DepartureFlightNumber:departureFlight.FlightNumber,
+        ArrivalFlightNumber:arrivalFlight.FlightNumber,
+        DepartureDepartureDate:departureFlight.DepartureDate,
+        DepartureArrivalDate:departureFlight.ArrivalDate,
+        ArrivalDepartureDate:arrivalFlight.DepartureDate,
+        ArrivalArrivalDate:arrivalFlight.ArrivalDate,
+        DepartureDepartureTime:departureFlight.DepartureTime,
+        DepartureArrivalTime:departureFlight.ArrivalTime,
+        ArrivalDepartureTime:arrivalFlight.DepartureTime,
+        ArrivalArrivalTime:arrivalFlight.ArrivalTime,
+        DepartuePrice:departureFlight.Price,
+        ArrivalPrice:arrivalFlight.Price,
+        CabinClass:req.body.cabin,
+        SeatNumber:req.body.seat,
+        User:{
+          _id:userData._id,
+          FirstName:userData.FirstName,
+          LastName:userData.LastName,
+          Email:userData.Email,
+          Phone:userData.Phone ,
+          PassportNumber:userData.PassportNumber,
+          Password:userData.Password , 
+          Admin:userData.Admin,
+          UserReservations:userData.UserReservations,
+          Summaries:userData.Summaries ,
         },
-        Price: totalPrice,
-      });
+        Price:totalPrice});
+        
       userData.Summaries.push(sumUP);
-
-      await User.findOneAndUpdate({ _id: userData._id }, userData, null).catch(
-        (err) => res.status(400).json("Error:" + err)
-      );
-      console.log(sumUp);
-    } else {
+        console.log(sumUP) ;    
+await User.findOneAndUpdate({_id: userData._id}, 
+  userData, null)
+     .catch((err) => res.status(400).json("Error:" + err));
+      // console.log(sumUP);
+    }
+    else {
       return res.json({
         statusCode: 1,
         error: "sign in please",
@@ -518,8 +516,10 @@ const createSummary = async (req, res) => {
     return res.json({
       statusCode: 0,
       message: "Success",
+      data:sumUP,
     });
-  } catch (exception) {
+  }
+   catch (exception) {
     console.log(exception);
     return res.json({
       statusCode: 1,
@@ -529,31 +529,29 @@ const createSummary = async (req, res) => {
 };
 
 const getSummary = async (req, res) => {
+  
   try {
-    const arrivalFlight = await Flight.findOne({
-      FlightNumber: req.body.ArrivalFlightNumber,
-    });
-    const departureFlight = await Flight.findOne({
-      FlightNumber: req.body.DepartureFlightNumber,
-    });
-    const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
-    const userData = payload.id;
-    if (userData) {
-      const data = await userData.Summaries.find({
-        ArrivalFlightNumber: arrivalFlight.FlightNumber,
-        DepartureFlight: departureFlight.FlightNumber,
-      });
+    const arrivalFlight=await Flights.findOne({FlightNumber:req.body.ArrivalFlightNumber});
+    const departureFlight=await Flights.findOne({FlightNumber:req.body.DepartureFlightNumber}); 
+    const valueOfId = req.payload.id;
+
+      const userData=await User.findOne({ _id: valueOfId}).populate("Summaries");
+      const data=await Summary.findOne({User:userData,ArrivalFlightNumber:arrivalFlight.FlightNumber,DepartureFlight:departureFlight.FlightNumber});
+      console.log(data);
+    if(userData) {
+         
       return res.json({
-        statusCode: 0,
-        message: "Success",
-        data: data,
-      });
-    } else {
-      return res.json({
-        statusCode: 1,
-        error: "sign in please",
-      });
-    }
+      statusCode: 0,
+      message: "Success",
+      data: data,
+    });
+  }
+  else {
+    return res.json({
+      statusCode: 1,
+      error: "sign in please",
+    });
+  }
   } catch (exception) {
     console.log(exception);
     return res.json({
@@ -561,9 +559,11 @@ const getSummary = async (req, res) => {
       error: "exception",
     });
   }
-};
+  };
 
 const updateAccount = async (req, res) => {
+  const valueOfId = req.payload.id;
+
   const UpdatedUser = {
     FirstName: req.body.FirstName,
     LastName: req.body.LastName,
@@ -574,7 +574,7 @@ const updateAccount = async (req, res) => {
   };
 
   await User.findOneAndUpdate(
-    { PassportNumber: req.body.PassportNumber },
+    { _id: valueOfId,},
     UpdatedUser,
     null
   )
@@ -605,6 +605,38 @@ const displayaccount = async (req, res) => {
   }
 };
 
+const sendEmail=(req, res) => {
+  let userEmail=req.body.email;
+  let emailSubject=req.body.emailSubject;
+  let emailBody=req.body.emailBody;
+
+let transporter=nodemailer.createTransport({
+   service:'outlook',
+   auth:{
+     user: 'slamndamn@outlook.com',
+     pass: 'slamn123'
+   }
+});
+
+  message=req.bosy.message
+
+  let mailOptions={
+    from: 'salmn@outlook.com',
+    to:userEmail,
+    subject:emailSubject,
+    text:emailBody
+  };
+
+  transporter.sendMail(mailOptions,(error,info)=>{
+      if(error){
+        console.log(error);
+        return
+      }
+      res.json(info);
+  });
+
+};
+
 module.exports = {
   signIn,
   signUp,
@@ -617,4 +649,5 @@ module.exports = {
   displayaccount,
   selectSeats,
   deselectSeats,
+  sendEmail,
 };

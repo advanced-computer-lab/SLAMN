@@ -8,6 +8,7 @@ const authentication = require("../Middleware/authentication");
 router
   .route("/deleteReservation")
   .post(
+    authentication.validateUser,
     UserValidation.validateDeleteFlightReservation,
     UserServices.deleteReservation
   );
@@ -15,18 +16,22 @@ router
 router
   .route("/createReservation")
   .post(
+    authentication.validateUser,
     UserValidation.validateCreateReservation,
     UserServices.createFlightReservation
   );
 
 router
   .route("/createSummary")
-  .post(UserValidation.validateAddSummary, UserServices.createSummary);
-router.route("/getSummary").post(UserServices.getSummary);
+  .post(
+    authentication.validateUser,
+    UserValidation.validateAddSummary,
+     UserServices.createSummary);
+router.route("/getSummary").post( authentication.validateUser,UserServices.getSummary);
 
 router
   .route("/updateAccount")
-  .post(UserValidation.validateUpdateAccount, UserServices.updateAccount);
+  .post( authentication.validateUser,UserValidation.validateUpdateAccount, UserServices.updateAccount);
 
 router
   .route("/displayaccount")
@@ -63,5 +68,9 @@ router
     UserValidation.validateSelection,
     UserServices.deselectSeats
   );
+
+  router
+  .route("/sendMail")
+  .post( authentication.validateUser,UserServices.sendEmail);
 
 module.exports = router;

@@ -5,6 +5,7 @@ import Update from "./Page/UpdateFlight";
 import AdminHome from "../src/Page/AdminHome";
 import CreateFlight from "./Page/CreateFlight";
 import Signin from "./Page/Signin";
+import SignUp from "../src/Page/SignUp";
 import DeleteFlight from "../src/Page/DeleteFight";
 import ViewAllFlights from "./Page/ViewAllFlights";
 import Homepage from "./Page/WelcomePage";
@@ -37,7 +38,8 @@ function App() {
             <Route path="/homeadmin" element={<AdminHome />} />
             <Route path="/addflight" element={<CreateFlight />} />
             <Route path="/deleteflight" element={<DeleteFlight />} />
-            <Route path="/signin" element={<Signin />} />
+            <Route path="/signin" element={<Signin />} />            
+            <Route path="/signup" element={<SignUp />} />
             <Route path="/viewallflights" element={<ViewAllFlights />} />
             <Route path="/search" element={<UserSearchFlight />} />
 

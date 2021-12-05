@@ -4,7 +4,7 @@ const cors = require("cors");
 const UserRouter = require("./Routes/UserRoutes");
 const AdminRouter = require("./Routes/AdminRoutes");
 const app = express();
-const port = 8000;
+const port = 5000;
 
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
