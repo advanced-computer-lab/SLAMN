@@ -10,6 +10,17 @@ import InfoIcon from "@mui/icons-material/Info";
 import SimpleDialog from "../Componenets/UserSearchFlight/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
+import { useContext } from "react";
+import UserInfo from "../Componenets/Seats/SeatReservationinfo";
+import Card from "../Componenets/ViewFlights/Card";
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import Select from "../Componenets/SearchFlights/Select";
+import Dropdown from "../Componenets/SearchFlights/Dropdown";
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles({
   root: {
@@ -22,6 +33,7 @@ const useStyles = makeStyles({
   searchBar: {
     display: "flex",
     flexDirection: "row",
+    marginTop: "1.5vw",
   },
   list: {
     display: "flex",
@@ -57,12 +69,17 @@ const useStyles = makeStyles({
     marginTop: "4vw",
     marginLeft: "17vw",
   },
+  passengers: {
+    background: "#f2f2f2",
+    border: " 1px solid #ccc",
+    borderRadius: "0.5vw",
+  },
 });
 
 export default function UserSearchFlight() {
   const classes = useStyles();
   const [selectedValue, setSelectedValue] = React.useState();
-
+  const [reservation, setReservation] = useContext(UserInfo);
   const [open, setOpen] = useState(false);
   const [view, setView] = useState("");
   const [flag, setFlag] = useState(0);
@@ -72,6 +89,19 @@ export default function UserSearchFlight() {
   const [departureAirport, setDepartureAirpot] = useState("");
   const [departureDate, setDepartureDate] = useState("");
   const [arrivalDate, setArrivalDate] = useState("");
+  const [cabin, setCabin] = React.useState("");
+  const [passengers, setPassengers] = React.useState("");
+  const [passengerslist, setPassengersList] = React.useState([]);
+  const [open1, setOpen1] = React.useState(false); //snackbar
+  const [popup, setPopup] = React.useState({ message: "", severity: "" });
+
+  const handleClose1 = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen1(false);
+  };
 
   const handleClick = () => {
     var obj = {};
@@ -86,7 +116,7 @@ export default function UserSearchFlight() {
     axios
       .post("http://localhost:8000/flights/getflights", obj, {})
       .then((res) => {
-        console.log(res.data.data);
+        console.log(res, "RESPONSEEEE");
         setFlights(res.data.data);
       });
   };
@@ -108,6 +138,10 @@ export default function UserSearchFlight() {
     if (prop === "DepartureAirport") setDepartureAirpot(event.target.value);
     if (prop === "ArrivalDate") setArrivalDate(event.target.value);
     if (prop === "DepartureDate") setDepartureDate(event.target.value);
+  };
+  const handleChangeCabin = (e) => {
+    console.log(e.target.value);
+    setCabin(e.target.value);
   };
   const handleChange2 = (event, nextView) => {
     setView(nextView);
@@ -146,63 +180,55 @@ export default function UserSearchFlight() {
           variant="outlined"
           onChange={handleChange("ArrivalDate")}
         />
-        <ToggleButtonGroup
-          orientation="vertical"
-          value={view}
-          exclusive
-          onChange={handleChange2}
-        >
-          <ToggleButton value="module" aria-label="module">
-            Departure Flight{" "}
-          </ToggleButton>
-          <ToggleButton value="quilt" aria-label="quilt">
-            Arrival Flight{" "}
-          </ToggleButton>
-        </ToggleButtonGroup>
+        <div className={classes.passengers}>
+          <Select
+            setPassengers={setPassengers}
+            passengers={passengers}
+            setPassengersList={setPassengersList}
+            passengerslist={passengerslist}
+          />
+        </div>
+
+        <Dropdown
+          items={["Economy", "Business", "First"]}
+          placeholder={"Cabin"}
+          value={cabin}
+          setCabin={setCabin}
+          onChange={(e) => {
+            handleChangeCabin(e);
+          }}
+        />
       </div>
       <Button onClick={handleClick} variant="outlined">
         {" "}
         FIND FLIGHT
       </Button>
       <div className={classes.list}>
-        {flights.map((elem) => (
-          <div className={classes.item}>
-            <div className={classes.set}>
-              <p>
-                {"Departure·"} {elem.DepartureAirport}
-              </p>
-              <p>{elem.DepartureDate}</p>
-              <p>{elem.DepartureTime}</p>
-            </div>
-            <div className={classes.durationDiv}>
-              {elem.TripDuration}
-              <FlightIcon className={classes.icon} />
-            </div>
-            <div className={classes.set}>
-              <p>
-                {"Arrival·"} {elem.ArrivalAirport}
-              </p>
-              <p>{elem.ArrivalDate}</p>
-              <p>{elem.ArrivalTime}</p>
-            </div>
-            <InfoIcon
-              value={"asds"}
-              onClick={(e) => handleClick2(e)}
-              className={classes.icon2}
-            />
-            <SimpleDialog
-              selectedValue={selectedValue}
-              open={open}
-              onClose={handleClose}
-            />
-            <Dialog onClose={handleClose} open={open}>
-              <DialogTitle>Flight Details</DialogTitle>
-              <p>{selected.ArrivalAirport}</p>
-              <p>{selected.ArrivalDate}</p>
-            </Dialog>
-          </div>
+        {flights.map((n) => (
+          <Card
+            flight={{
+              FlightNumber: n.FlightNumber,
+              Price: n.Price,
+              DepartureAirport: n.DepartureAirport,
+              DepartureTime: n.DepartureTime,
+              DepartureDate: n.DepartureDate,
+              ArrivalAirport: n.ArrivalAirport,
+              ArrivalTime: n.ArrivalTime,
+              ArrivalDate: n.ArrivalDate,
+              passengers: passengers,
+              Cabin: cabin,
+              passengerslist: passengerslist,
+            }}
+            setPopup={setPopup}
+            setOpen={setOpen1}
+          />
         ))}
       </div>
+      <Snackbar open={open1} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose1} severity={popup.severity}>
+          {popup.message}
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

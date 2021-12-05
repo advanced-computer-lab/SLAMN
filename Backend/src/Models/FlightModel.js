@@ -1,6 +1,5 @@
 const { time } = require("console");
 const mongoose = require("mongoose");
-const internal = require("stream");
 const Schema = mongoose.Schema;
 
 const flightSchema = new Schema({
@@ -58,24 +57,44 @@ const flightSchema = new Schema({
   },
   EconomySeatsList: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Seat",
+      number: {
+        type: String,
+        required: true,
+      },
+      isReserved: {
+        type: Boolean,
+        required: true,
+      },
     },
   ],
   BusinessSeatsList: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Seat",
+      number: {
+        type: String,
+        required: true,
+      },
+      isReserved: {
+        type: Boolean,
+        required: true,
+      },
     },
   ],
   FirstSeatsList: [
     {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Seat",
+      number: {
+        type: String,
+        required: true,
+      },
+      isReserved: {
+        type: Boolean,
+        required: true,
+      },
     },
   ],
 });
 
 mongoose.models = {};
+flightSchema.set("toJSON", { virtuals: true });
+flightSchema.set("toObject", { virtuals: true });
 const Flight = mongoose.model("Flight", flightSchema);
 module.exports = Flight;

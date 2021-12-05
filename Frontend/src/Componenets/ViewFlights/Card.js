@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import Divider from "@mui/material/Divider";
 import Button from "../AccountDetails/Buttons";
-
+import { useNavigate } from "react-router-dom";
+import UserInfo from "../Seats/SeatReservationinfo";
+import axios from "axios";
 const useStyles = makeStyles({
   root: {
     marginTop: "1vw",
@@ -131,14 +133,98 @@ const useStyles = makeStyles({
     height: "2vw  !important",
     marginLeft: "20vw",
   },
+  priceandselect: {
+    display: "flex",
+    width: "50vw",
+    justifyContent: "space-between",
+  },
+  price: {
+    fontWeight: "700",
+  },
+  price2: {
+    marginLeft: "1vw",
+    marginTop: "0.5vw",
+    color: "gray",
+  },
 });
 
-export default function Card() {
+export default function Card(props) {
   const classes = useStyles();
+  const [reservation, setReservation] = useContext(UserInfo);
+  const history = useNavigate();
+  const handleClick = async () => {
+    if (props.flight.passengers === "") {
+      props.setPopup({
+        message: "To select this flight please select passengers",
+        severity: "error",
+      });
+      props.setOpen(true);
+    } else {
+      if (props.flight.cabin === "") {
+        props.setPopup({
+          message: "To select this flight please select a cabin type",
+          severity: "error",
+        });
+        props.setOpen(true);
+      } else {
+        await axios
+          .post(
+            "http://localhost:8000/users/viewAvailableSeats",
+
+            {
+              FlightNumber: "" + props.flight.FlightNumber,
+              Cabin: props.flight.Cabin,
+            },
+            { headers: { auth: window.localStorage.getItem("token") } }
+          )
+          .then(function (response) {
+            console.log(response);
+            if (response.data.seats.length != 0) {
+              console.log("MSH FADYY");
+              {
+                var i = 1;
+                var a = [];
+                var newArray = [];
+                for (i; i <= response.data.seats.length; i++) {
+                  if (i % 6 === 0) {
+                    a.push({
+                      number: response.data.seats[i - 1].number,
+                      isReserved: response.data.seats[i - 1].isReserved,
+                    });
+                    newArray.push(a);
+                    a = [];
+                  } else {
+                    a.push({
+                      number: response.data.seats[i - 1].number,
+                      isReserved: response.data.seats[i - 1].isReserved,
+                    });
+                  }
+                }
+                if ((i - 1) % 6 != 0) {
+                  newArray.push(a);
+                }
+                console.log(newArray);
+                localStorage.setItem("seats", JSON.stringify(newArray));
+              }
+            }
+          });
+        setReservation({
+          Cabin: props.flight.Cabin,
+          FlightNumber: props.flight.FlightNumber,
+          passengerslist: props.flight.passengerslist,
+          price: props.flight.Price,
+          DepartureAirport: props.flight.DepartureAirport,
+          ArrivalAirport: props.flight.ArrivalAirport,
+        });
+
+        history("/bookflight");
+      }
+    }
+  };
   return (
     <div className={classes.root}>
       <div className={classes.block}></div>
-      <div className={classes.flight}>flight</div>
+      <div className={classes.flight}>Flight {props.flight.FlightNumber}</div>
       <div className={classes.display}>
         <FlightTakeoffIcon
           className={classes.depicon}
@@ -149,48 +235,39 @@ export default function Card() {
       <div className={classes.display}>
         <div>
           <div className={classes.display}>
-            <div className={classes.tim1dep}>08:15</div>
-            <div className={classes.count1dep}> CAI</div>
+            <div className={classes.tim1dep}>{props.flight.DepartureTime}</div>
+            <div className={classes.count1dep}>
+              {" "}
+              {props.flight.DepartureAirport}
+            </div>
           </div>
 
-          <div className={classes.dep1info}>Thu, 09 Dec</div>
+          <div className={classes.dep1info}>{props.flight.DepartureDate}</div>
         </div>
 
         <div>
           <div className={classes.display}>
-            <div className={classes.tim2dep}>08:15</div>
-            <div className={classes.count2dep}> CAI</div>
+            <div className={classes.tim2dep}>{props.flight.ArrivalTime}</div>
+            <div className={classes.count2dep}>
+              {" "}
+              {props.flight.ArrivalAirport}
+            </div>
           </div>
-          <div className={classes.dep12info}>Thu, 09 Dec</div>
+          <div className={classes.dep12info}>{props.flight.ArrivalDate}</div>
         </div>
       </div>
       <Divider className={classes.divider} />
-      <div className={classes.display}>
-        <FlightLandIcon
-          className={classes.arrivalicon}
-          style={{ color: "#005dad" }}
+      <div className={classes.priceandselect}>
+        <div className={classes.count2dep}>
+          <div className={classes.price}>Price:</div>
+          <div className={classes.price2}>{props.flight.Price + "EGP"}</div>
+        </div>
+        <Button
+          ClassName={classes.button}
+          title={"Select "}
+          onClick={handleClick}
         />
-        <div className={classes.arrival}>Arrival</div>
       </div>
-      <div className={classes.display}>
-        <div>
-          <div className={classes.display}>
-            <div className={classes.tim1arrival}>08:15</div>
-            <div className={classes.count1arrival}> CAI</div>
-          </div>
-
-          <div className={classes.arrival1info}>Thu, 09 Dec</div>
-        </div>
-
-        <div>
-          <div className={classes.display}>
-            <div className={classes.tim2arrival}>08:15</div>
-            <div className={classes.count2arrival}> CAI</div>
-          </div>
-          <div className={classes.arrival12info}>Thu, 09 Dec</div>
-        </div>
-      </div>
-      <Button ClassName={classes.button} title={"Select"} />
     </div>
   );
 }

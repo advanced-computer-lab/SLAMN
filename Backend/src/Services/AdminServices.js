@@ -20,7 +20,15 @@ const getFlights = async (req, res) => {
 
 const createFlight = async (req, res) => {
   try {
-    console.log(req.body);
+    const user = req.payload.id;
+    const valid = await User.findOne({ _id: user });
+    if (valid.Admin === false) {
+      return res.json({
+        statusCode: 1,
+        error: "Not an Admin",
+      });
+    }
+    console.log(req.payload, "Payload", valid);
     const Eseats = req.body.EconomySeats;
     const Bseats = req.body.BusinessSeats;
     const Fseats = req.body.FirstClassSeats;
@@ -36,21 +44,21 @@ const createFlight = async (req, res) => {
     var i = 1;
     for (i; i <= Eseats; i++) {
       Economylist.push({
-        Number: "E" + i,
+        number: "E" + i,
         isReserved: false,
       });
     }
     var i = 1;
     for (i; i <= Bseats; i++) {
       Businesslist.push({
-        Number: "B" + i,
+        number: "B" + i,
         isReserved: false,
       });
     }
     var i = 1;
     for (i; i <= Fseats; i++) {
       Firstlist.push({
-        Number: "F" + i,
+        number: "F" + i,
         isReserved: false,
       });
     }

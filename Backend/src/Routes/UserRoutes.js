@@ -41,6 +41,17 @@ router.route("/displayaccount").post(
 router
   .route("/changepassword")
   .post(
+    authentication.validateUser,
+    UserValidation.validatePassword,
+    UserServices.changePassword
+  );
+router
+  .route("/signup")
+  .post(UserValidation.validateSignup, UserServices.signUp);
+
+router
+  .route("/viewAvailableSeats")
+  .post(
     UserValidation.validatePassword,
     authentication.validateUser,
     UserServices.changePassword
@@ -53,5 +64,12 @@ router
 router
   .route("/signup")
   .post(UserValidation.validateSignup, UserServices.signUp);
+router
+  .route("/deselectSeats")
+  .post(
+    authentication.validateUser,
+    UserValidation.validateSelection,
+    UserServices.deselectSeats
+  );
 
 module.exports = router;
