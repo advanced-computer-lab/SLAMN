@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
@@ -142,11 +142,14 @@ const useStyles = makeStyles({
 
 export default function Summary() {
   const classes = useStyles();
+  const returnParameters = JSON.parse(localStorage.getItem("returnParameters"));
+
+  useEffect(() => {});
   return (
     <div className={classes.root}>
       <div className={classes.block}></div>
       <div className={classes.display}>
-        <div className={classes.flight}>flight</div>
+        <div className={classes.flight}>{"Flight"}</div>
         <AirplaneTicketIcon
           className={classes.ticketicon}
           style={{ color: "#005dad" }}
@@ -158,24 +161,42 @@ export default function Summary() {
           style={{ color: "#005dad" }}
         />
         <div className={classes.dep}>Departure</div>
-        <div className={classes.depclass}>Economy</div>
+        <div className={classes.dep}>
+          {"Flight:" + returnParameters.DepartureFlightNumber}
+        </div>
+        <div className={classes.depclass}>
+          {returnParameters.departureCabin}
+        </div>
       </div>
-      <div className={classes.depprice}>$7.50</div>
+      <div className={classes.depprice}>{returnParameters.departurePrice}</div>
       <div className={classes.display}>
         <div>
           <div className={classes.display}>
-            <div className={classes.tim1dep}>08:15</div>
-            <div className={classes.count1dep}> CAI</div>
+            <div className={classes.tim1dep}>
+              {returnParameters.DepartureTime}
+            </div>
+            <div className={classes.count1dep}>
+              {returnParameters.DepartureAirport}
+            </div>
           </div>
 
-          <div className={classes.dep1info}>Thu, 09 Dec</div>
-          <div className={classes.dep1info}>Cairo International Airport </div>
+          <div className={classes.dep1info}>
+            {returnParameters.DepartureDate}
+          </div>
+          <div className={classes.dep1info}>
+            {returnParameters.DepartureAirport + " International Airport"}{" "}
+          </div>
         </div>
 
         <div>
           <div className={classes.display}>
-            <div className={classes.tim2dep}>08:15</div>
-            <div className={classes.count2dep}> CAI</div>
+            <div className={classes.tim2dep}>
+              {returnParameters.ArrivalTime}
+            </div>
+            <div className={classes.count2dep}>
+              {" "}
+              {returnParameters.ArrivalAirport}
+            </div>
           </div>
           <div className={classes.dep12info}>Thu, 09 Dec</div>
           <div className={classes.dep12info}>Cairo International Airport </div>

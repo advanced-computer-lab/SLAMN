@@ -2,11 +2,12 @@ import React, { useState, useEffect, useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import AirlineSeatReclineNormalIcon from "@mui/icons-material/AirlineSeatReclineNormal";
 import SeatPicker from "../Componenets/Seats/SeatPicker";
-
+import Button from "../Componenets/AccountDetails/Buttons";
 import Line from "../Images/arrowRight.png";
 import Line1 from "../Images/Line.png";
 import Passenger from "../Componenets/Seats/Passenger";
 import UserInfo from "../Componenets/Seats/SeatReservationinfo";
+import { useNavigate } from "react-router";
 const useStyles = makeStyles(() => ({
   root: {
     width: "60vw",
@@ -39,6 +40,11 @@ const useStyles = makeStyles(() => ({
     height: "20vw",
     marginTop: "2vw",
     textAlign: " -webkit-center",
+  },
+  seatpicker2: {
+    overflowY: "scroll",
+    height: "20vw",
+    marginBottom: "2svw",
   },
   flights: {
     width: "60vw",
@@ -111,7 +117,13 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function ViewAvailableSeats(props) {
+  var returnParameters = {};
+  if (JSON.parse(localStorage.getItem("returnList"))) {
+    returnParameters = JSON.parse(localStorage.getItem("returnParameters"));
+  }
+
   const classes = useStyles();
+  const history = useNavigate();
   const [reservation, setReservation] = useContext(UserInfo);
   const [cabin, setCabin] = React.useState(reservation.Cabin);
   const [price, setPrice] = React.useState(0);
@@ -122,6 +134,43 @@ export default function ViewAvailableSeats(props) {
     reservation.passengerslist.length
   );
 
+  const handleConfirm = () => {
+    console.log(JSON.parse(localStorage.getItem("returnList")), "ELCONFIRMMM");
+    if (!JSON.parse(localStorage.getItem("returnList"))) {
+      var returnPList = [];
+      var i = 0;
+      for (i; i < reservation.passengerslist; i++) {
+        returnPList.push({
+          passengerNumber: reservation.passengerslist[i].passengersNumber,
+          passengerType: reservation.passengerslist[i].passengersType,
+          passengerSeat: "",
+        });
+      }
+      localStorage.setItem("returnList", JSON.stringify(returnPList));
+
+      localStorage.setItem(
+        "returnParameters",
+        JSON.stringify({
+          Cabin: "",
+          returnPassengersList: reservation.passengerslist,
+          departurePassengersList: reservation.passengerslist,
+          departurePrice: price,
+          passengersNumber: reservation.passengerslist.length,
+          returnPrice: 0,
+          DepartureAirport: reservation.ArrivalAirport,
+          ArrivalAirport: reservation.DepartureAirport,
+          isReturn: true,
+          departureCabin: reservation.Cabin,
+          DepartureFlightNumber: reservation.FlightNumber,
+          ReturnFlightNumber: "",
+        })
+      );
+      history("/bookreturnflight");
+    } else {
+      console.log(returnParameters, "LASTTT");
+      history("/createsummary");
+    }
+  };
   return (
     <div className={classes.root}>
       <div className={classes.title}>SEAT RESERVATION</div>
@@ -164,21 +213,29 @@ export default function ViewAvailableSeats(props) {
           </div>
         </div>
         <div className={classes.seatpicker}>
-          <SeatPicker
-            seatsnumber={seatsNumber}
-            setSeats={setPassengers}
-            seats={passengers}
-            price={price}
-            initialPrice={reservation.price}
-            cabin={cabin}
-            setPrice={setPrice}
-          />
+          <div className={classes.seatpicker2}>
+            <SeatPicker
+              seatsnumber={seatsNumber}
+              setSeats={setPassengers}
+              seats={passengers}
+              price={price}
+              initialPrice={reservation.price}
+              cabin={cabin}
+              setPrice={setPrice}
+            />
+          </div>
+
           <div className={classes.pricediv}>
             <div className={classes.total}>Total Price:</div>
             <div className={classes.price}>{price}EGP</div>
           </div>
         </div>
       </div>
+      <Button
+        ClassName={classes.button}
+        title={"Confirm "}
+        onClick={handleConfirm}
+      />
     </div>
   );
 }

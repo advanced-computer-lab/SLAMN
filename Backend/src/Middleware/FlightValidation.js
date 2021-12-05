@@ -13,7 +13,6 @@ const validateAddFlight = (req, res, next) => {
     FirstClassSeats: Joi.number().required(),
     DepartureAirport: Joi.string().required(),
     ArrivalAirport: Joi.string().required(),
-    isDeparture: Joi.bool().required(),
     Price: Joi.number().required(),
     TripDuration: Joi.string().required(),
   }).required();

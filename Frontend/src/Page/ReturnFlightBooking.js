@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@mui/material/Button";
+
 import axios from "axios";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
@@ -77,8 +78,28 @@ const useStyles = makeStyles({
 });
 
 export default function UserSearchFlight() {
-  localStorage.setItem("returnParameters", JSON.stringify({}));
-  localStorage.removeItem("returnList");
+  const returnParameters = JSON.parse(localStorage.getItem("returnParameters"));
+  useEffect(() => {
+    console.log(returnParameters, "RETURNFLIGHT");
+    const newseats = JSON.parse(localStorage.getItem("returnList"));
+    localStorage.setItem(
+      "returnParameters",
+      JSON.stringify({
+        Cabin: returnParameters.Cabin,
+        returnPassengersList: newseats,
+        DeparturePassengersList: returnParameters.DeparturePassengersList,
+        passengersNumber: returnParameters.passengersNumber,
+        returnPrice: returnParameters.returnPrice,
+        departurePrice: returnParameters.departurePrice,
+        DepartureAirport: returnParameters.DepartureAirport,
+        ArrivalAirport: returnParameters.ArrivalAirport,
+        isReturn: returnParameters.isReturn,
+        departureCabin: returnParameters.departureCabin,
+        DepartureFlightNumber: returnParameters.DepartureFlightNumber,
+        ReturnFlightNumber: returnParameters.ReturnFlightNumber,
+      })
+    );
+  }, []);
   const classes = useStyles();
   const [selectedValue, setSelectedValue] = React.useState();
   const [reservation, setReservation] = useContext(UserInfo);
@@ -92,8 +113,12 @@ export default function UserSearchFlight() {
   const [departureDate, setDepartureDate] = useState("");
   const [arrivalDate, setArrivalDate] = useState("");
   const [cabin, setCabin] = React.useState("");
-  const [passengers, setPassengers] = React.useState("");
-  const [passengerslist, setPassengersList] = React.useState([]);
+  const [passengers, setPassengers] = React.useState(
+    returnParameters.returnPassengersList.length
+  );
+  const [passengerslist, setPassengersList] = React.useState(
+    returnParameters.returnPassengersList
+  );
   const [open1, setOpen1] = React.useState(false); //snackbar
   const [popup, setPopup] = React.useState({ message: "", severity: "" });
 
@@ -107,12 +132,12 @@ export default function UserSearchFlight() {
 
   const handleClick = () => {
     var obj = {};
-    if (departureDate.length !== 0) obj.DepartureDate = departureDate;
-    if (arrivalDate.length !== 0) obj.ArrivalDate = arrivalDate;
-    if (arrivalAirport.length !== 0) obj.ArrivalAirport = arrivalAirport;
-    if (departureAirport.length !== 0) obj.DepartureAirport = departureAirport;
-    if (flag === 2) obj.isDeparture = true;
-    if (flag === 1) obj.isDeparture = false;
+    if (arrivalDate.length !== 0) obj.DepartureDate = arrivalDate;
+    if (returnParameters.ArrivalAirport !== 0)
+      obj.ArrivalAirport = returnParameters.ArrivalAirport;
+    if (returnParameters.DepartureAirport !== 0)
+      obj.DepartureAirport = returnParameters.DepartureAirport;
+    obj.isDeparture = true;
 
     console.log(obj);
     axios
@@ -122,35 +147,32 @@ export default function UserSearchFlight() {
         setFlights(res.data.data);
       });
   };
-  const handleClick2 = (e) => {
-    setOpen(true);
-    var ths = {};
-    ths.FlightNumber = e.value;
-    console.log(e.value);
-    axios
-      .post("http://localhost:8000/flights/getflights", ths, {})
-      .then((res) => {
-        console.log(res.data.data);
-        setSelected(res.data.data);
-      });
-  };
 
   const handleChange = (prop) => (event) => {
-    if (prop === "ArrivalAirport") setArrivalAirport(event.target.value);
-    if (prop === "DepartureAirport") setDepartureAirpot(event.target.value);
     if (prop === "ArrivalDate") setArrivalDate(event.target.value);
-    if (prop === "DepartureDate") setDepartureDate(event.target.value);
   };
   const handleChangeCabin = (e) => {
     console.log(e.target.value);
     setCabin(e.target.value);
+    localStorage.setItem(
+      "returnParameters",
+      JSON.stringify({
+        Cabin: "" + e.target.value,
+        returnPassengersList: returnParameters.returnPassengersList,
+        DeparturePassengersList: returnParameters.DeparturePassengersList,
+        passengersNumber: returnParameters.passengersNumber,
+        returnPrice: returnParameters.returnPrice,
+        departurePrice: returnParameters.departurePrice,
+        DepartureAirport: returnParameters.DepartureAirport,
+        ArrivalAirport: returnParameters.ArrivalAirport,
+        isReturn: returnParameters.isReturn,
+        departureCabin: returnParameters.departureCabin,
+        DepartureFlightNumber: returnParameters.DepartureFlightNumber,
+        ReturnFlightNumber: returnParameters.ReturnFlightNumber,
+      })
+    );
   };
-  const handleChange2 = (event, nextView) => {
-    setView(nextView);
-    setTimeout(500);
-    if (view === "module") setFlag(1);
-    if (view === "quilt") setFlag(2);
-  };
+
   const handleClose = (value) => {
     setOpen(false);
     setSelectedValue(value);
@@ -159,37 +181,11 @@ export default function UserSearchFlight() {
     <div className={classes.root}>
       <div className={classes.searchBar}>
         <TextField
-          placeholder="Where from ?"
-          margin="none"
-          variant="outlined"
-          onChange={handleChange("DepartureAirport")}
-        />
-        <TextField
-          placeholder=" Where to ?"
-          margin="none"
-          variant="outlined"
-          onChange={handleChange("ArrivalAirport")}
-        />
-        <TextField
-          placeholder="Departure date"
-          margin="none"
-          variant="outlined"
-          onChange={handleChange("DepartureDate")}
-        />
-        <TextField
           placeholder="Return date "
           margin="none"
           variant="outlined"
           onChange={handleChange("ArrivalDate")}
         />
-        <div className={classes.passengers}>
-          <Select
-            setPassengers={setPassengers}
-            passengers={passengers}
-            setPassengersList={setPassengersList}
-            passengerslist={passengerslist}
-          />
-        </div>
 
         <Dropdown
           items={["Economy", "Business", "First"]}

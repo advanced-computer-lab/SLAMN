@@ -26,6 +26,9 @@ export default function CreateFlight() {
   const date = new Date();
   const [FlightNumber, setFlight] = React.useState("");
   const [DepartureDate, setDepartureDate] = React.useState("");
+  const [TripDuration, setTripDuration] = React.useState("");
+  const [FirstClassSeats, setFirstSeats] = React.useState(-1);
+  const [Price, setPrice] = React.useState(0);
   const [ArrivalDate, setArrivalDate] = React.useState("");
   const [EconomySeats, setEconomySeats] = React.useState(-1);
   const [BusinessSeats, setBusinessSeats] = React.useState(-1);
@@ -42,7 +45,7 @@ export default function CreateFlight() {
   const handleClose1 = () => {
     setOpen1(false);
   };
-  const handleClick = () => {
+  const handleClick = async () => {
     if (
       FlightNumber === "" ||
       DepartureDate.length === "" ||
@@ -58,18 +61,25 @@ export default function CreateFlight() {
       handleOpen1();
       console.log(BusinessSeats);
     } else {
-      axios
-        .post("http://localhost:8000/flights/", {
-          FlightNumber: FlightNumber,
-          DepartureDate: DepartureDate,
-          ArrivalDate: ArrivalDate,
-          EconomySeats: EconomySeats,
-          BusinessSeats: BusinessSeats,
-          ArrivalAirport: arrivaltime,
-          DepartureAirport: deptime,
-          DepartureTime: deptime,
-          ArrivalTime: arrivaltime,
-        })
+      await axios
+        .post(
+          "http://localhost:8000/flights/",
+          {
+            FlightNumber: FlightNumber,
+            DepartureDate: DepartureDate,
+            ArrivalDate: ArrivalDate,
+            DepartureTime: deptime,
+            ArrivalTime: arrivaltime,
+            EconomySeats: EconomySeats,
+            BusinessSeats: BusinessSeats,
+            FirstClassSeats: FirstClassSeats,
+            ArrivalAirport: Arrairport,
+            DepartureAirport: depariport,
+            Price: Price,
+            TripDuration: TripDuration,
+          },
+          { headers: { auth: window.localStorage.getItem("token") } }
+        )
         .then(function (response) {
           console.log(response);
         });
@@ -101,6 +111,12 @@ export default function CreateFlight() {
               setArrivalDate(e.target.value);
             }}
           />
+          <TextBox
+            title={"TripDurtion"}
+            onChange={(e) => {
+              setTripDuration(e.target.value);
+            }}
+          />
         </div>
       </div>
       <div className={classes.root}>
@@ -117,6 +133,22 @@ export default function CreateFlight() {
             title={"BusinessSeats"}
             onChange={(e) => {
               setBusinessSeats(e.target.value);
+            }}
+          />
+        </div>
+        <div className={classes.space}>
+          <TextBox
+            title={"FirstClassSeats"}
+            onChange={(e) => {
+              setFirstSeats(e.target.value);
+            }}
+          />
+        </div>
+        <div className={classes.space}>
+          <TextBox
+            title={"Price"}
+            onChange={(e) => {
+              setPrice(e.target.value);
             }}
           />
         </div>
