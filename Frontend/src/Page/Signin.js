@@ -1,103 +1,141 @@
 import React from "react";
 import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
+import TextField from "@material-ui/core/TextField";
 import { useState } from "react";
-import SnackBar from "../Componenets/General/SnackBar";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import Link from "@material-ui/core/Link";
+import CloseIcon from "@mui/icons-material/Close";
 
 import axios from "axios";
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
+import { filledInputClasses } from "@mui/material";
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-  },
+  display: { display: "flex" },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    backgroundColor: "#005dad",
+    marginTop: "7vw",
+    marginLeft: "48vw",
   },
-  form: {
-    width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
+  text2: {
+    marginLeft: "38vw",
+    marginTop: "2vw",
+    width: "23vw !important",
   },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
+  text1: {
+    marginLeft: "38vw",
+    marginTop: "2vw",
+    width: "23vw !important",
   },
+  button: {
+    marginLeft: "37vw",
+    width: "23vw !important",
+  },
+  title: {
+    marginLeft: "47vw",
+  },
+  link: {
+    marginLeft: "49vw",
+  },
+  emailicon: { marginTop: "2.35vw", marginLeft: "1vw" },
+  erroremailerror: { marginTop: "2.2vw", color: "crimson" },
+  emailwithout: { marginTop: "2vw", color: "white" },
+  errorfirst: { marginTop: "2.2vw", color: "crimson" },
+  passworderrors: { marginTop: "2.2vw", color: "crimson" },
+  passwordicon: { marginTop: "2.35vw", marginLeft: "1vw" },
+  passwordwithout: { marginTop: "2vw", color: "white" },
 }));
 
 export default function Signin() {
   const classes = useStyles();
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [open1, setOpen1] = useState(false);
-  const [error, seterror] = useState("");
-  const handleOpen1 = () => {
-    setOpen1(true);
+  const [password, setPassword] = React.useState("");
+  const [email, setEmail] = React.useState("");
+  const [passworderror, setpassworderror] = useState(false);
+  const [passwordtext, setpasswordtext] = useState("");
+  const [emailtext, setemailtext] = useState("");
+  const [emailerror, setemailerror] = useState(false);
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
   };
-
-  const handleClose1 = () => {
-    setOpen1(false);
-  };
-  const handleLogin = (e) => {
-    console.log("password", "emaill");
-    console.log("email", "passssssssssss");
-
-    axios
-      .post("http://localhost:8000/flights/signin", {
-        Email: email,
-        Password: password,
-      })
-      .then(function (response) {
-        console.log(response);
-        console.log("yalllllllllaa");
-      });
-
-    // window.location = "/home";
-  };
-
   const onChangePassword = (e) => {
     setPassword(e.target.value);
   };
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
   };
+  const handleLogin = (e) => {
+    var x = 2;
+    if (email === "") {
+      console.log(email);
+      setemailerror(true);
+      setemailtext("Email could not be left empty ");
+    } else {
+      if (!validateEmail(email)) {
+        setemailerror(true);
+        setemailtext("Email should be in xxxx@y.com format");
+      } else {
+        setemailerror(false);
+        x--;
+      }
+    }
+    if (password === "") {
+      console.log("innnnnnnn");
+      setpassworderror(true);
+      setpasswordtext("Password cannot be left empty");
+    } else {
+      console.log("out");
+      setpassworderror(false);
+      x--;
+    }
+    if (x == 0) {
+      axios
+        .post("http://localhost:8000/users/signin", {
+          Email: email,
+          Password: password,
+        })
+        .then((res) => {
+          console.log(res);
+          console.log("this " + "  " + res.headers.auth);
+          window.localStorage.setItem("token", res.headers.auth);
+          console.log(window.localStorage);
+          if (res.data.message === "Success") {
+            setemailerror(false);
+            setpassworderror(false);
+            window.location = "/home";
+          }
+          if (res.data.message === "Invalid Password") {
+            setpassworderror(true);
+            setpasswordtext("Invalid Password");
+          }
+          if (res.data.message === "Invalid Email") {
+            setemailerror(true);
+            setemailtext("Invalid Email");
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
+    <div>
+      <div>
         <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
+          <LockOutlinedIcon style={{ color: "#ffd633" }} />
         </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
+        <Typography className={classes.title} component="h1" variant="h5">
+          Sign In
         </Typography>
-        <form className={classes.form} noValidate>
+      </div>
+      <div className={classes.display}>
+        <div className={classes.text1}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -108,8 +146,25 @@ export default function Signin() {
             name="email"
             autoComplete="email"
             autoFocus
-            onChange={onChangePassword}
+            onChange={onChangeEmail}
+            error={emailerror}
           />
+        </div>
+        <CloseIcon
+          style={emailerror ? { color: "crimson" } : { color: "white" }}
+          fontSize="xsmall"
+          className={classes.emailicon}
+        />
+        <div
+          className={
+            emailerror ? classes.erroremailerror : classes.emailwithout
+          }
+        >
+          {emailtext}
+        </div>
+      </div>
+      <div className={classes.display}>
+        <div className={classes.text2}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -119,44 +174,39 @@ export default function Signin() {
             label="Password"
             type="password"
             id="password"
-            autoComplete="current-password"
-            onChange={onChangeEmail}
+            onChange={onChangePassword}
+            error={passworderror}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={handleLogin}
-          >
-            Sign In
-          </Button>
-
-          <Grid container>
-            <Grid item xs></Grid>
-            <Grid item>
-              <Link href="signup" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
+        </div>
+        <CloseIcon
+          style={passworderror ? { color: "crimson" } : { color: "white" }}
+          fontSize="xsmall"
+          className={classes.passwordicon}
+        />
+        <div
+          className={
+            passworderror ? classes.passworderrors : classes.passwordwithout
+          }
+        >
+          {passwordtext}
+        </div>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-
-      <SnackBar
-        open={open1}
-        handleOpen={handleOpen1}
-        handleClose={handleClose1}
-        error={error}
-      />
-    </Container>
+      <div className={classes.button}>
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          fullWidth
+          className={classes.submit}
+          onClick={handleLogin}
+          style={{ backgroundColor: "#005dad" }}
+        >
+          Sign In
+        </Button>
+      </div>
+      <Link className={classes.link} href="signup" variant="body2">
+        {"Don't have an account? Sign Up"}
+      </Link>
+    </div>
   );
 }

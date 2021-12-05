@@ -3,7 +3,7 @@
   width: 60vw !important;
 }
 .MuiTextField-root {
-  margin: 1vw !important;
+  margin: 0vw !important;
 }
 .MuiButton-root {
   display: flex;
@@ -11,4 +11,9 @@
   width: 14.5vw;
   height: 3.7vw;
   margin: 1vw !important;
+}
+.MuiToggleButton-root {
+  width: 7.5vw;
+  height: 3.7vw;
+  margin-left: 1vw !important;
 }
