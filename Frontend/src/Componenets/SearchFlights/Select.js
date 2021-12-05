@@ -16,21 +16,45 @@ const useStyles = makeStyles({
   },
   first: {
     marginLeft: "3vw",
+    color: "grey",
   },
   first2: {
     marginLeft: "1.6vw",
+    color: "grey",
   },
   second: {
     marginLeft: "0.9vw",
+    color: "grey",
   },
   second2: {
     marginLeft: "0.9vw",
+    color: "grey",
   },
-  children: { marginTop: "0.7vw", fontSize: "1.3vw" },
-  adult: { marginTop: "0.7vw", fontSize: "1.3vw" },
+  children: {
+    marginTop: "0.7vw",
+    marginLeft: "0.7vw",
+    fontSize: "1.1vw",
+    color: "grey",
+  },
+  adult: {
+    marginTop: "0.7vw",
+    marginLeft: "0.7vw",
+    fontSize: "1.1vw",
+    color: "grey",
+  },
 
-  value1: { marginTop: "0.45vw", fontSize: "1.5vw", marginLeft: "0.5vw" },
-  value2: { marginTop: "0.45vw", fontSize: "1.5vw", marginLeft: "0.5vw" },
+  value1: {
+    marginTop: "0.45vw",
+    fontSize: "1.5vw",
+    marginLeft: "0.5vw",
+    color: "grey",
+  },
+  value2: {
+    marginTop: "0.45vw",
+    fontSize: "1.5vw",
+    marginLeft: "0.5vw",
+    color: "grey",
+  },
 });
 
 export default function Select(props) {

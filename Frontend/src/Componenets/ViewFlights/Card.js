@@ -6,7 +6,7 @@ import Divider from "@mui/material/Divider";
 import Button from "../AccountDetails/Buttons";
 import { useNavigate } from "react-router-dom";
 import UserInfo from "../Seats/SeatReservationinfo";
-
+import axios from "axios";
 const useStyles = makeStyles({
   root: {
     marginTop: "1vw",
@@ -152,7 +152,7 @@ export default function Card(props) {
   const classes = useStyles();
   const [reservation, setReservation] = useContext(UserInfo);
   const history = useNavigate();
-  const handleClick = () => {
+  const handleClick = async () => {
     if (props.flight.passengers === "") {
       props.setPopup({
         message: "To select this flight please select passengers",
@@ -167,6 +167,47 @@ export default function Card(props) {
         });
         props.setOpen(true);
       } else {
+        await axios
+          .post(
+            "http://localhost:8000/users/viewAvailableSeats",
+
+            {
+              FlightNumber: "" + props.flight.FlightNumber,
+              Cabin: props.flight.Cabin,
+            },
+            { headers: { auth: window.localStorage.getItem("token") } }
+          )
+          .then(function (response) {
+            console.log(response);
+            if (response.data.seats.length != 0) {
+              console.log("MSH FADYY");
+              {
+                var i = 1;
+                var a = [];
+                var newArray = [];
+                for (i; i <= response.data.seats.length; i++) {
+                  if (i % 6 === 0) {
+                    a.push({
+                      number: response.data.seats[i - 1].number,
+                      isReserved: response.data.seats[i - 1].isReserved,
+                    });
+                    newArray.push(a);
+                    a = [];
+                  } else {
+                    a.push({
+                      number: response.data.seats[i - 1].number,
+                      isReserved: response.data.seats[i - 1].isReserved,
+                    });
+                  }
+                }
+                if ((i - 1) % 6 != 0) {
+                  newArray.push(a);
+                }
+                console.log(newArray);
+                localStorage.setItem("seats", JSON.stringify(newArray));
+              }
+            }
+          });
         setReservation({
           Cabin: props.flight.Cabin,
           FlightNumber: props.flight.FlightNumber,
@@ -175,6 +216,7 @@ export default function Card(props) {
           DepartureAirport: props.flight.DepartureAirport,
           ArrivalAirport: props.flight.ArrivalAirport,
         });
+
         history("/bookflight");
       }
     }

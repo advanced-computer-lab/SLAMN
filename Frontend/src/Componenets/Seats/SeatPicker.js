@@ -4,44 +4,32 @@ import { useState, useEffect } from "react";
 import SeatPicker from "react-seat-picker";
 
 export default function Seatpicker(props) {
+  //const seats = window.localStorage.getItem("seats");
+  const seats = JSON.parse(localStorage.getItem("seats"));
   // const [array, setArray] = React.useState([]);
-  // useEffect(() => {
-  //   var i = 0;
-  //   var newArray = [];
-  //   var a = [];
-  //   for (i; i < props.array.length; i++) {
-  //     if ((i + 1) % 6 === 0) {
-  //       newArray.push(a);
-  //       a = [];
-  //     }
-  //     a.push(props.array[i]);
-  //   }
-  //   if (a != []) {
-  //     newArray.push(a);
-  //   }
-  //   setArray(newArray);
-  //   console.log(newArray);
-  // }, []);
+  useEffect(() => {
+    console.log(seats, "SEATSSSS");
+  }, []);
 
   const [loading, setLoading] = React.useState(false);
   const array2 = [
     [
       { number: "E1", isReserved: false },
-      { number: "E2", isReserved: false, _id: "88888" },
-      { number: "E3", isReserved: true, _id: "88888" },
-      { number: "E4", isReserved: false, _id: "88888" },
-      { number: "E5", isReserved: false, _id: "88888" },
-      { number: "E6", isReserved: false, _id: "88888" },
+      { number: "E2", isReserved: false },
+      { number: "E3", isReserved: true },
+      { number: "E4", isReserved: false },
+      { number: "E5", isReserved: false },
+      { number: "E6", isReserved: false },
     ],
     [
-      { number: "E7", isReserved: false, _id: "88888" },
-      { number: "E8", isReserved: false, _id: "88888" },
-      { number: "E9", isReserved: false, _id: "88888" },
-      { number: "E10", isReserved: false, _id: "88888" },
+      { number: "E7", isReserved: false },
+      { number: "E8", isReserved: false },
+      { number: "E9", isReserved: false },
+      { number: "E10", isReserved: false },
       { number: "E11", isReserved: false },
-      { number: "E12", isReserved: false, _id: "88888" },
+      { number: "E12", isReserved: false },
     ],
-    [{ number: "E13", isReserved: false, _id: "88888" }],
+    [{ number: "E13", isReserved: false }],
   ];
   const addSeatCallback = async ({ row, number }, addCb) => {
     setLoading(true);
@@ -63,34 +51,32 @@ export default function Seatpicker(props) {
           passengerSeat: number,
         });
         found = true;
+        if (props.cabin === "Economy") {
+          if (props.seats[i].passengerType === "Adult") {
+            props.setPrice(props.price + props.initialPrice);
+          } else {
+            props.setPrice(props.price + props.initialPrice * 0.5);
+          }
+        }
+        if (props.cabin === "Business") {
+          if (props.seats[i].passengerType === "Adult") {
+            props.setPrice(props.price + props.initialPrice * 1.5);
+          } else {
+            props.setPrice(props.price + props.initialPrice * 1.5 * 0.5);
+          }
+        }
+        if (props.cabin === "First") {
+          if (props.seats[i].passengerType === "Adult") {
+            props.setPrice(props.price + props.initialPrice * 2);
+          } else {
+            props.setPrice(props.price + props.initialPrice * 0.5 * 2);
+          }
+        }
       } else {
         newseats.push(props.seats[i]);
       }
     }
     props.setSeats(newseats);
-  };
-
-  const addSeatCallbackContinousCase = async (
-    { row, number, id },
-    addCb,
-    params,
-    removeCb
-  ) => {
-    setLoading(true);
-    {
-      if (removeCb) {
-        await new Promise((resolve) => setTimeout(resolve, 750));
-        console.log(
-          `Removed seat ${params.number}, row ${params.row}, id ${params.id}`
-        );
-        removeCb(params.row, params.number);
-      }
-      await new Promise((resolve) => setTimeout(resolve, 750));
-      console.log(`Added seat ${number}, row ${row}, id ${id}`);
-      const newTooltip = `tooltip for id-${id} added by callback`;
-      addCb(row, number, id, newTooltip);
-      setLoading(false);
-    }
   };
 
   const removeSeatCallback = async ({ row, number }, removeCb) => {
@@ -112,6 +98,27 @@ export default function Seatpicker(props) {
           passengerType: props.seats[i].passengerType,
           passengerSeat: "",
         });
+        if (props.cabin === "Economy") {
+          if (props.seats[i].passengerType === "Adult") {
+            props.setPrice(props.price - props.initialPrice);
+          } else {
+            props.setPrice(props.price - props.initialPrice * 0.5);
+          }
+        }
+        if (props.cabin === "Business") {
+          if (props.seats[i].passengerType === "Adult") {
+            props.setPrice(props.price - props.initialPrice * 1.5);
+          } else {
+            props.setPrice(props.price - props.initialPrice * 1.5 * 0.5);
+          }
+        }
+        if (props.cabin === "First") {
+          if (props.seats[i].passengerType === "Adult") {
+            props.setPrice(props.price - props.initialPrice * 2);
+          } else {
+            props.setPrice(props.price - props.initialPrice * 0.5 * 2);
+          }
+        }
       } else {
         newseats.push(props.seats[i]);
       }
@@ -120,14 +127,13 @@ export default function Seatpicker(props) {
   };
 
   {
-    const rows = props.array;
     return (
       <div>
         <div style={{ marginTop: "3vw", height: "20vw" }}>
           <SeatPicker
             addSeatCallback={addSeatCallback}
             removeSeatCallback={removeSeatCallback}
-            rows={rows}
+            rows={seats}
             maxReservableSeats={props.seats.length}
             alpha
             visible

@@ -33,6 +33,7 @@ const useStyles = makeStyles({
   searchBar: {
     display: "flex",
     flexDirection: "row",
+    marginTop: "1.5vw",
   },
   list: {
     display: "flex",
@@ -67,6 +68,11 @@ const useStyles = makeStyles({
   icon2: {
     marginTop: "4vw",
     marginLeft: "17vw",
+  },
+  passengers: {
+    background: "#f2f2f2",
+    border: " 1px solid #ccc",
+    borderRadius: "0.5vw",
   },
 });
 
@@ -174,12 +180,14 @@ export default function UserSearchFlight() {
           variant="outlined"
           onChange={handleChange("ArrivalDate")}
         />
-        <Select
-          setPassengers={setPassengers}
-          passengers={passengers}
-          setPassengersList={setPassengersList}
-          passengerslist={passengerslist}
-        />
+        <div className={classes.passengers}>
+          <Select
+            setPassengers={setPassengers}
+            passengers={passengers}
+            setPassengersList={setPassengersList}
+            passengerslist={passengerslist}
+          />
+        </div>
 
         <Dropdown
           items={["Economy", "Business", "First"]}
@@ -190,20 +198,6 @@ export default function UserSearchFlight() {
             handleChangeCabin(e);
           }}
         />
-
-        <ToggleButtonGroup
-          orientation="vertical"
-          value={view}
-          exclusive
-          onChange={handleChange2}
-        >
-          <ToggleButton value="module" aria-label="module">
-            Departure Flight{" "}
-          </ToggleButton>
-          <ToggleButton value="quilt" aria-label="quilt">
-            Arrival Flight{" "}
-          </ToggleButton>
-        </ToggleButtonGroup>
       </div>
       <Button onClick={handleClick} variant="outlined">
         {" "}
