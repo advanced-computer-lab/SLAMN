@@ -33,7 +33,6 @@ function App() {
       <BrowserRouter>
         <UserInfo.Provider value={[reservation, setReservation]}>
           <Routes>
-            <Route path="/" element={<Homepage />} />
             <Route path="/updateflight" element={<Update />} />
             <Route path="/homeadmin" element={<AdminHome />} />
             <Route path="/addflight" element={<CreateFlight />} />
