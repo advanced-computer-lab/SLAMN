@@ -240,18 +240,41 @@ const createFlightReservation = async (req, res) => {
     console.log(req.body);
     const valueOfId = req.payload.id;
     const userData = await User.findOne({ _id: valueOfId});
+        //  const userData = await User.findOne({ _id: "61acf8804f22c4507b340a83"});
+
     const arrivalFlight = await Flights.findOne({
       FlightNumber: req.body.ArrivalFlightNumber,
     });
     const departureFlight = await Flights.findOne({
       FlightNumber: req.body.DepartureFlightNumber,
     });
-    const Cabinclass = req.body.CabinClass;
+    const DepCabinclass = req.body.DepCabinClass;
+    const ArrCabinclass = req.body.ArrCabinClass;
     var basePrice = arrivalFlight.Price + departureFlight.Price;
     const noOfChildren = req.body.NumberOfChildren;
     const noOfAdults = req.body.NumberOfAdults;
 
-    switch (Cabinclass) {
+    switch (DepCabinclass) {
+      case "Economy": {
+        basePrice = basePrice;
+        break;
+      }
+      case "First Class": {
+        basePrice += 700;
+        break;
+      }
+      case "Business Class": {
+        basePrice += 1000;
+        break;
+      }
+      default: {
+        return res.json({
+          statusCode: 1,
+          error: "Not a valid class",
+        });
+      }
+    }
+    switch (ArrCabinclass) {
       case "Economy": {
         basePrice = basePrice;
         break;
@@ -276,6 +299,8 @@ const createFlightReservation = async (req, res) => {
       const reserve = await Reservation.create({
         DepartureFlightNumber: departureFlight.FlightNumber,
         ArrivalFlightNumber: arrivalFlight.FlightNumber,
+        DepCabinclass: DepCabinclass,
+        ArrCabinclass: ArrCabinclass,
         NumberOfChildren: noOfChildren,
         NumberOfAdults: noOfAdults,
         totalPrice: basePrice * 0.5 * noOfChildren + basePrice * noOfAdults,
@@ -296,6 +321,8 @@ const createFlightReservation = async (req, res) => {
         _id: reserve._id,
         User: reserve.User,
         DepartureFlightNumber: reserve.DepartureFlightNumber,
+        DepCabinclass: reserve.DepCabinclass,
+        ArrCabinclass: reserve.ArrCabinclass,
         ArrivalFlightNumber: reserve.ArrivalFlightNumber,
         CabinClass: reserve.CabinClass,
         NumberOfChildren: reserve.NumberOfChildren,
@@ -486,7 +513,7 @@ const createSummary= async (req, res) => {
         DepartuePrice:departureFlight.Price,
         ArrivalPrice:arrivalFlight.Price,
         CabinClass:req.body.cabin,
-        SeatNumber:req.body.seat,
+        SeatNumber:req.body.seat,//array
         User:{
           _id:userData._id,
           FirstName:userData.FirstName,
