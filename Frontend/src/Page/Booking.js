@@ -6,9 +6,8 @@ import ViewAvailableSeats from "./ViewAvailableSeats";
 const useStyles = makeStyles({
   root: {
     background: " gainsboro",
-
     width: "100%",
-    height: "100% vw",
+    height: "100vw",
   },
   blockSearch: {
     background: "white",
@@ -28,38 +27,10 @@ const useStyles = makeStyles({
 
 export default function Booking() {
   const classes = useStyles();
-  const [passengers, setPassengers] = React.useState([
-    {
-      passengerNumber: 1,
-      passengerType: "Adult",
-      passengerSeat: "",
-    },
-    {
-      passengerNumber: 2,
-      passengerType: "child",
-      passengerSeat: "",
-    },
-    {
-      passengerNumber: 3,
-      passengerType: "Adult",
-      passengerSeat: "",
-    },
-    {
-      passengerNumber: 4,
-      passengerType: "Adult",
-      passengerSeat: "",
-    },
-    {
-      passengerNumber: 5,
-      passengerType: "Adult",
-      passengerSeat: "",
-    },
-  ]);
   return (
     <div className={classes.root}>
       <NavBar />
-      <Bookfirst />
-      <ViewAvailableSeats passengers={passengers} />
+      <ViewAvailableSeats />
     </div>
   );
 }

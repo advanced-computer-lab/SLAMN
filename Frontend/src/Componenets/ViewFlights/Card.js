@@ -183,9 +183,8 @@ export default function Card(props) {
               { headers: { auth: window.localStorage.getItem("token") } }
             )
             .then(function (response) {
-              console.log(response);
-              if (response.data.seats.length != 0) {
-                console.log("MSH FADYY");
+              console.log(response, "MY SEATSS");
+              if (response.data.seats) {
                 {
                   var i = 1;
                   var a = [];

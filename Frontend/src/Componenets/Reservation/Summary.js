@@ -4,6 +4,10 @@ import FlightTakeoffIcon from "@mui/icons-material/FlightTakeoff";
 import FlightLandIcon from "@mui/icons-material/FlightLand";
 import Divider from "@mui/material/Divider";
 import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
+import axios from "axios";
+import NavBar from "../General/NavBar";
+import Buttons from "../General/Buttons";
+import { useNavigate } from "react-router";
 
 const useStyles = makeStyles({
   root: {
@@ -141,103 +145,164 @@ const useStyles = makeStyles({
 });
 
 export default function Summary() {
+  const history = useNavigate();
+  const departurelist = JSON.parse(localStorage.getItem("departureList"));
   const classes = useStyles();
-  const returnParameters = JSON.parse(localStorage.getItem("returnParameters"));
+  const [returnParameters, setParameters] = React.useState(
+    JSON.parse(localStorage.getItem("returnParameters"))
+  );
+  const handleConfirm = () => {
+    history("/home");
+  };
+  useEffect(() => {
+    console.log(returnParameters, "el returnn");
+    axios
+      .post(
+        "http://localhost:8000/users/createSummary",
 
-  useEffect(() => {});
+        {
+          ArrivalFlightNumber: returnParameters.ReturnFlightNumber,
+          DepartureFlightNumber: returnParameters.DepartureFlightNumber,
+          returnSeats: returnParameters.returnPassengersList,
+          departureSeats: departurelist,
+          returnCabin: returnParameters.Cabin,
+          departureCabin: returnParameters.departureCabin,
+        },
+        { headers: { auth: window.localStorage.getItem("token") } }
+      )
+      .then(function (response) {
+        console.log(response, "response");
+        localStorage.setItem(
+          "summaryDetails",
+          JSON.stringify(response.data.data)
+        );
+        setParameters(response.data.data);
+      });
+  }, []);
   return (
-    <div className={classes.root}>
-      <div className={classes.block}></div>
-      <div className={classes.display}>
-        <div className={classes.flight}>{"Flight"}</div>
-        <AirplaneTicketIcon
-          className={classes.ticketicon}
-          style={{ color: "#005dad" }}
-        />
-      </div>
-      <div className={classes.display}>
-        <FlightTakeoffIcon
-          className={classes.depicon}
-          style={{ color: "#005dad" }}
-        />
-        <div className={classes.dep}>Departure</div>
-        <div className={classes.dep}>
-          {"Flight:" + returnParameters.DepartureFlightNumber}
+    <div>
+      <NavBar />
+      <div className={classes.root}>
+        <div className={classes.block}></div>
+        <div className={classes.display}>
+          <div className={classes.flight}>{"Flight"}</div>
+          <AirplaneTicketIcon
+            className={classes.ticketicon}
+            style={{ color: "#005dad" }}
+          />
         </div>
-        <div className={classes.depclass}>
-          {returnParameters.departureCabin}
+        <div className={classes.display}>
+          <FlightTakeoffIcon
+            className={classes.depicon}
+            style={{ color: "#005dad" }}
+          />
+
+          <div className={classes.dep}>
+            {"Departure Flight:" + returnParameters.DepartureFlightNumber}
+          </div>
+          <div className={classes.depclass}>
+            {returnParameters.departureCabin}
+          </div>
         </div>
-      </div>
-      <div className={classes.depprice}>{returnParameters.departurePrice}</div>
-      <div className={classes.display}>
-        <div>
-          <div className={classes.display}>
-            <div className={classes.tim1dep}>
-              {returnParameters.DepartureTime}
+        {/* <div className={classes.depprice}>{returnParameters.departurePrice}</div> */}
+        <div className={classes.display}>
+          <div>
+            <div className={classes.display}>
+              <div className={classes.tim1dep}>
+                {returnParameters.DepartureDepartureTime}
+              </div>
+              <div className={classes.count1dep}>
+                {returnParameters.DepartureAirport}
+              </div>
             </div>
-            <div className={classes.count1dep}>
-              {returnParameters.DepartureAirport}
+
+            <div className={classes.dep1info}>
+              {returnParameters.DepartureDepartureDate}
+            </div>
+            <div className={classes.dep1info}>
+              {returnParameters.DepartureAirport + " International Airport"}{" "}
             </div>
           </div>
 
-          <div className={classes.dep1info}>
-            {returnParameters.DepartureDate}
-          </div>
-          <div className={classes.dep1info}>
-            {returnParameters.DepartureAirport + " International Airport"}{" "}
-          </div>
-        </div>
-
-        <div>
-          <div className={classes.display}>
-            <div className={classes.tim2dep}>
-              {returnParameters.ArrivalTime}
+          <div>
+            <div className={classes.display}>
+              <div className={classes.tim2dep}>
+                {returnParameters.DepartureDepartureTime}
+              </div>
+              <div className={classes.count2dep}>
+                {" "}
+                {returnParameters.ArrivalAirport}
+              </div>
             </div>
-            <div className={classes.count2dep}>
-              {" "}
-              {returnParameters.ArrivalAirport}
+            <div className={classes.dep12info}>
+              {returnParameters.DepartureArrivalDate}
+            </div>
+            <div className={classes.dep12info}>
+              {returnParameters.ArrivalAirport + " International Airport "}
             </div>
           </div>
-          <div className={classes.dep12info}>Thu, 09 Dec</div>
-          <div className={classes.dep12info}>Cairo International Airport </div>
         </div>
-      </div>
-      <Divider className={classes.divider} />
-      <div className={classes.display}>
-        <FlightLandIcon
-          className={classes.arrivalicon}
-          style={{ color: "#005dad" }}
-        />
-        <div className={classes.arrival}>Return</div>
-        <div className={classes.arrivalclass}>Economy</div>
-      </div>
-      <div className={classes.arrivalprice}>$3.55</div>
-      <div className={classes.display}>
-        <div>
-          <div className={classes.display}>
-            <div className={classes.tim1arrival}>08:15</div>
-            <div className={classes.count1arrival}> CAI</div>
+        <Divider className={classes.divider} />
+        <div className={classes.display}>
+          <FlightLandIcon
+            className={classes.arrivalicon}
+            style={{ color: "#005dad" }}
+          />
+          <div className={classes.arrival}>
+            {"Return Flight: " + returnParameters.ArrivalFlightNumber}
+          </div>
+          <div className={classes.arrivalclass}>
+            {returnParameters.returnCabin}
+          </div>
+        </div>
+        <div className={classes.display}>
+          <div>
+            <div className={classes.display}>
+              <div className={classes.tim1arrival}>
+                {returnParameters.ArrivalDepartureTime}
+              </div>
+              <div className={classes.count1arrival}>
+                {" "}
+                {returnParameters.ArrivalAirport}
+              </div>
+            </div>
+
+            <div className={classes.arrival1info}>
+              {returnParameters.ArrivalDepartureDate}
+            </div>
+            <div className={classes.arrival1info}>
+              {returnParameters.ArrivalAirport + " International Airport"}
+            </div>
           </div>
 
-          <div className={classes.arrival1info}>Thu, 09 Dec</div>
-          <div className={classes.arrival1info}>
-            Cairo International Airport{" "}
+          <div>
+            <div className={classes.display}>
+              <div className={classes.tim2arrival}>
+                {returnParameters.ArrivalArrivalTime}
+              </div>
+              <div className={classes.count2arrival}>
+                {" "}
+                {returnParameters.DepartureAirport}
+              </div>
+            </div>
+            <div className={classes.arrival12info}>
+              {returnParameters.ArrivalArrivalDate}
+            </div>
+            <div className={classes.arrival12info}>
+              {returnParameters.DepartureAirport + " International Airport"}
+            </div>
           </div>
         </div>
-
-        <div>
-          <div className={classes.display}>
-            <div className={classes.tim2arrival}>08:15</div>
-            <div className={classes.count2arrival}> CAI</div>
-          </div>
-          <div className={classes.arrival12info}>Thu, 09 Dec</div>
-          <div className={classes.arrival12info}>
-            Cairo International Airport{" "}
-          </div>
+        <Divider className={classes.divider} />
+        <div className={classes.priceTotal}>
+          {"Total price : " + returnParameters.Price}{" "}
         </div>
       </div>
-      <Divider className={classes.divider} />
-      <div className={classes.priceTotal}>Total price : $10.00 </div>
+      <Buttons
+        ClassName={classes.button}
+        title={"Confirm Booking"}
+        onClick={handleConfirm}
+      />
     </div>
   );
 }

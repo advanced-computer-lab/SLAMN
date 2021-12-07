@@ -3,6 +3,7 @@ import Buttons from "../Componenets/General/Buttons";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { useNavigate } from "react-router-dom";
+import NavBar from "../Componenets/General/NavBar";
 
 const useStyles = makeStyles({
   root: {
@@ -23,11 +24,12 @@ export default function AdminHome() {
   };
   const handleView = () => {
     // history.push("/viewallflights");
-    navigate("/viewallflights");
+    navigate("/search");
   };
 
   return (
     <div className={classes.root}>
+      <NavBar />
       <Buttons size="small" title="Search Flight" onClick={handleView} />
       <Buttons size="small" title="Create Flight" onClick={handleCreate} />
     </div>

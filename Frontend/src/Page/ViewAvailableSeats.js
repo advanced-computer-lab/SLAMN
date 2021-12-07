@@ -24,6 +24,9 @@ const useStyles = makeStyles(() => ({
     border: " 1px solid #ccc",
     borderRadius: "0.3vw",
   },
+  confirm: {
+    backgroundColor: "whitesmoke",
+  },
   title: {
     width: "60vw",
     textAlign: "center",
@@ -45,7 +48,7 @@ const useStyles = makeStyles(() => ({
   seatpicker2: {
     overflowY: "scroll",
     height: "20vw",
-    marginBottom: "2svw",
+    marginBottom: "2vw",
   },
   flights: {
     width: "60vw",
@@ -148,7 +151,10 @@ export default function ViewAvailableSeats(props) {
         });
       }
       localStorage.setItem("returnList", JSON.stringify(returnPList));
-
+      localStorage.setItem(
+        "departureList",
+        JSON.stringify(reservation.passengerslist)
+      );
       localStorage.setItem(
         "returnParameters",
         JSON.stringify({
@@ -168,6 +174,10 @@ export default function ViewAvailableSeats(props) {
       );
       history("/bookreturnflight");
     } else {
+      const returnParameters = JSON.parse(
+        localStorage.getItem("returnParameters")
+      );
+
       history("/createsummary");
     }
   };
@@ -231,11 +241,13 @@ export default function ViewAvailableSeats(props) {
           </div>
         </div>
       </div>
-      <Button
-        ClassName={classes.button}
-        title={"Confirm "}
-        onClick={handleConfirm}
-      />
+      <div className={classes.confirm}>
+        <Button
+          ClassName={classes.button}
+          title={"Confirm "}
+          onClick={handleConfirm}
+        />
+      </div>
     </div>
   );
 }

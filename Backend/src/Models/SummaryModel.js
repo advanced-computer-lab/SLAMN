@@ -12,15 +12,23 @@ const summary = new Schema({
   //   type: mongoose.Schema.Types.ObjectId,
   //   ref: "Flight",
   // },
-  DepartureFlightNumber:{
-    type:Number,
-    required:true,
+  DepartureFlightNumber: {
+    type: Number,
+    required: true,
   },
-  ArrivalFlightNumber:{
-    type:Number,
-    required:true,
+  ArrivalFlightNumber: {
+    type: Number,
+    required: true,
   },
   DepartureDepartureDate: {
+    type: String,
+    required: true,
+  },
+  DepartureAirport: {
+    type: String,
+    required: true,
+  },
+  ArrivalAirport: {
     type: String,
     required: true,
   },
@@ -60,17 +68,49 @@ const summary = new Schema({
     type: Number,
     require: true,
   },
-  CabinClass:{
-    type:String,
-    require:true,
+  returnCabin: {
+    type: String,
+    require: true,
   },
-  SeatNumber:{
-    type:String,
-    require:true,
+  departureCabin: {
+    type: String,
+    require: true,
   },
-  Price:{
-    type:Number,
-    require:true,
+  returnSeats: {
+    type: [
+      {
+        passengerNumber: {
+          type: Number,
+        },
+        passengerType: {
+          type: String,
+        },
+        passengerSeat: {
+          type: String,
+        },
+      },
+    ],
+    require: true,
+  },
+  departureSeats: {
+    type: [
+      {
+        passengerNumber: {
+          type: Number,
+        },
+        passengerType: {
+          type: String,
+        },
+        passengerSeat: {
+          type: String,
+        },
+      },
+    ],
+    require: true,
+  },
+  Price: {
+    type: Number,
+    require: true,
   },
   User: {
     type: mongoose.Schema.Types.ObjectId,

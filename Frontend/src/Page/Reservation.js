@@ -44,7 +44,7 @@ const useStyles = makeStyles({
     width: "100vw",
     height: "5vw",
     fontSize: "2vw",
-
+    color: "grey",
     boxShadow: "1px 2px 1px #9E9E9E",
   },
 

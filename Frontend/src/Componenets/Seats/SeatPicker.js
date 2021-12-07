@@ -13,25 +13,7 @@ export default function Seatpicker(props) {
   }, []);
 
   const [loading, setLoading] = React.useState(false);
-  const array2 = [
-    [
-      { number: "E1", isReserved: false },
-      { number: "E2", isReserved: false },
-      { number: "E3", isReserved: true },
-      { number: "E4", isReserved: false },
-      { number: "E5", isReserved: false },
-      { number: "E6", isReserved: false },
-    ],
-    [
-      { number: "E7", isReserved: false },
-      { number: "E8", isReserved: false },
-      { number: "E9", isReserved: false },
-      { number: "E10", isReserved: false },
-      { number: "E11", isReserved: false },
-      { number: "E12", isReserved: false },
-    ],
-    [{ number: "E13", isReserved: false }],
-  ];
+
   const addSeatCallback = async ({ row, number }, addCb) => {
     setLoading(true);
     {
@@ -181,21 +163,6 @@ export default function Seatpicker(props) {
             tooltipProps={{ multiline: true }}
           />
         </div>
-        {/* <h1>Seat Picker Continuous Case</h1>
-        <div style={{ marginTop: "100px" }}>
-          <SeatPicker
-            addSeatCallback={this.addSeatCallbackContinousCase}
-            removeSeatCallback={this.removeSeatCallback}
-            rows={rows}
-            maxReservableSeats={3}
-            alpha
-            visible
-            selectedByDefault
-            loading={loading}
-            tooltipProps={{ multiline: true }}
-            continuous
-          />
-        </div> */}
       </div>
     );
   }

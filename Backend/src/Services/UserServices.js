@@ -490,6 +490,7 @@ const deleteReservation = async (req, res) => {
 
 const createSummary = async (req, res) => {
   try {
+    console.log(req.payload, "elpayloaaddd");
     const valueOfId = req.payload.id;
 
     const userData = await User.findOne({ _id: valueOfId });
@@ -508,6 +509,8 @@ const createSummary = async (req, res) => {
       const sumUP = await Summary.create({
         DepartureFlightNumber: departureFlight.FlightNumber,
         ArrivalFlightNumber: arrivalFlight.FlightNumber,
+        DepartureAirport: departureFlight.DepartureAirport,
+        ArrivalAirport: departureFlight.ArrivalAirport,
         DepartureDepartureDate: departureFlight.DepartureDate,
         DepartureArrivalDate: departureFlight.ArrivalDate,
         ArrivalDepartureDate: arrivalFlight.DepartureDate,
@@ -518,8 +521,10 @@ const createSummary = async (req, res) => {
         ArrivalArrivalTime: arrivalFlight.ArrivalTime,
         DepartuePrice: departureFlight.Price,
         ArrivalPrice: arrivalFlight.Price,
-        CabinClass: req.body.cabin,
-        SeatNumber: req.body.seat, //array
+        returnCabin: req.body.returnCabin,
+        returnSeats: req.body.returnSeats,
+        departureCabin: req.body.returnCabin,
+        departureSeats: req.body.returnSeats,
         User: {
           _id: userData._id,
           FirstName: userData.FirstName,

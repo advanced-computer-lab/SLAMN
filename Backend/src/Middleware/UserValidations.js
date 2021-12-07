@@ -127,8 +127,10 @@ const validateAddSummary = (req, res, next) => {
   const schema = Joi.object({
     DepartureFlightNumber: Joi.number().required(),
     ArrivalFlightNumber: Joi.number().required(),
-    seat: Joi.number().required(),
-    cabin: Joi.string().required(),
+    returnSeats: Joi.array().required(),
+    returnCabin: Joi.string().required(),
+    departureSeats: Joi.array().required(),
+    departureCabin: Joi.string().required(),
   }).required();
 
   const isValid = schema.validate(req.body);

@@ -184,14 +184,6 @@ export default function UserSearchFlight() {
           variant="outlined"
           onChange={handleChange("ArrivalDate")}
         />
-        <div className={classes.passengers}>
-          <Select
-            setPassengers={setPassengers}
-            passengers={passengers}
-            setPassengersList={setPassengersList}
-            passengerslist={passengerslist}
-          />
-        </div>
 
         <Dropdown
           items={["Economy", "Business", "First"]}
@@ -202,6 +194,14 @@ export default function UserSearchFlight() {
             handleChangeCabin(e);
           }}
         />
+        <div className={classes.passengers}>
+          <Select
+            setPassengers={setPassengers}
+            passengers={passengers}
+            setPassengersList={setPassengersList}
+            passengerslist={passengerslist}
+          />
+        </div>
       </div>
       <Button onClick={handleClick} variant="outlined">
         {" "}

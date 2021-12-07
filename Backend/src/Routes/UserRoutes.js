@@ -21,7 +21,12 @@ router
 
 router
   .route("/createSummary")
-  .post(UserValidation.validateAddSummary, UserServices.createSummary);
+  .post(
+    UserValidation.validateAddSummary,
+    authentication.validateUser,
+    UserServices.createSummary
+  );
+
 router.route("/getSummary").post(UserServices.getSummary);
 
 router
@@ -52,9 +57,9 @@ router
 router
   .route("/viewAvailableSeats")
   .post(
-    UserValidation.validatePassword,
+    UserValidation.validateSeats,
     authentication.validateUser,
-    UserServices.changePassword
+    UserServices.viewAvailableSeats
   );
 
 router
@@ -62,26 +67,12 @@ router
   .post(UserValidation.validateSignin, UserServices.signIn);
 
 router
-  .route("/signup")
-  .post(UserValidation.validateSignup, UserServices.signUp);
-router
   .route("/deselectSeats")
   .post(
     authentication.validateUser,
     UserValidation.validateSelection,
     UserServices.deselectSeats
   );
-  router
-  .route("/sendMail")
-  .post( authentication.validateUser,UserServices.sendEmail);
-
-  router
-  .route("/getfutureReservation")
-  .post(
-    authentication.validateUser,
-    UserServices.getFutureReservations
-  );
-
 router
   .route("/sendMail")
   .post(authentication.validateUser, UserServices.sendEmail);
@@ -89,5 +80,9 @@ router
 router
   .route("/getfutureReservation")
   .post(authentication.validateUser, UserServices.getFutureReservations);
+
+router
+  .route("/sendMail")
+  .post(authentication.validateUser, UserServices.sendEmail);
 
 module.exports = router;
