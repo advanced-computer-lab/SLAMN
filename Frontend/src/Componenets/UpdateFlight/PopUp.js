@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import Buttons from "../General/Buttons";
 import { makeStyles } from "@material-ui/core/styles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import TextBox from "../General/TextBox";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -43,6 +43,27 @@ export default function PopUp(props) {
 
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+
+  const flightnumbers = window.localStorage.getItem("flightnumber");
+  const depDate = window.localStorage.getItem("depDate");
+  const arrDate = window.localStorage.getItem("arrDate");
+  const depTime = window.localStorage.getItem("depTime");
+  const arrTime = window.localStorage.getItem("arrTime");
+
+  const arrAirport = window.localStorage.getItem("arrAirport");
+  const depAirport = window.localStorage.getItem("depAirport");
+
+  useEffect(async () => {
+    console.log(
+      flightnumbers,
+      depDate,
+      arrDate,
+      depTime,
+      arrTime,
+      arrAirport,
+      depAirport
+    );
+  }, []);
 
   const onChangeflight = (e) => {
     props.flightnumber(e.target.value);
@@ -113,62 +134,58 @@ export default function PopUp(props) {
                 <TextBox
                   title="Flight Number"
                   onChange={onChangeflight}
-                  value={props.flightno}
+                  value={flightnumbers}
                   disabled
+                  defaultValue={flightnumbers}
                 ></TextBox>
               </div>
               <div className={classes.space}>
                 <TextBox
                   onChange={onChangedepdate}
+                  defaultValue={depDate}
                   title="Departure Date"
                 ></TextBox>
               </div>
               <div className={classes.space}>
                 <TextBox
                   onChange={onChangearrdate}
+                  defaultValue={arrDate}
                   title="Arrival Date"
                 ></TextBox>
               </div>
             </div>
-            <div className={classes.root}>
-              <div className={classes.space}>
-                <TextBox
-                  onChange={onChangeeconseats}
-                  title="Available Economy Seats"
-                ></TextBox>
-              </div>
-              <div className={classes.space}>
-                <TextBox
-                  onChange={onChangebuisseats}
-                  title="Available Buisness Class Seats"
-                ></TextBox>
-              </div>
-              <div className={classes.space}>
-                <TextBox
-                  title="Arrival Airport"
-                  onChange={onChangeairportarrival}
-                ></TextBox>
-              </div>
-            </div>
+
             <div className={classes.root}>
               <div className={classes.space}>
                 <TextBox
                   onChange={onChangeairportdep}
                   title="Departure Airport"
+                  defaultValue={depAirport}
                 ></TextBox>
               </div>
               <div className={classes.space}>
                 <TextBox
                   onChange={onChangearrtime}
                   title="Arrival Time"
+                  defaultValue={arrTime}
                 ></TextBox>
               </div>
               <div className={classes.space}>
                 <TextBox
                   title="Departure Time"
+                  defaultValue={depTime}
                   onChange={onChangedeptime}
                 ></TextBox>
               </div>
+            </div>
+          </div>
+          <div className={classes.root}>
+            <div className={classes.space}>
+              <TextBox
+                title="Arrival Airport"
+                defaultValue={arrAirport}
+                onChange={onChangeairportarrival}
+              ></TextBox>
             </div>
           </div>
         </DialogActions>

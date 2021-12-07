@@ -254,8 +254,8 @@ const createFlightReservation = async (req, res) => {
     const DepCabinclass = req.body.DepCabinClass;
     const ArrCabinclass = req.body.ArrCabinClass;
     var basePrice = arrivalFlight.Price + departureFlight.Price;
-    const noOfChildren = req.body.NumberOfChildren;
-    const noOfAdults = req.body.NumberOfAdults;
+    const noOfChildren = req.body.NumberOfPassengers;
+    c;
 
     switch (DepCabinclass) {
       case "Economy": {
@@ -304,8 +304,8 @@ const createFlightReservation = async (req, res) => {
         ArrivalFlightNumber: arrivalFlight.FlightNumber,
         DepCabinclass: DepCabinclass,
         ArrCabinclass: ArrCabinclass,
-        NumberOfChildren: noOfChildren,
-        NumberOfAdults: noOfAdults,
+        NumberOfPassengers: noOfChildren,
+
         totalPrice: basePrice * 0.5 * noOfChildren + basePrice * noOfAdults,
         User: {
           _id: userData._id,

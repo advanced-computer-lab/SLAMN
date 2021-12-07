@@ -26,18 +26,15 @@ const reservation = new Schema({
     type: String,
     require: true,
   },
-  NumberOfChildren: {
+  NumberOfPassengers: {
     type: Number,
     require: true,
   },
-  NumberOfAdults: {
-    type: Number,
-    require: true,
-  },
+
   totalPrice: {
     type: Number,
     require: true,
-  },//dep arr
+  }, //dep arr
 });
 reservation.set("toJSON", { virtuals: true });
 reservation.set("toObject", { virtuals: true });

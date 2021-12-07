@@ -26,12 +26,21 @@ export default function List(props) {
   const [work, setWork] = React.useState(false);
   const [account, setAccount] = React.useState(false);
   const anchorRef = React.useRef(null);
+  const logged = window.localStorage.getItem("logged");
 
   const handleClickAccount = () => {
-    window.location = "/account";
+    if (logged === "false") {
+      window.location = "/sigin";
+    } else {
+      window.location = "/account";
+    }
   };
   const handleClickWork = () => {
-    window.location = "/viewbookings";
+    if (logged === "false") {
+      window.location = "/sigin";
+    } else {
+      window.location = "/viewbookings";
+    }
   };
 
   const handleToggle = () => {

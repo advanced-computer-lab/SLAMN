@@ -151,8 +151,24 @@ export default function Summary() {
   const [returnParameters, setParameters] = React.useState(
     JSON.parse(localStorage.getItem("returnParameters"))
   );
+
   const handleConfirm = () => {
-    history("/home");
+    axios
+      .post(
+        "http://localhost:8000/users/createReservation",
+
+        {
+          DepartureFlightNumber: returnParameters.DepartureFlightNumber,
+          ArrivalFlightNumber: returnParameters.DepartureFlightNumber,
+          DepCabinClass: returnParameters.departureCabin,
+          ArrCabinClass: returnParameters.returnCabin,
+          NumberOfPassengers: returnParameters.returnSeats.length,
+        },
+        { headers: { auth: window.localStorage.getItem("token") } }
+      )
+      .then(function (response) {
+        history("/home");
+      });
   };
   useEffect(() => {
     console.log(returnParameters, "el returnn");

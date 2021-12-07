@@ -6,11 +6,11 @@ import { useNavigate } from "react-router-dom";
 import NavBar from "../Componenets/General/NavBar";
 
 const useStyles = makeStyles({
-  root: {
-    display: "flex",
-    marginTop: "15vw",
-    marginLeft: "23vw",
-  },
+  // root: {
+  //   display: "flex",
+  //   marginTop: "15vw",
+  //   marginLeft: "23vw",
+  // },
 });
 
 export default function AdminHome() {
@@ -24,7 +24,7 @@ export default function AdminHome() {
   };
   const handleView = () => {
     // history.push("/viewallflights");
-    navigate("/search");
+    navigate("/adminsearch");
   };
 
   return (
