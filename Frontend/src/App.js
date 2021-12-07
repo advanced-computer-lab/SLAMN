@@ -7,7 +7,7 @@ import CreateFlight from "./Page/CreateFlight";
 import Signin from "./Page/Signin";
 import DeleteFlight from "../src/Page/DeleteFight";
 import ViewAllFlights from "./Page/ViewAllFlights";
-
+import AdminSearchFlight from "../src/Page/AdminSearchFlight";
 import Home from "../src/Page/Home";
 import AccountDetails from "./Page/AccountDetails";
 import UpdateAccountDeatils from "../src/Page/UpdateAccount";
@@ -56,6 +56,7 @@ function App() {
               element={<ViewAvailableSeats />}
             />{" "}
             <Route path="/viewbookings" element={<ViewBookings />} />
+            <Route path="/adminsearch" element={<AdminSearchFlight />} />
           </Routes>
         </UserInfo.Provider>
       </BrowserRouter>

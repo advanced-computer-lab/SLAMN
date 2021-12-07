@@ -22,14 +22,14 @@ const useStyles = makeStyles({
     height: "2vw",
     width: "2vw",
     marginTop: "1vw",
-    marginLeft: "89vw",
+    //marginLeft: "89vw",
   },
   loginFocus: {
     backgroundColor: "#ffd633 !important",
     height: "2vw",
     width: "2vw",
     marginTop: "1vw",
-    marginLeft: "89vw",
+    //marginLeft: "89vw",
   },
 });
 

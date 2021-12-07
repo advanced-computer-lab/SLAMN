@@ -11,6 +11,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import axios from "axios";
 import { filledInputClasses } from "@mui/material";
+import { red } from "@mui/material/colors";
 const useStyles = makeStyles((theme) => ({
   display: { display: "flex" },
   avatar: {
@@ -105,10 +106,20 @@ export default function Signin() {
           window.localStorage.setItem("token", res.headers.auth);
           console.log(window.localStorage);
           if (res.data.message === "Success") {
+            console.log(res.data, "IN SUCCCC");
             setemailerror(false);
             setpassworderror(false);
             console.log("innnnnnnnnnnnn");
-            window.location = "/home";
+            if (res.data.data == true) {
+              console.log(res.data, "IN ADMIN");
+              window.localStorage.setItem("admin", "true");
+              window.location = "/homeadmin";
+            }
+            if (res.data.data == false) {
+              console.log(res.data, "in homeee");
+              window.localStorage.setItem("admin", "false");
+              window.location = "/home";
+            }
           }
           if (res.data.message === "Invalid Password") {
             setpassworderror(true);

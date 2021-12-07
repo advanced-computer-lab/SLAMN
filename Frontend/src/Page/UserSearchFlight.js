@@ -17,6 +17,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import Select from "../Componenets/SearchFlights/Select";
 import Dropdown from "../Componenets/SearchFlights/Dropdown";
+import NavBar from "../Componenets/General/NavBar";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;

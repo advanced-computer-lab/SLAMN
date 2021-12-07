@@ -11,17 +11,24 @@ import NavBar from "../Componenets/General/NavBar";
 const useStyles = makeStyles({
   space: {
     marginTop: "2vw !important",
+    marginBottom: "2vw !important",
     marginLeft: "1vw",
     background: "#fff",
-    border: " 1px solid #ccc",
-    borderRadius: "0.3vw",
+    display: "flex",
+    justifyContent: "space-around",
   },
   root: {
-    backgroundColor: "whitesmoke",
+    margin: "auto",
+    position: "relative",
+    top: "3vw",
+    border: "1px solid grey",
+    borderRadius: " 0.7vw",
+    width: "40vw",
+    textAlign: "center",
   },
   updatebutton: {
-    marginTop: "3vw",
-    marginLeft: "1vw",
+    textAlign: "-webkit-center",
+    marginTop: "4vw",
   },
   title: {
     textAlign: "center",
@@ -36,6 +43,9 @@ const useStyles = makeStyles({
     textAlign: "center",
     lineHeight: "4vw",
     margin: "auto",
+  },
+  severalboxes: {
+    display: "flex",
   },
 });
 
@@ -107,6 +117,7 @@ export default function CreateFlight() {
     <div>
       <NavBar />
       <div className={classes.title}>CREATE FLIGHT</div>
+
       <div className={classes.root}>
         <div className={classes.space}>
           <TextBox
@@ -116,30 +127,7 @@ export default function CreateFlight() {
             }}
           />
         </div>
-        <div className={classes.space}>
-          <TextBox
-            title={"DepartureDate"}
-            onChange={(e) => {
-              setDepartureDate(e.target.value);
-            }}
-          />
-        </div>
-        <div className={classes.space}>
-          <TextBox
-            title={"ArrivalDate"}
-            onChange={(e) => {
-              setArrivalDate(e.target.value);
-            }}
-          />
-          <TextBox
-            title={"TripDurtion"}
-            onChange={(e) => {
-              setTripDuration(e.target.value);
-            }}
-          />
-        </div>
-      </div>
-      <div className={classes.root}>
+
         <div className={classes.space}>
           <TextBox
             title={"EconomySeats"}
@@ -166,12 +154,33 @@ export default function CreateFlight() {
         </div>
         <div className={classes.space}>
           <TextBox
+            title={"DepartureDate"}
+            onChange={(e) => {
+              setDepartureDate(e.target.value);
+            }}
+          />
+          <TextBox
+            title={"ArrivalDate"}
+            onChange={(e) => {
+              setArrivalDate(e.target.value);
+            }}
+          />
+        </div>
+        <div className={classes.space}>
+          <TextBox
             title={"Price"}
             onChange={(e) => {
               setPrice(e.target.value);
             }}
           />
+          <TextBox
+            title={"TripDurtion"}
+            onChange={(e) => {
+              setTripDuration(e.target.value);
+            }}
+          />
         </div>
+
         <div className={classes.space}>
           <TextBox
             title={"Arrival Airport "}
@@ -185,6 +194,8 @@ export default function CreateFlight() {
               setarrivaltime(e.target.value);
             }}
           />
+        </div>
+        <div className={classes.space}>
           <TextBox
             title={"Departure Airport "}
             onChange={(e) => {
@@ -197,12 +208,14 @@ export default function CreateFlight() {
               setdeptime(e.target.value);
             }}
           />
-          <div />
         </div>
+
+        <div />
       </div>
       <div className={classes.updatebutton}>
         <Button title="Add" onClick={handleClick} />
       </div>
+
       <SnackBar
         open={open1}
         handleOpen={handleOpen1}
