@@ -5,7 +5,7 @@ import Divider from "@mui/material/Divider";
 const useStyles = makeStyles({
   root: {
     backgroundColor: "white",
-    width: "25vw",
+    width: "38vw",
     height: "15vw",
     padding: "0.5vw",
     borderRadius: "0.5vw !important",
@@ -43,7 +43,7 @@ const useStyles = makeStyles({
     marginTop: "1vw",
     fontSize: "1vw",
 
-    marginLeft: "5.3vw",
+    marginLeft: "6.85vw",
   },
   email: {
     marginTop: "1vw",
@@ -105,6 +105,17 @@ const useStyles = makeStyles({
     textDecoration: "underline",
     cursor: "pointer",
   },
+  display: {
+    display: "flex",
+  },
+  title1: {
+    color: "aaa",
+    fontWeight: "bolder",
+    fontSize: "1.5vw",
+    fontFamily: " Rubik,sans-serif",
+    marginLeft: "1vw",
+    marginTop: "2vw",
+  },
 });
 export default function Reservation(props) {
   const classes = useStyles();
@@ -119,8 +130,10 @@ export default function Reservation(props) {
   };
   return (
     <div className={classes.root}>
-      <div className={classes.title}>Booked Flight</div>
-
+      <div className={classes.display}>
+        <div className={classes.title}>Booked Flight</div>
+        <div className={classes.title1}>{props.flight.bookingnumber}</div>
+      </div>
       <div className={classes.display}>
         <div className={classes.firstName}>Departure FlightNumber</div>
         <div className={classes.firstNameValue}> {props.flight.departure}</div>

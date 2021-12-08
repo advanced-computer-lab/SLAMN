@@ -161,7 +161,7 @@ export default function Summary() {
 
         {
           DepartureFlightNumber: returnParameters.DepartureFlightNumber,
-          ArrivalFlightNumber: returnParameters.DepartureFlightNumber,
+          ArrivalFlightNumber: returnParameters.ArrivalFlightNumber,
           DepCabinClass: returnParameters.departureCabin,
           ArrCabinClass: summary.returnCabin,
           NumberOfPassengers: returnParameters.returnSeats.length,

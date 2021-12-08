@@ -1,6 +1,7 @@
 const User = require("../Models/UserModel");
 const Summary = require("../Models/SummaryModel");
 const Reservation = require("../Models/FlightReservation");
+const nodemailer = require("nodemailer");
 const Flights = require("../Models/FlightModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -446,17 +447,15 @@ const createFlightReservation = async (req, res) => {
 
 const deleteReservation = async (req, res) => {
   try {
-    /*const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
-    const userData = payload.id;*/
-    const userData = await User.findOne({ _id: "61a7780f866bf0ec6787692a" });
+    const user = req.payload.id;
+    const userData = await User.findOne({ _id: user });
     const ReservationToBeDeleted = await Reservation.findOne({
       _id: req.body._id,
     });
     if (userData) {
       console.log(ReservationToBeDeleted);
-      //userData.UserReservations.pop(ReservationToBeDeleted);
       userData.UserReservations.forEach((element) => {
-        if (element._id == req.body._id) {
+        if (element._id === req.body._id) {
           var index = userData.UserReservations.indexOf(element);
           if (index > -1) {
             userData.UserReservations.splice(index, 1);
@@ -470,6 +469,7 @@ const deleteReservation = async (req, res) => {
       return res.json({
         statusCode: 0,
         message: "Success",
+        data: userData.UserReservations,
       });
     } else {
       return res.json({
@@ -489,7 +489,6 @@ const sendEmail = (req, res) => {
   let userEmail = req.body.email;
   let emailSubject = req.body.emailSubject;
   let emailBody = req.body.emailBody;
-
   let transporter = nodemailer.createTransport({
     service: "outlook",
     auth: {
@@ -498,10 +497,10 @@ const sendEmail = (req, res) => {
     },
   });
 
-  message = req.bosy.message;
+  const message = req.body.message;
 
   let mailOptions = {
-    from: "salmn@outlook.com",
+    from: "salmndamn@outlook.com",
     to: userEmail,
     subject: emailSubject,
     text: emailBody,
@@ -510,9 +509,11 @@ const sendEmail = (req, res) => {
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log(error);
-      return;
+      return res.json({ message: "error" });
     }
-    res.json(info);
+
+    console.log(info);
+    return res.json({ info, message: "Success" });
   });
 };
 
@@ -535,7 +536,8 @@ const getFutureReservations = async (req, res) => {
       for (var i = 0; i < arr.length; i++) {
         var flight = await Flights.findOne({ FlightNumber: arr[i] });
         console.log(flight.DepartureDate);
-        if (flight.DepartureDate > req.body.date) {
+        console.log(Date.parse("02/02/2022") > Date.parse("08/02/2021"));
+        if (Date.parse(flight.DepartureDate) > Date.parse(req.body.date)) {
           reservationresult = await Reservation.find({
             User: userData,
             DepartureFlightNumber: flight.FlightNumber,

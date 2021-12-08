@@ -115,11 +115,13 @@ export default function Signin() {
               console.log(res.data, "IN ADMIN");
               window.localStorage.setItem("admin", "true");
               window.localStorage.setItem("logged", "true");
+              window.localStorage.setItem("email", email);
               window.location = "/homeadmin";
             }
             if (res.data.data == false) {
               console.log(res.data, "in homeee");
               window.localStorage.setItem("admin", "false");
+              window.localStorage.setItem("email", email);
               window.localStorage.setItem("logged", "true");
               window.location = "/home";
             }

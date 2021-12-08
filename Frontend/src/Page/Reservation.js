@@ -12,7 +12,7 @@ import Button from "../Componenets/AccountDetails/Buttons";
 import PopupDelete from "../Componenets/General/PopUp";
 
 const useStyles = makeStyles({
-  display: { display: "flex" },
+  display: { display: "flex", marginBottom: "2vw" },
   root: {
     background: " gainsboro",
     width: "100vw",
@@ -66,16 +66,16 @@ const useStyles = makeStyles({
 export default function Reservation() {
   const classes = useStyles();
   const headers = window.localStorage.getItem("token");
-  const [first, setFirst] = React.useState("");
-  const [last, setLast] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [pass, setPass] = React.useState("");
+  const [deleted, setDeleted] = React.useState("");
   const name = window.localStorage.getItem("name");
   const [flights, setFlights] = React.useState([]);
   const [open2, setOpen2] = useState(false);
   const [del, setDelete] = useState(false);
   const [dep, setDep] = useState("");
   const [arr, setarr] = useState("");
+  const [lengtharr, setLength] = React.useState(0);
+
+  var length = 0;
 
   const emails = window.localStorage.getItem("email");
 
@@ -93,13 +93,15 @@ export default function Reservation() {
   const handleClose2agree = () => {
     setOpen2(false);
     setDelete(!del);
+    console.log(deleted, "DELLLLLL");
     const emailSubject = "Reservation Cancelled";
     const emailBody = "Please Pay an amount of $50";
+    console.log(emails, "elemail");
     axios
       .post(
         "http://localhost:8000/users/sendMail",
         {
-          userEmail: emails,
+          email: emails,
           emailSubject: emailSubject,
           emailBody: emailBody,
         },
@@ -110,16 +112,87 @@ export default function Reservation() {
         }
       )
       .then(function (response) {
+        console.log(response, "RESPONSEEEEE");
+      });
+    axios
+      .post(
+        "http://localhost:8000/users/deleteReservation",
+        {
+          _id: deleted,
+        },
+        {
+          headers: {
+            auth: headers,
+          },
+        }
+      )
+      .then(function (response) {
         console.log(response);
+        var date = new Date();
+        var month = date.getUTCMonth() + 1; //months from 1-12
+        var day = date.getUTCDate();
+        var year = date.getUTCFullYear();
+
+        const newdate = day + "/" + month + "/" + year;
+        axios
+          .post(
+            "http://localhost:8000/users/getfutureReservation",
+            { date: newdate },
+            {
+              headers: {
+                auth: headers,
+              },
+            }
+          )
+          .then((res) => {
+            setFlights(res.data.data);
+            length = flights.length - 1;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       });
   };
 
+  // useEffect(async () => {
+  //   var date = new Date();
+  //   var month = date.getUTCMonth() + 1; //months from 1-12
+  //   var day = date.getUTCDate();
+  //   var year = date.getUTCFullYear();
+
+  //   const newdate = day + "/" + month + "/" + year;
+
+  //   console.log(newdate, "datee");
+  //   await axios
+  //     .post(
+  //       "http://localhost:8000/users/getfutureReservation",
+  //       { date: newdate },
+  //       {
+  //         headers: {
+  //           auth: headers,
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       console.log(res.data.data, "elreservation");
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
   useEffect(async () => {
     var date = new Date();
+    var month = date.getUTCMonth() + 1; //months from 1-12
+    var day = date.getUTCDate();
+    var year = date.getUTCFullYear();
+
+    const newdate = day + "/" + month + "/" + year;
+
+    // console.log(newdate,"datee")
     await axios
       .post(
         "http://localhost:8000/users/getfutureReservation",
-        { date: date },
+        { date: newdate },
         {
           headers: {
             auth: headers,
@@ -127,32 +200,13 @@ export default function Reservation() {
         }
       )
       .then((res) => {
-        console.log(res.data.data, "elreservation");
+        console.log(res);
         setFlights(res.data.data);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-  useEffect(async () => {
-    var date = new Date();
-    await axios
-      .post(
-        "http://localhost:8000/users/getfutureReservation",
-        { date: date },
-        {
-          headers: {
-            auth: headers,
-          },
-        }
-      )
-      .then((res) => {
-        setFlights(res.data.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, [del]);
 
   return (
     <div className={classes.root}>
@@ -167,12 +221,13 @@ export default function Reservation() {
           <List />
         </div>
         <div className={classes.accountform}>
-          {flights.map((n) => (
+          {flights.map((n, index) => (
             <div className={classes.display}>
               <Card
                 flight={{
-                  arrival: n.ArrivalFlightNumber,
-                  departure: n.DepartureFlightNumber,
+                  arrival: n[index].ArrivalFlightNumber,
+                  departure: n[index].DepartureFlightNumber,
+                  bookingnumber: n[index]._id,
                 }}
               />
 
@@ -180,8 +235,11 @@ export default function Reservation() {
                 ClassName={classes.button}
                 title={"Cancel"}
                 onClick={() => {
-                  setDep(n.DepartureFlightNumber);
-                  setarr(n.ArrivalFlightNumber);
+                  console.log(n, "nnnnnnnnnnnn");
+                  console.log(flights, "FLIGHTTTTTTT");
+                  setDep(n[index].DepartureFlightNumber);
+                  setarr(n[index].ArrivalFlightNumber);
+                  setDeleted(n[index]._id);
                   handleClickPopUpDelete();
                 }}
               />
