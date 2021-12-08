@@ -78,6 +78,7 @@ const useStyles = makeStyles({
 
 export default function UserSearchFlight() {
   localStorage.setItem("returnParameters", JSON.stringify({}));
+
   localStorage.removeItem("returnList");
   const classes = useStyles();
   const [selectedValue, setSelectedValue] = React.useState();
@@ -144,14 +145,9 @@ export default function UserSearchFlight() {
     if (prop === "DepartureDate") setDepartureDate(event.target.value);
   };
   const handleChangeCabin = (e) => {
+    localStorage.setItem("departureCabin", JSON.stringify(e.target.value));
     console.log(e.target.value);
     setCabin(e.target.value);
-  };
-  const handleChange2 = (event, nextView) => {
-    setView(nextView);
-    setTimeout(500);
-    if (view === "module") setFlag(1);
-    if (view === "quilt") setFlag(2);
   };
   const handleClose = (value) => {
     setOpen(false);

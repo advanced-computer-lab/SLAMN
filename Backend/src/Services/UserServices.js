@@ -237,124 +237,6 @@ const selectSeats = async (req, res) => {
       .catch((err) => res.status(400).json("Error:" + err));
   } catch (exception) {}
 };
-
-const createFlightReservation = async (req, res) => {
-  try {
-    console.log(req.body);
-    const valueOfId = req.payload.id;
-    const userData = await User.findOne({ _id: valueOfId });
-    //  const userData = await User.findOne({ _id: "61acf8804f22c4507b340a83"});
-
-    const arrivalFlight = await Flights.findOne({
-      FlightNumber: req.body.ArrivalFlightNumber,
-    });
-    const departureFlight = await Flights.findOne({
-      FlightNumber: req.body.DepartureFlightNumber,
-    });
-    const DepCabinclass = req.body.DepCabinClass;
-    const ArrCabinclass = req.body.ArrCabinClass;
-    var basePrice = arrivalFlight.Price + departureFlight.Price;
-    const noOfChildren = req.body.NumberOfPassengers;
-    c;
-
-    switch (DepCabinclass) {
-      case "Economy": {
-        basePrice = basePrice;
-        break;
-      }
-      case "First Class": {
-        basePrice += 700;
-        break;
-      }
-      case "Business Class": {
-        basePrice += 1000;
-        break;
-      }
-      default: {
-        return res.json({
-          statusCode: 1,
-          error: "Not a valid class",
-        });
-      }
-    }
-    switch (ArrCabinclass) {
-      case "Economy": {
-        basePrice = basePrice;
-        break;
-      }
-      case "First Class": {
-        basePrice += 700;
-        break;
-      }
-      case "Business Class": {
-        basePrice += 1000;
-        break;
-      }
-      default: {
-        return res.json({
-          statusCode: 1,
-          error: "Not a valid class",
-        });
-      }
-    }
-
-    if (userData) {
-      const reserve = await Reservation.create({
-        DepartureFlightNumber: departureFlight.FlightNumber,
-        ArrivalFlightNumber: arrivalFlight.FlightNumber,
-        DepCabinclass: DepCabinclass,
-        ArrCabinclass: ArrCabinclass,
-        NumberOfPassengers: noOfChildren,
-
-        totalPrice: basePrice * 0.5 * noOfChildren + basePrice * noOfAdults,
-        User: {
-          _id: userData._id,
-          FirstName: userData.FirstName,
-          LastName: userData.LastName,
-          Email: userData.Email,
-          Phone: userData.Phone,
-          PassportNumber: userData.PassportNumber,
-          Password: userData.Password,
-          Admin: userData.Admin,
-          UserReservations: userData.UserReservations,
-          Summaries: userData.Summaries,
-        },
-      });
-      const ReserveTobePushed = {
-        _id: reserve._id,
-        User: reserve.User,
-        DepartureFlightNumber: reserve.DepartureFlightNumber,
-        DepCabinclass: reserve.DepCabinclass,
-        ArrCabinclass: reserve.ArrCabinclass,
-        ArrivalFlightNumber: reserve.ArrivalFlightNumber,
-        CabinClass: reserve.CabinClass,
-        NumberOfChildren: reserve.NumberOfChildren,
-        NumberOfAdults: reserve.NumberOfAdults,
-        totalPrice: reserve.totalPrice,
-      };
-      userData.UserReservations.push(ReserveTobePushed);
-
-      await User.findOneAndUpdate({ _id: userData._id }, userData, null).catch(
-        (err) => res.status(400).json("Error:" + err)
-      );
-    } else {
-      return res.json({
-        statusCode: 1,
-        error: "sign in please",
-      });
-    }
-    return res.json({
-      statusCode: 0,
-      message: "Success",
-    });
-  } catch (exception) {
-    console.log(exception);
-    return res.json({
-      statusCode: 1,
-      error: "exception",
-    });
-  }
-};
 const deselectSeats = async (req, res) => {
   try {
     const selectedSeat = req.body.seat;
@@ -447,6 +329,121 @@ const deselectSeats = async (req, res) => {
   } catch (exception) {}
 };
 
+const createFlightReservation = async (req, res) => {
+  try {
+    console.log(req.body);
+    const valueOfId = req.payload.id;
+    const userData = await User.findOne({ _id: valueOfId });
+    //  const userData = await User.findOne({ _id: "61acf8804f22c4507b340a83"});
+
+    const arrivalFlight = await Flights.findOne({
+      FlightNumber: req.body.ArrivalFlightNumber,
+    });
+    const departureFlight = await Flights.findOne({
+      FlightNumber: req.body.DepartureFlightNumber,
+    });
+    const DepCabinclass = req.body.DepCabinClass;
+    const ArrCabinclass = req.body.ArrCabinClass;
+    var basePrice = arrivalFlight.Price + departureFlight.Price;
+    const noOfPassengers = req.body.NumberOfPassengers;
+
+    switch (DepCabinclass) {
+      case "Economy": {
+        basePrice = basePrice;
+        break;
+      }
+      case "First": {
+        basePrice *= 2;
+        break;
+      }
+      case "Business": {
+        basePrice *= 1.5;
+        break;
+      }
+      default: {
+        return res.json({
+          statusCode: 1,
+          error: "Not a valid class",
+        });
+      }
+    }
+    switch (ArrCabinclass) {
+      case "Economy": {
+        basePrice = basePrice;
+        break;
+      }
+      case "First": {
+        basePrice *= 2;
+        break;
+      }
+      case "Business": {
+        basePrice *= 1.5;
+        break;
+      }
+      default: {
+        return res.json({
+          statusCode: 1,
+          error: "Not a valid class",
+        });
+      }
+    }
+
+    if (userData) {
+      const reserve = await Reservation.create({
+        DepartureFlightNumber: departureFlight.FlightNumber,
+        ArrivalFlightNumber: arrivalFlight.FlightNumber,
+        DepCabinclass: DepCabinclass,
+        ArrCabinclass: ArrCabinclass,
+        NumberOfPassengers: noOfPassengers,
+        totalPrice: basePrice * noOfPassengers,
+        User: {
+          _id: userData._id,
+          FirstName: userData.FirstName,
+          LastName: userData.LastName,
+          Email: userData.Email,
+          Phone: userData.Phone,
+          PassportNumber: userData.PassportNumber,
+          Password: userData.Password,
+          Admin: userData.Admin,
+          UserReservations: userData.UserReservations,
+          Summaries: userData.Summaries,
+        },
+      });
+      const ReserveTobePushed = {
+        _id: reserve._id,
+        User: reserve.User,
+        DepartureFlightNumber: reserve.DepartureFlightNumber,
+        DepCabinclass: reserve.DepCabinclass,
+        ArrCabinclass: reserve.ArrCabinclass,
+        ArrivalFlightNumber: reserve.ArrivalFlightNumber,
+        CabinClass: reserve.CabinClass,
+        NumberOfPassengers: reserve.NumberOfPassengers,
+        totalPrice: reserve.totalPrice,
+      };
+      userData.UserReservations.push(ReserveTobePushed);
+
+      await User.findOneAndUpdate({ _id: userData._id }, userData, null).catch(
+        (err) => res.status(400).json("Error:" + err)
+      );
+    } else {
+      return res.json({
+        statusCode: 1,
+        error: "sign in please",
+      });
+    }
+    return res.json({
+      statusCode: 0,
+      message: "Success",
+    });
+  } catch (exception) {
+    console.log(exception);
+    return res.json({
+      statusCode: 1,
+      error: "exception",
+    });
+  }
+};
+
 const deleteReservation = async (req, res) => {
   try {
     /*const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
@@ -488,6 +485,88 @@ const deleteReservation = async (req, res) => {
   }
 };
 
+const sendEmail = (req, res) => {
+  let userEmail = req.body.email;
+  let emailSubject = req.body.emailSubject;
+  let emailBody = req.body.emailBody;
+
+  let transporter = nodemailer.createTransport({
+    service: "outlook",
+    auth: {
+      user: "slamndamn@outlook.com",
+      pass: "slamn123",
+    },
+  });
+
+  message = req.bosy.message;
+
+  let mailOptions = {
+    from: "salmn@outlook.com",
+    to: userEmail,
+    subject: emailSubject,
+    text: emailBody,
+  };
+
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.log(error);
+      return;
+    }
+    res.json(info);
+  });
+};
+
+const getFutureReservations = async (req, res) => {
+  try {
+    const valueOfId = req.payload.id;
+    const userData = await User.findOne({ _id: valueOfId });
+
+    // const userData=await User.findOne({ _id: "61a7780f866bf0ec6787692a"});
+    var current = new Date();
+
+    if (userData) {
+      let reservations = await Reservation.find({ User: userData });
+      console.log(current, "MAYAA", reservations);
+      let result = [];
+      var reservationresult;
+      //console.log(reservations);
+      const arr = reservations.map((res) => res.DepartureFlightNumber);
+      console.log(arr);
+      for (var i = 0; i < arr.length; i++) {
+        var flight = await Flights.findOne({ FlightNumber: arr[i] });
+        console.log(flight.DepartureDate);
+        if (flight.DepartureDate > req.body.date) {
+          reservationresult = await Reservation.find({
+            User: userData,
+            DepartureFlightNumber: flight.FlightNumber,
+          });
+          result.push(reservationresult);
+          console.log("dakhal");
+        }
+      }
+
+      console.log(result);
+
+      return res.json({
+        statusCode: 0,
+        message: "Success",
+        data: result,
+      });
+    } else {
+      return res.json({
+        statusCode: 1,
+        error: "sign in please",
+      });
+    }
+  } catch (exception) {
+    console.log(exception);
+    return res.json({
+      statusCode: 1,
+      error: "exception",
+    });
+  }
+};
+
 const createSummary = async (req, res) => {
   try {
     console.log(req.payload, "elpayloaaddd");
@@ -523,8 +602,8 @@ const createSummary = async (req, res) => {
         ArrivalPrice: arrivalFlight.Price,
         returnCabin: req.body.returnCabin,
         returnSeats: req.body.returnSeats,
-        departureCabin: req.body.returnCabin,
-        departureSeats: req.body.returnSeats,
+        departureCabin: req.body.departureCabin,
+        departureSeats: req.body.departureSeats,
         User: {
           _id: userData._id,
           FirstName: userData.FirstName,
@@ -752,88 +831,6 @@ const changePassword = async (req, res) => {
 //       pass: "slamn123",
 //     },
 //   });
-
-const sendEmail = (req, res) => {
-  let userEmail = req.body.email;
-  let emailSubject = req.body.emailSubject;
-  let emailBody = req.body.emailBody;
-
-  let transporter = nodemailer.createTransport({
-    service: "outlook",
-    auth: {
-      user: "slamndamn@outlook.com",
-      pass: "slamn123",
-    },
-  });
-
-  message = req.bosy.message;
-
-  let mailOptions = {
-    from: "salmn@outlook.com",
-    to: userEmail,
-    subject: emailSubject,
-    text: emailBody,
-  };
-
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error);
-      return;
-    }
-    res.json(info);
-  });
-};
-
-const getFutureReservations = async (req, res) => {
-  try {
-    const valueOfId = req.payload.id;
-    const userData = await User.findOne({ _id: valueOfId });
-
-    // const userData=await User.findOne({ _id: "61a7780f866bf0ec6787692a"});
-    var current = new Date();
-
-    if (userData) {
-      let reservations = await Reservation.find({ User: userData });
-      console.log(current);
-      let result = [];
-      var reservationresult;
-      //console.log(reservations);
-      const arr = reservations.map((res) => res.DepartureFlightNumber);
-      console.log(arr);
-      for (var i = 0; i < arr.length; i++) {
-        var flight = await Flights.findOne({ FlightNumber: arr[i] });
-        console.log(flight.DepartureDate);
-        if (flight.DepartureDate > req.body.date) {
-          reservationresult = await Reservation.find({
-            User: userData,
-            DepartureFlightNumber: flight.FlightNumber,
-          });
-          result.push(reservationresult);
-          console.log("dakhal");
-        }
-      }
-
-      console.log(result);
-
-      return res.json({
-        statusCode: 0,
-        message: "Success",
-        data: result,
-      });
-    } else {
-      return res.json({
-        statusCode: 1,
-        error: "sign in please",
-      });
-    }
-  } catch (exception) {
-    console.log(exception);
-    return res.json({
-      statusCode: 1,
-      error: "exception",
-    });
-  }
-};
 
 module.exports = {
   signIn,

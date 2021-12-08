@@ -139,7 +139,6 @@ export default function ViewAvailableSeats(props) {
   );
 
   const handleConfirm = async () => {
-    console.log(JSON.parse(localStorage.getItem("returnList")), "ELCONFIRMMM");
     if (!JSON.parse(localStorage.getItem("returnList"))) {
       var returnPList = [];
       var i = 0;
@@ -151,10 +150,6 @@ export default function ViewAvailableSeats(props) {
         });
       }
       localStorage.setItem("returnList", JSON.stringify(returnPList));
-      localStorage.setItem(
-        "departureList",
-        JSON.stringify(reservation.passengerslist)
-      );
       localStorage.setItem(
         "returnParameters",
         JSON.stringify({
@@ -174,10 +169,6 @@ export default function ViewAvailableSeats(props) {
       );
       history("/bookreturnflight");
     } else {
-      const returnParameters = JSON.parse(
-        localStorage.getItem("returnParameters")
-      );
-
       history("/createsummary");
     }
   };

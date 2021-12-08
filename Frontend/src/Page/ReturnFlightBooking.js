@@ -77,8 +77,10 @@ const useStyles = makeStyles({
   },
 });
 
-export default function UserSearchFlight() {
+export default function ReturnFlightBooking() {
   const returnParameters = JSON.parse(localStorage.getItem("returnParameters"));
+  const departurelist = JSON.parse(localStorage.getItem("departureList"));
+  const departureCabin = JSON.parse(localStorage.getItem("departureCabin"));
   useEffect(() => {
     console.log(returnParameters, "RETURNFLIGHT");
     const newseats = JSON.parse(localStorage.getItem("returnList"));
@@ -159,14 +161,14 @@ export default function UserSearchFlight() {
       JSON.stringify({
         Cabin: "" + e.target.value,
         returnPassengersList: returnParameters.returnPassengersList,
-        DeparturePassengersList: returnParameters.DeparturePassengersList,
+        DeparturePassengersList: departurelist,
         passengersNumber: returnParameters.passengersNumber,
         returnPrice: returnParameters.returnPrice,
         departurePrice: returnParameters.departurePrice,
         DepartureAirport: returnParameters.DepartureAirport,
         ArrivalAirport: returnParameters.ArrivalAirport,
         isReturn: returnParameters.isReturn,
-        departureCabin: returnParameters.departureCabin,
+        departureCabin: departureCabin,
         DepartureFlightNumber: returnParameters.DepartureFlightNumber,
         ReturnFlightNumber: returnParameters.ReturnFlightNumber,
       })

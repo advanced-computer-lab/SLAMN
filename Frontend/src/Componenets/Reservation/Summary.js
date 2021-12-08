@@ -153,6 +153,8 @@ export default function Summary() {
   );
 
   const handleConfirm = () => {
+    const summary = JSON.parse(localStorage.getItem("summaryDetails"));
+    console.log(summary, "SD");
     axios
       .post(
         "http://localhost:8000/users/createReservation",
@@ -161,17 +163,18 @@ export default function Summary() {
           DepartureFlightNumber: returnParameters.DepartureFlightNumber,
           ArrivalFlightNumber: returnParameters.DepartureFlightNumber,
           DepCabinClass: returnParameters.departureCabin,
-          ArrCabinClass: returnParameters.returnCabin,
+          ArrCabinClass: summary.returnCabin,
           NumberOfPassengers: returnParameters.returnSeats.length,
         },
         { headers: { auth: window.localStorage.getItem("token") } }
       )
       .then(function (response) {
+        console.log(response, "LLLL");
         history("/home");
       });
   };
   useEffect(() => {
-    console.log(returnParameters, "el returnn");
+    console.log(returnParameters, "el returnn", departurelist);
     axios
       .post(
         "http://localhost:8000/users/createSummary",

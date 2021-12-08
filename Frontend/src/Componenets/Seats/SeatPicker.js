@@ -4,14 +4,8 @@ import { useState, useEffect } from "react";
 import SeatPicker from "react-seat-picker";
 
 export default function Seatpicker(props) {
-  //const seats = window.localStorage.getItem("seats");
   const seats = JSON.parse(localStorage.getItem("seats"));
   const returnParameters = JSON.parse(localStorage.getItem("returnParameters"));
-  // const [array, setArray] = React.useState([]);
-  useEffect(() => {
-    console.log(seats, "SEATSSSS");
-  }, []);
-
   const [loading, setLoading] = React.useState(false);
 
   const addSeatCallback = async ({ row, number }, addCb) => {
@@ -78,6 +72,9 @@ export default function Seatpicker(props) {
           ReturnFlightNumber: returnParameters.ReturnFlightNumber,
         })
       );
+    } else {
+      console.log("SEATSSS DEPPP", newseats);
+      localStorage.setItem("departureList", JSON.stringify(newseats));
     }
   };
 
@@ -144,6 +141,8 @@ export default function Seatpicker(props) {
           ReturnFlightNumber: returnParameters.ReturnFlightNumber,
         })
       );
+    } else {
+      localStorage.setItem("departureList", JSON.stringify(newseats));
     }
   };
 

@@ -127,6 +127,7 @@ export default function Reservation() {
         }
       )
       .then((res) => {
+        console.log(res.data.data, "elreservation");
         setFlights(res.data.data);
       })
       .catch((err) => {

@@ -123,11 +123,11 @@ export default function Reservation(props) {
 
       <div className={classes.display}>
         <div className={classes.firstName}>Departure FlightNumber</div>
-        <div className={classes.firstNameValue}> {props.departure}</div>
+        <div className={classes.firstNameValue}> {props.flight.departure}</div>
       </div>
       <div className={classes.display}>
         <div className={classes.lastName}>Arrival FlightNumber</div>
-        <div className={classes.lastNamevalue}> {props.arrival}</div>
+        <div className={classes.lastNamevalue}> {props.flight.arrival}</div>
       </div>
     </div>
   );

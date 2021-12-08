@@ -3,7 +3,7 @@ import TextBox from "../Componenets/General/TextBox";
 import axios from "axios";
 import Button from "../Componenets/General/Buttons";
 import { makeStyles } from "@material-ui/core/styles";
-
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import SnackBar from "../Componenets/General/SnackBar";
 import NavBar from "../Componenets/General/NavBar";
@@ -52,6 +52,7 @@ const useStyles = makeStyles({
 export default function CreateFlight() {
   const classes = useStyles();
   const date = new Date();
+  const history = useNavigate();
   const [FlightNumber, setFlight] = React.useState("");
   const [DepartureDate, setDepartureDate] = React.useState("");
   const [TripDuration, setTripDuration] = React.useState("");
@@ -110,6 +111,7 @@ export default function CreateFlight() {
         )
         .then(function (response) {
           console.log(response);
+          history("/homeadmin");
         });
     }
   };

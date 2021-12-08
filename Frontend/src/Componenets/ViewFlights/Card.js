@@ -276,6 +276,7 @@ export default function Card(props) {
                     }
                     console.log(newArray);
                     localStorage.setItem("seats", JSON.stringify(newArray));
+
                     localStorage.setItem(
                       "returnParameters",
                       JSON.stringify({

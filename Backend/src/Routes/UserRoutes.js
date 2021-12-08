@@ -9,6 +9,7 @@ router
   .route("/deleteReservation")
   .post(
     UserValidation.validateDeleteFlightReservation,
+    authentication.validateUser,
     UserServices.deleteReservation
   );
 
@@ -16,6 +17,7 @@ router
   .route("/createReservation")
   .post(
     UserValidation.validateCreateReservation,
+    authentication.validateUser,
     UserServices.createFlightReservation
   );
 
@@ -37,11 +39,9 @@ router
     UserServices.updateAccount
   );
 
-router.route("/displayaccount").post(
-  authentication.validateUser,
-
-  UserServices.displayaccount
-);
+router
+  .route("/displayaccount")
+  .post(authentication.validateUser, UserServices.displayaccount);
 
 router
   .route("/changepassword")
@@ -80,9 +80,5 @@ router
 router
   .route("/getfutureReservation")
   .post(authentication.validateUser, UserServices.getFutureReservations);
-
-router
-  .route("/sendMail")
-  .post(authentication.validateUser, UserServices.sendEmail);
 
 module.exports = router;
