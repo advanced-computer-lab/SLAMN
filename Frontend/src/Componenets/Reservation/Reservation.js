@@ -131,7 +131,7 @@ export default function Reservation(props) {
   return (
     <div className={classes.root}>
       <div className={classes.display}>
-        <div className={classes.title}>Booked Flight</div>
+        <div className={classes.title}>Booking Number: </div>
         <div className={classes.title1}>{props.flight.bookingnumber}</div>
       </div>
       <div className={classes.display}>
