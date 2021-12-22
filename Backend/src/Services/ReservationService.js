@@ -1,3 +1,4 @@
+const Flight = require("../Models/FlightModel");
 const Reservation = require("../Models/FlightReservation");
 
 const createFlightReservation = async (req, res) => {
@@ -32,4 +33,22 @@ const createFlightReservation = async (req, res) => {
       });
     }
   };
-  module.exports={createFlightReservation,deleteReservation};
+  const updateFlightReservation = async (req, res) => {
+    const Reservation= await Reservation.findOne({_id});
+    const CabinClass=req.body.CabinClass;
+    const NumberOfChildren=req.body.NumberOfChildren;
+    const NumberOfAdults=req.body.NumberOfAdults;
+    const Price=req.body.totalPrice;
+    Reservation.updateOne({_id},
+      {
+        $set: {CabinClass:CabinClass,
+          NumberOfChildren:NumberOfChildren,
+          NumberOfAdults:NumberOfAdults,
+          totalPrice:Price-Reservation.totalPrice,
+        },
+      }
+    )
+      .then(() => res.json("reservation updated"))
+      .catch((err) => res.status(400).json("Error:" + err));
+  };
+  module.exports={createFlightReservation,deleteReservation,updateFlightReservation};
