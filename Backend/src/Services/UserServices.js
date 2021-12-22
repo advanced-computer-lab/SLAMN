@@ -19,7 +19,7 @@ const signIn = async (req, res) => {
         const token = await jwt.sign(
           {
             id: data._id,
-            email: data.email,
+            email: data.Email,
             password: data.Password,
           },
           process.env.SECRET,

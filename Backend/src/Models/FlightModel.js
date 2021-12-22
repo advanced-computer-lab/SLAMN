@@ -35,6 +35,10 @@ const flightSchema = new Schema({
     type: Number,
     required: true,
   },
+  BaggageAllowance: {
+    type: Number,
+    required: true,
+  },
   ArrivalAirport: {
     type: String,
     required: true,

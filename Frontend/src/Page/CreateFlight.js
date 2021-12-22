@@ -65,6 +65,7 @@ export default function CreateFlight() {
   const [depariport, setdepairport] = React.useState("");
   const [arrivaltime, setarrivaltime] = React.useState("");
   const [deptime, setdeptime] = React.useState("");
+  const [baggage, setBaggage] = React.useState(-1);
   const [open1, setOpen1] = useState(false);
   const [error, seterror] = useState("");
   const handleOpen1 = () => {
@@ -106,6 +107,7 @@ export default function CreateFlight() {
             DepartureAirport: depariport,
             Price: Price,
             TripDuration: TripDuration,
+            BaggageAllowance: baggage,
           },
           { headers: { auth: window.localStorage.getItem("token") } }
         )
@@ -126,6 +128,14 @@ export default function CreateFlight() {
             title={"FlightNumber"}
             onChange={(e) => {
               setFlight(e.target.value);
+            }}
+          />
+        </div>
+        <div className={classes.space}>
+          <TextBox
+            title={"BaggageAllowance"}
+            onChange={(e) => {
+              setBaggage(e.target.value);
             }}
           />
         </div>

@@ -22,3 +22,5 @@ app.use("/flights", AdminRouter);
 connectDB();
 
 app.listen(port);
+
+module.exports = app;

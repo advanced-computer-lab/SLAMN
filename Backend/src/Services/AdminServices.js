@@ -79,7 +79,9 @@ const createFlight = async (req, res) => {
       EconomySeatsList: Economylist,
       BusinessSeatsList: Businesslist,
       FirstSeatsList: Firstlist,
+      BaggageAllowance: req.body.BaggageAllowance,
     });
+    //  console.log("flightcreated");
     return res.json({
       statusCode: 0,
       message: "Success",
@@ -96,6 +98,7 @@ const createFlight = async (req, res) => {
 const searchFlight = async (req, res) => {
   try {
     const data = await Flights.find(req.body);
+
     return res.json({
       statusCode: 0,
       message: "Success",
