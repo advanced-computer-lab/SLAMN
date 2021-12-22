@@ -83,10 +83,9 @@ const signUp = async (req, res) => {
         UserReservations: reservations,
         Summaries: summaries,
       });
-      return res.json({
-        statusCode: 0,
-        message: "Your account successfully created",
-      });
+      return res.json(
+         "Your account successfully created"
+      );
     }
   } catch (exception) {
     console.log(exception);
@@ -241,14 +240,18 @@ const getSummary = async (req, res) => {
 try {
   const arrivalFlight=await Flight.findOne(req.body.ArrivalFlight);
   const departureFlight=await Flight.findOne(req.body.DepartureFlight);
-  const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
-  const userData = payload.id;
+  // const payload = jwt.verify(req.headers["auth"], process.env.SECRET);
+  // const userData = payload.id;
+  const userData=await User.findOne({_id:"61a7780f866bf0ec6787692a"}).populate("Summaries");
+
   if(userData) {
-    const data = await userData.Summaries.find({ArrivalFlightNumber:arrivalFlight.FlightNumber,DepartureFlight:departureFlight.FlightNumber});
-  return res.json({
+    // const data = await userData.Summaries.find({ArrivalFlightNumber:arrivalFlight.FlightNumber,DepartureFlight:departureFlight.FlightNumber});
+    const initialdata= Summary.findOne({_id:"61ab8368ada93fdb7aab0c5e"});
+    console.log(initialdata);
+    return res.json({
     statusCode: 0,
     message: "Success",
-    data: data,
+   // data: data,
   });
 }
 else {
