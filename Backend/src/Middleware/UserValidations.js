@@ -170,10 +170,11 @@ const validateUpdateAccount = (req, res, next) => {
 };
 const validateUpdateReservation = (req, res, next) => {
   const schema = Joi.object({
+    BookingNumber: Joi.string().required(),
     CabinClass: Joi.string().required(),
-    NumberOfChildren: Joi.string().required(),
-    NumberOfAdults: Joi.string().required(),
-    Price: Joi.string().required()
+    // NumberOfChildren: Joi.number().required(),
+    // NumberOfAdults: Joi.number().required(),
+    Price: Joi.number().required()
   }).required();
 
   const isValid = schema.validate(req.body);

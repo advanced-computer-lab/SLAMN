@@ -754,20 +754,22 @@ const changePassword = async (req, res) => {
   }
 };
 const updateFlightReservation = async (req, res) => {
-  const reservation= await Reservation.findOne({_id});
+  const reservation= await Reservation.findOne({_id:req.body.BookingNumber});
   const CabinClass=req.body.CabinClass;
   const NumberOfChildren=req.body.NumberOfChildren;
   const NumberOfAdults=req.body.NumberOfAdults;
-  const Price=req.body.totalPrice;
+  const Price=req.body.Price-reservation.totalPrice;
   const valueOfId = req.payload.id;
+  console.log("iddddd",valueOfId);
   const userData = await User.findOne({ _id: valueOfId });
+  console.log("userrrr",userData);
   if(userData){
-  Reservation.findByIdAndUpdate({_id},
+    console.log("bodyyyyyy",req.body); 
+    console.log("reservation idddddd",req.body.BookingNumber); 
+  Reservation.findByIdAndUpdate({ _id:req.body.BookingNumber},
     {
-        CabinClass:CabinClass,
-        NumberOfChildren:NumberOfChildren,
-        NumberOfAdults:NumberOfAdults,
-        totalPrice:Price-Reservation.totalPrice,
+        DepCabinClass:CabinClass,
+        totalPrice:Price
       
     },function (err, docs) {
       if (err) {
