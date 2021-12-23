@@ -29,7 +29,7 @@ router
     UserServices.createSummary
   );
 
-router.route("/getSummary").post(UserServices.getSummary);
+router.route("/getSummary").post(authentication.validateUser,UserServices.getSummary);
 
 router
   .route("/updateAccount")

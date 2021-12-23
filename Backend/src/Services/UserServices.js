@@ -15,6 +15,9 @@ const signIn = async (req, res) => {
     const data = await User.findOne({ Email: email });
     if (data) {
       const validPassword = await bcrypt.compare(password, data.Password);
+      console.log(validPassword,"trueeeeee");
+      console.log(password,"trueeeeee");
+      console.log(data.Password,"trueeeeee");
       if (validPassword) {
         const token = await jwt.sign(
           {
@@ -86,10 +89,9 @@ const signUp = async (req, res) => {
         UserReservations: reservations,
         Summaries: summaries,
       });
-      return res.json({
-        statusCode: 0,
-        message: "Your account successfully created",
-      });
+      return res.json(
+         "Your account successfully created"
+      );
     }
   } catch (exception) {
     console.log(exception);
@@ -349,26 +351,6 @@ const createFlightReservation = async (req, res) => {
     const noOfPassengers = req.body.NumberOfPassengers;
 
     switch (DepCabinclass) {
-      case "Economy": {
-        basePrice = basePrice;
-        break;
-      }
-      case "First": {
-        basePrice *= 2;
-        break;
-      }
-      case "Business": {
-        basePrice *= 1.5;
-        break;
-      }
-      default: {
-        return res.json({
-          statusCode: 1,
-          error: "Not a valid class",
-        });
-      }
-    }
-    switch (ArrCabinclass) {
       case "Economy": {
         basePrice = basePrice;
         break;
