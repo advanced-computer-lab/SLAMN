@@ -536,8 +536,9 @@ const getFutureReservations = async (req, res) => {
       for (var i = 0; i < arr.length; i++) {
         var flight = await Flights.findOne({ FlightNumber: arr[i] });
         console.log(flight.DepartureDate);
-        console.log(Date.parse("02/02/2022") > Date.parse("08/02/2021"));
-        if (Date.parse(flight.DepartureDate) > Date.parse(req.body.date)) {
+        console.log(new Date(2022 - 01 - 01) >= new Date(2021 - 12 - 23));
+        if (new Date(flight.DepartureDate) > new Date(req.body.date)) {
+          console.log("dakhal");
           reservationresult = await Reservation.find({
             User: userData,
             DepartureFlightNumber: flight.FlightNumber,
