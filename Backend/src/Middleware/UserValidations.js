@@ -168,6 +168,23 @@ const validateUpdateAccount = (req, res, next) => {
   }
   return next();
 };
+const validateUpdateReservation = (req, res, next) => {
+  const schema = Joi.object({
+    CabinClass: Joi.string().required(),
+    NumberOfChildren: Joi.string().required(),
+    NumberOfAdults: Joi.string().required(),
+    Price: Joi.string().required()
+  }).required();
+
+  const isValid = schema.validate(req.body);
+  if (isValid.error) {
+    return res.json({
+      statusCode: 1,
+      error: isValid.error.details[0].message,
+    });
+  }
+  return next();
+};
 
 module.exports = {
   validateSignin,
@@ -179,4 +196,5 @@ module.exports = {
   validateSeats,
   validateSelection,
   validatePassword,
+  validateUpdateReservation
 };

@@ -752,6 +752,42 @@ const changePassword = async (req, res) => {
     });
   }
 };
+const updateFlightReservation = async (req, res) => {
+  const reservation= await Reservation.findOne({_id});
+  const CabinClass=req.body.CabinClass;
+  const NumberOfChildren=req.body.NumberOfChildren;
+  const NumberOfAdults=req.body.NumberOfAdults;
+  const Price=req.body.totalPrice;
+  const valueOfId = req.payload.id;
+  const userData = await User.findOne({ _id: valueOfId });
+  if(userData){
+  Reservation.findByIdAndUpdate({_id},
+    {
+        CabinClass:CabinClass,
+        NumberOfChildren:NumberOfChildren,
+        NumberOfAdults:NumberOfAdults,
+        totalPrice:Price-Reservation.totalPrice,
+      
+    },function (err, docs) {
+      if (err) {
+         return res.json({
+          message: " error",
+        });
+      } else {
+        console.log("Updated Reservation : ", docs);
+        return res.json({
+        message: "success",
+        });
+      }
+    }
+  );}
+  else{
+    return res.json({
+      statusCode: 1,
+      error: "sign in please",
+    });
+  }
+};
 // const getFutureReservations = async (req, res) => {
 //   try {
 //     const valueOfId = req.payload.id;
@@ -831,4 +867,5 @@ module.exports = {
   sendEmail,
   getFutureReservations,
   changePassword,
+  updateFlightReservation
 };

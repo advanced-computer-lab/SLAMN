@@ -39,6 +39,14 @@ router
     UserServices.updateAccount
   );
 
+  router
+  .route("/updateReservation")
+  .post(
+    UserValidation.validateUpdateReservation,
+    authentication.validateUser,
+    UserServices.updateFlightReservation
+  );
+
 router
   .route("/displayaccount")
   .post(authentication.validateUser, UserServices.displayaccount);
