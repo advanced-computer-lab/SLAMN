@@ -16,7 +16,7 @@ const useStyles = makeStyles({
   root: {
     background: " gainsboro",
     width: "100vw",
-    height: "49vw",
+    height: "100vw",
   },
   loginBlur: {
     backgroundColor: "white !important",
@@ -74,6 +74,7 @@ export default function Reservation() {
   const [dep, setDep] = useState("");
   const [arr, setarr] = useState("");
   const [lengtharr, setLength] = React.useState(0);
+  const [error, setError] = React.useState(false);
 
   var length = 0;
 
@@ -133,7 +134,7 @@ export default function Reservation() {
         var day = date.getUTCDate();
         var year = date.getUTCFullYear();
 
-        const newdate = day + "/" + month + "/" + year;
+        const newdate = year + "-" + month + "-" + day;
         axios
           .post(
             "http://localhost:8000/users/getfutureReservation",
@@ -154,39 +155,13 @@ export default function Reservation() {
       });
   };
 
-  // useEffect(async () => {
-  //   var date = new Date();
-  //   var month = date.getUTCMonth() + 1; //months from 1-12
-  //   var day = date.getUTCDate();
-  //   var year = date.getUTCFullYear();
-
-  //   const newdate = day + "/" + month + "/" + year;
-
-  //   console.log(newdate, "datee");
-  //   await axios
-  //     .post(
-  //       "http://localhost:8000/users/getfutureReservation",
-  //       { date: newdate },
-  //       {
-  //         headers: {
-  //           auth: headers,
-  //         },
-  //       }
-  //     )
-  //     .then((res) => {
-  //       console.log(res.data.data, "elreservation");
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
   useEffect(async () => {
     var date = new Date();
     var month = date.getUTCMonth() + 1; //months from 1-12
     var day = date.getUTCDate();
     var year = date.getUTCFullYear();
 
-    const newdate = day + "/" + month + "/" + year;
+    const newdate = year + "-" + month + "-" + day;
 
     // console.log(newdate,"datee")
     await axios
@@ -201,7 +176,8 @@ export default function Reservation() {
       )
       .then((res) => {
         console.log(res);
-        setFlights(res.data.data);
+        if (res.data.error) setError(true);
+        else setFlights(res.data.data);
       })
       .catch((err) => {
         console.log(err);
@@ -221,30 +197,35 @@ export default function Reservation() {
           <List />
         </div>
         <div className={classes.accountform}>
-          {flights.map((n, index) => (
-            <div className={classes.display}>
-              <Card
-                flight={{
-                  arrival: n[index].ArrivalFlightNumber,
-                  departure: n[index].DepartureFlightNumber,
-                  bookingnumber: n[index]._id,
-                }}
-              />
+          {error === true ? (
+            <div></div>
+          ) : (
+            flights.map((n) => (
+              <div className={classes.display}>
+                {console.log(n)}
+                <Card
+                  flight={{
+                    arrival: n[0].ArrivalFlightNumber,
+                    departure: n[0].DepartureFlightNumber,
+                    bookingnumber: n[0]._id,
+                  }}
+                />
 
-              <Button
-                ClassName={classes.button}
-                title={"Cancel"}
-                onClick={() => {
-                  console.log(n, "nnnnnnnnnnnn");
-                  console.log(flights, "FLIGHTTTTTTT");
-                  setDep(n[index].DepartureFlightNumber);
-                  setarr(n[index].ArrivalFlightNumber);
-                  setDeleted(n[index]._id);
-                  handleClickPopUpDelete();
-                }}
-              />
-            </div>
-          ))}
+                <Button
+                  ClassName={classes.button}
+                  title={"Cancel"}
+                  onClick={() => {
+                    console.log(n, "nnnnnnnnnnnn");
+                    console.log(flights, "FLIGHTTTTTTT");
+                    setDep(n[0].DepartureFlightNumber);
+                    setarr(n[0].ArrivalFlightNumber);
+                    setDeleted(n[0]._id);
+                    handleClickPopUpDelete();
+                  }}
+                />
+              </div>
+            ))
+          )}
         </div>
         <PopupDelete
           open={open2}

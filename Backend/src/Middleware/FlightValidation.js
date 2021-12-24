@@ -15,6 +15,7 @@ const validateAddFlight = (req, res, next) => {
     ArrivalAirport: Joi.string().required(),
     Price: Joi.number().required(),
     TripDuration: Joi.string().required(),
+    BaggageAllowance: Joi.number().required(),
   }).required();
 
   const isValid = schema.validate(req.body);
