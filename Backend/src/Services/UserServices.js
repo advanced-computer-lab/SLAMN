@@ -1524,7 +1524,7 @@ const updateReturnFlightReservation  = async (req, res) =>{
     });
   }
 
-}
+};
 module.exports = {
   signIn,
   signUp,
