@@ -9,14 +9,21 @@ import UserInfo from "../Seats/SeatReservationinfo";
 import axios from "axios";
 const useStyles = makeStyles({
   root: {
-    marginTop: "1vw",
-    marginLeft: "2vw",
+    marginTop: "3vw",
+    marginLeft: "20vw",
     backgroundColor: "white",
     width: "50vw",
     height: "20vw",
     padding: "0.5vw",
     borderRadius: "0.5vw !important",
     boxShadow: "1px 1.6px 1px #9E9E9E",
+  },
+  duration: {
+    fontSize: "1vw",
+    color: "gray",
+    fontWeight: "600",
+    marginTop: "0.7vw",
+    marginLeft: "6vw",
   },
   block: {
     width: "51vw",
@@ -145,6 +152,18 @@ const useStyles = makeStyles({
     marginLeft: "1vw",
     marginTop: "0.5vw",
     color: "gray",
+  },
+  baggage: {
+    fontSize: "1.1vw",
+    fontWeight: "700",
+    marginTop: "0.7vw",
+  },
+  baggageallowance: {
+    fontSize: "1vw",
+    color: "gray",
+    fontWeight: "600",
+    marginTop: "0.7vw",
+    marginLeft: "8vw",
   },
 });
 
@@ -357,12 +376,22 @@ export default function Card(props) {
           <div className={classes.price}>Price:</div>
           <div className={classes.price2}>{props.flight.Price + "EGP"}</div>
         </div>
-        <Button
-          ClassName={classes.button}
-          title={"Select "}
-          onClick={handleClick}
-        />
+        <div>
+          <div className={classes.baggage}>{"BaggageAllownce: "}</div>
+          <div className={classes.baggageallowance}>
+            {props.flight.BaggageAllowance + "kg"}
+          </div>
+        </div>
+        <div>
+          <div className={classes.baggage}>TripDuration:</div>
+          <div className={classes.duration}>{props.flight.TripDuration}</div>
+        </div>
       </div>
+      <Button
+        ClassName={classes.button}
+        title={"Select "}
+        onClick={handleClick}
+      />
     </div>
   );
 }
