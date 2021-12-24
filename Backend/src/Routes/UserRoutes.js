@@ -5,6 +5,8 @@ const UserValidation = require("../Middleware/UserValidations");
 const UserServices = require("../Services/UserServices");
 const authentication = require("../Middleware/authentication");
 
+router.route("/pay").post(UserServices.Pay);
+
 router
   .route("/deleteReservation")
   .post(
