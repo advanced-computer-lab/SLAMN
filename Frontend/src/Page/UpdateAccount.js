@@ -102,6 +102,10 @@ export default function UpdateAccount() {
             last={lastName}
             emails={email}
             passports={passport}
+            setfirst={setFirstName}
+            setlastname={setLastName}
+            setEmail={setEmail}
+            setPass={setPassport}
           />
         </div>
       </div>

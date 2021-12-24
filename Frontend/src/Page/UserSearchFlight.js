@@ -11,6 +11,7 @@ import SimpleDialog from "../Componenets/UserSearchFlight/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import { useContext } from "react";
+import { useNavigate } from "react-router";
 import UserInfo from "../Componenets/Seats/SeatReservationinfo";
 import Card from "../Componenets/ViewFlights/Card";
 import Snackbar from "@material-ui/core/Snackbar";
@@ -28,7 +29,8 @@ const useStyles = makeStyles({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f2f2f2",
+    backgroundColor: "white",
+    width: "80vw",
   },
   searchBar: {
     display: "flex",
@@ -97,6 +99,7 @@ export default function UserSearchFlight() {
   const [passengerslist, setPassengersList] = React.useState([]);
   const [open1, setOpen1] = React.useState(false); //snackbar
   const [popup, setPopup] = React.useState({ message: "", severity: "" });
+  const history = useNavigate();
 
   const handleClose1 = (event, reason) => {
     if (reason === "clickaway") {
@@ -120,21 +123,26 @@ export default function UserSearchFlight() {
       .post("http://localhost:8000/flights/getflights", obj, {})
       .then((res) => {
         console.log(res, "RESPONSEEEE");
+        localStorage.setItem("flightsArray", JSON.stringify(res.data.data));
+        localStorage.setItem("passengersList", JSON.stringify(passengerslist));
         setFlights(res.data.data);
-      });
-
-    console.log(flights, "flightsssssssssssssssssssss");
-  };
-  const handleClick2 = (e) => {
-    setOpen(true);
-    var ths = {};
-    ths.FlightNumber = e.value;
-    console.log(e.value);
-    axios
-      .post("http://localhost:8000/flights/getflights", ths, {})
-      .then((res) => {
-        console.log(res.data.data);
-        setSelected(res.data.data);
+        if (res.data.data.length != 0) {
+          if (passengers === "") {
+            setPopup({
+              message: "Please select passengers",
+              severity: "error",
+            });
+            setOpen1(true);
+          } else {
+            if (cabin === "") {
+              setPopup({
+                message: "Please select Cabin",
+                severity: "error",
+              });
+              setOpen1(true);
+            } else history("/viewallflights");
+          }
+        }
       });
   };
 
@@ -190,6 +198,7 @@ export default function UserSearchFlight() {
             handleChangeCabin(e);
           }}
         />
+
         <div className={classes.passengers}>
           <Select
             setPassengers={setPassengers}
@@ -203,7 +212,7 @@ export default function UserSearchFlight() {
         {" "}
         FIND FLIGHT
       </Button>
-      <div className={classes.list}>
+      {/* <div className={classes.list}>
         {flights.map((n) => (
           <Card
             flight={{
@@ -223,7 +232,7 @@ export default function UserSearchFlight() {
             setOpen={setOpen1}
           />
         ))}
-      </div>
+      </div> */}
       <Snackbar open={open1} autoHideDuration={2000} onClose={handleClose}>
         <Alert onClose={handleClose1} severity={popup.severity}>
           {popup.message}

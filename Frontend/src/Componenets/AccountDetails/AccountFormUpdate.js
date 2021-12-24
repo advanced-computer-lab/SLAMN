@@ -139,6 +139,14 @@ export default function AccountForm(props) {
   const email = window.localStorage.getItem("email");
   const passport = window.localStorage.getItem("passportNumber");
 
+  useEffect(async () => {
+    props.setfirst(name);
+    props.setlastname(lastname);
+    props.setEmail(email);
+    props.setPass(passport);
+    console.log("name", name);
+  }, []);
+
   const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
