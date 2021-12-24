@@ -172,8 +172,8 @@ const validateUpdateReservation = (req, res, next) => {
   const schema = Joi.object({
     BookingNumber: Joi.string().required(),
     CabinClass: Joi.string().required(),
-    // NumberOfChildren: Joi.number().required(),
-    // NumberOfAdults: Joi.number().required(),
+    NumberOfChildren: Joi.number().required(),
+    NumberOfAdults: Joi.number().required(),
     Price: Joi.number().required()
   }).required();
 

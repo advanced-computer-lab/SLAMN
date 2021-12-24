@@ -30,7 +30,14 @@ const reservation = new Schema({
     type: Number,
     require: true,
   },
-
+  NumberOfChildren: {
+    type: Number,
+    require: true,
+  },
+  NumberOfAdults: {
+    type: Number,
+    require: true,
+  },
   totalPrice: {
     type: Number,
     require: true,

@@ -758,7 +758,15 @@ const updateFlightReservation = async (req, res) => {
   const CabinClass=req.body.CabinClass;
   const NumberOfChildren=req.body.NumberOfChildren;
   const NumberOfAdults=req.body.NumberOfAdults;
-  const Price=req.body.Price-reservation.totalPrice;
+  const NumberOfPassengers=req.body.NumberOfChildren+req.body.NumberOfAdults;
+  console.log("no of passengers",NumberOfPassengers);
+  var basePrice=(NumberOfAdults*req.body.Price)+(NumberOfChildren*req.body.Price*0.5);
+  var emptySeats=0;
+  var enoughSeats=false;
+  console.log("old price",reservation.totalPrice);
+  console.log("new price",basePrice);
+  const PriceDifference=basePrice-reservation.totalPrice;
+  console.log("diffrence",PriceDifference);
   const valueOfId = req.payload.id;
   console.log("iddddd",valueOfId);
   const userData = await User.findOne({ _id: valueOfId });
@@ -766,11 +774,101 @@ const updateFlightReservation = async (req, res) => {
   if(userData){
     console.log("bodyyyyyy",req.body); 
     console.log("reservation idddddd",req.body.BookingNumber); 
+    
+      if(NumberOfPassengers>reservation.NumberOfPassengers){
+        //check if there is enough seats
+        switch (CabinClass) {
+          case "Economy": {
+            for(i=0;i<EconomySeatsList.length;i++){
+              if(EconomySeatsList[i].isReserved==false)
+                 emptySeats++;
+              if(emptySeats==NumberOfPassengers){
+                enoughSeats=true;
+                break;
+              }
+            }
+            break;
+          }
+          case "First": {
+            for(i=0;i<FirstSeatsList.length;i++){
+              if(FirstSeatsList[i].isReserved==false)
+                 emptySeats++;
+              if(emptySeats==NumberOfPassengers){
+                enoughSeats=true;
+                break;
+              }
+            }
+            break;
+          }
+          case "Business": {
+            for(i=0;i<BusinessSeatsList.length;i++){
+              if(BusinessSeatsList[i].isReserved==false)
+                 emptySeats++;
+              if(emptySeats==NumberOfPassengers){
+                enoughSeats=true;
+                break;
+              }
+            }
+            break;
+          }
+          default: {
+            return res.json({
+              statusCode: 1,
+              error: "Not a valid class",
+            });
+          }
+        }
+      }
+      else{
+        enoughSeats=true;
+        if(NumberOfPassengers>reservation.NumberOfPassengers){
+          //call update seats
+        }
+      }
+      if(!enoughSeats){
+        return res.json({
+          statusCode: 1,
+          error: "No available empty seats",
+        });
+      }
+      if(reservation.CabinClass!=CabinClass){
+        switch (CabinClass) {
+          case "Economy": {
+            basePrice = basePrice;
+            break;
+          }
+          case "First": {
+            basePrice *= 2;
+            break;
+          }
+          case "Business": {
+            basePrice *= 1.5;
+            break;
+          }
+          default: {
+            return res.json({
+              statusCode: 1,
+              error: "Not a valid class",
+            });
+          }
+        }
+        if(reservation.seat==req.body.seat){
+          return res.json({
+            message: "you have to change your seat",
+          });
+          
+        }
+        // else{
+        //   call update seat
+        // }
+        }
   Reservation.findByIdAndUpdate({ _id:req.body.BookingNumber},
     {
         DepCabinClass:CabinClass,
-        totalPrice:Price
-      
+        totalPrice:PriceDifference,
+        NumberOfPassengers:NumberOfPassengers,
+        NumberOfChildren:NumberOfChildren,
+        NumberOfAdults:NumberOfAdults,
     },function (err, docs) {
       if (err) {
          return res.json({
