@@ -2,10 +2,6 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const reservation = new Schema({
-  Flight: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Flight",
-  },
   User: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
@@ -26,10 +22,6 @@ const reservation = new Schema({
     type: String,
     require: true,
   },
-  NumberOfPassengers: {
-    type: Number,
-    require: true,
-  },
   NumberOfChildren: {
     type: Number,
     require: true,
@@ -38,10 +30,42 @@ const reservation = new Schema({
     type: Number,
     require: true,
   },
+  returnSeats: {
+    type: [
+      {
+        passengerNumber: {
+          type: Number,
+        },
+        passengerType: {
+          type: String,
+        },
+        passengerSeat: {
+          type: String,
+        },
+      },
+    ],
+    require: true,
+  },
+  departureSeats: {
+    type: [
+      {
+        passengerNumber: {
+          type: Number,
+        },
+        passengerType: {
+          type: String,
+        },
+        passengerSeat: {
+          type: String,
+        },
+      },
+    ],
+    require: true,
+  },
   totalPrice: {
     type: Number,
     require: true,
-  }, //dep arr
+  },
 });
 reservation.set("toJSON", { virtuals: true });
 reservation.set("toObject", { virtuals: true });

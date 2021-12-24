@@ -337,8 +337,6 @@ const createFlightReservation = async (req, res) => {
     console.log(req.body);
     const valueOfId = req.payload.id;
     const userData = await User.findOne({ _id: valueOfId });
-    //  const userData = await User.findOne({ _id: "61acf8804f22c4507b340a83"});
-
     const arrivalFlight = await Flights.findOne({
       FlightNumber: req.body.ArrivalFlightNumber,
     });
@@ -456,7 +454,7 @@ const deleteReservation = async (req, res) => {
     } else {
       return res.json({
         statusCode: 1,
-        error: "Can't delte this reservation",
+        error: "Can't delete this reservation",
       });
     }
   } catch (exception) {
@@ -753,84 +751,16 @@ const changePassword = async (req, res) => {
     });
   }
 };
-const updateFlightReservation = async (req, res) => {
+const updateDepartureFlightReservation = async (req, res) => {
   const reservation= await Reservation.findOne({_id:req.body.BookingNumber});
   const CabinClass=req.body.CabinClass;
   const NumberOfChildren=req.body.NumberOfChildren;
   const NumberOfAdults=req.body.NumberOfAdults;
-  const NumberOfPassengers=req.body.NumberOfChildren+req.body.NumberOfAdults;
-  console.log("no of passengers",NumberOfPassengers);
   var basePrice=(NumberOfAdults*req.body.Price)+(NumberOfChildren*req.body.Price*0.5);
-  var emptySeats=0;
-  var enoughSeats=false;
-  console.log("old price",reservation.totalPrice);
-  console.log("new price",basePrice);
   const PriceDifference=basePrice-reservation.totalPrice;
-  console.log("diffrence",PriceDifference);
   const valueOfId = req.payload.id;
-  console.log("iddddd",valueOfId);
   const userData = await User.findOne({ _id: valueOfId });
-  console.log("userrrr",userData);
   if(userData){
-    console.log("bodyyyyyy",req.body); 
-    console.log("reservation idddddd",req.body.BookingNumber); 
-    
-      if(NumberOfPassengers>reservation.NumberOfPassengers){
-        //check if there is enough seats
-        switch (CabinClass) {
-          case "Economy": {
-            for(i=0;i<EconomySeatsList.length;i++){
-              if(EconomySeatsList[i].isReserved==false)
-                 emptySeats++;
-              if(emptySeats==NumberOfPassengers){
-                enoughSeats=true;
-                break;
-              }
-            }
-            break;
-          }
-          case "First": {
-            for(i=0;i<FirstSeatsList.length;i++){
-              if(FirstSeatsList[i].isReserved==false)
-                 emptySeats++;
-              if(emptySeats==NumberOfPassengers){
-                enoughSeats=true;
-                break;
-              }
-            }
-            break;
-          }
-          case "Business": {
-            for(i=0;i<BusinessSeatsList.length;i++){
-              if(BusinessSeatsList[i].isReserved==false)
-                 emptySeats++;
-              if(emptySeats==NumberOfPassengers){
-                enoughSeats=true;
-                break;
-              }
-            }
-            break;
-          }
-          default: {
-            return res.json({
-              statusCode: 1,
-              error: "Not a valid class",
-            });
-          }
-        }
-      }
-      else{
-        enoughSeats=true;
-        if(NumberOfPassengers>reservation.NumberOfPassengers){
-          //call update seats
-        }
-      }
-      if(!enoughSeats){
-        return res.json({
-          statusCode: 1,
-          error: "No available empty seats",
-        });
-      }
       if(reservation.CabinClass!=CabinClass){
         switch (CabinClass) {
           case "Economy": {
@@ -852,23 +782,319 @@ const updateFlightReservation = async (req, res) => {
             });
           }
         }
-        if(reservation.seat==req.body.seat){
-          return res.json({
-            message: "you have to change your seat",
-          });
-          
         }
-        // else{
-        //   call update seat
-        // }
+        const oldSeats = reservation.departureSeats;
+        const newSeats = req.body.passengers;
+        const cabin = reservation.DepCabinClass;
+        const newCabin = req.body.CabinClass;
+        const flightNumber = reservation.DepartureFlightNumber;
+        var unreserve = [];
+        const flight = await Flights.find({ FlightNumber: flightNumber });
+        var a = [];
+        var Economy = flight[0].EconomySeatsList;
+        var Business = flight[0].BusinessSeatsList;
+        var First = flight[0].FirstSeatsList;
+        if (cabin === "Economy") {
+          a = Economy;
+          var i = 0;
+          for (i; i < a.length; i++) {
+            var j = 0;
+            for (j; j < oldSeats.length; j++) {
+              if (a[i].number === oldSeats[j].passengerSeat) {
+                unreserve.push({
+                  number: a[i].number,
+                  isReserved: false,
+                });
+                break;
+              }
+            }
+            if (j >= oldSeats.length) {
+              unreserve.push(a[i]);
+            }
+          }
+          Economy = unreserve;
+          if (newCabin === "Economy") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < Economy.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (Economy[i].number === newSeats[j].passengerSeat) {
+                  if (Economy[i].isReserved === false) {
+                    finalSeats.push({
+                      number: Economy[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(Economy[i]);
+              }
+            }
+            Economy = finalSeats;
+          }
+    
+          if (newCabin === "Business") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < Business.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (Business[i].number === newSeats[j].passengerSeat) {
+                  if (Business[i].isReserved === false) {
+                    finalSeats.push({
+                      number: Business[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(Business[i]);
+              }
+            }
+            Business = finalSeats;
+          }
+    
+          if (newCabin === "First") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < First.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (First[i].number === newSeats[j].passengerSeat) {
+                  if (First[i].isReserved === false) {
+                    finalSeats.push({
+                      number: First[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(First[i]);
+              }
+            }
+            First = finalSeats;
+          }
         }
+    
+        if (cabin === "Business") {
+          a = Business;
+          var i = 0;
+          for (i; i < a.length; i++) {
+            var j = 0;
+            for (j; j < oldSeats.length; j++) {
+              if (a[i].number === oldSeats[j].passengerSeat) {
+                unreserve.push({
+                  number: a[i].number,
+                  isReserved: false,
+                });
+                break;
+              }
+            }
+            if (j >= oldSeats.length) {
+              unreserve.push(a[i]);
+            }
+          }
+          Business = unreserve;
+          if (newCabin === "Economy") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < Economy.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (Economy[i].number === newSeats[j].passengerSeat) {
+                  if (Economy[i].isReserved === false) {
+                    finalSeats.push({
+                      number: Economy[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(Economy[i]);
+              }
+            }
+            Economy = finalSeats;
+          }
+    
+          if (newCabin === "Business") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < Business.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (Business[i].number === newSeats[j].passengerSeat) {
+                  if (Business[i].isReserved === false) {
+                    finalSeats.push({
+                      number: Business[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(Business[i]);
+              }
+            }
+            Business = finalSeats;
+          }
+    
+          if (newCabin === "First") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < First.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (First[i].number === newSeats[j].passengerSeat) {
+                  if (First[i].isReserved === false) {
+                    finalSeats.push({
+                      number: First[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(First[i]);
+              }
+            }
+            First = finalSeats;
+          }
+        }
+    
+        if (cabin === "First") {
+          a = First;
+          var i = 0;
+          for (i; i < a.length; i++) {
+            var j = 0;
+            for (j; j < oldSeats.length; j++) {
+              if (a[i].number === oldSeats[j].passengerSeat) {
+                unreserve.push({
+                  number: a[i].number,
+                  isReserved: false,
+                });
+                break;
+              }
+            }
+            if (j >= oldSeats.length) {
+              unreserve.push(a[i]);
+            }
+          }
+          First = unreserve;
+          if (newCabin === "Economy") {
+            var i = 0;
+            finalSeats = [];
+            console.log(Economy, "ECONOMYY");
+            for (i; i < Economy.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (Economy[i].number === newSeats[j].passengerSeat) {
+                  if (Economy[i].isReserved === false) {
+                    finalSeats.push({
+                      number: Economy[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(Economy[i]);
+              }
+            }
+            Economy = finalSeats;
+            console.log(Economy, "ECONOMYY2");
+          }
+    
+          if (newCabin === "Business") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < Business.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (Business[i].number === newSeats[j].passengerSeat) {
+                  if (Business[i].isReserved === false) {
+                    finalSeats.push({
+                      number: Business[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(Business[i]);
+              }
+            }
+            Business = finalSeats;
+          }
+    
+          if (newCabin === "First") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < First.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (First[i].number === newSeats[j].passengerSeat) {
+                  if (First[i].isReserved === false) {
+                    finalSeats.push({
+                      number: First[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(First[i]);
+              }
+            }
+            First = finalSeats;
+          }
+        }
+    
+        Flights.updateOne(
+          { FlightNumber: reservation.DepartureFlightNumber },
+          {
+            $set: {
+              FlightNumber: flight.FlightNumber,
+              DepartureDate: flight.DepartureDate,
+              ArrivalDate: flight.ArrivalDate,
+              DepartureTime: flight.DepartureTime,
+              ArrivalTime: flight.ArrivalTime,
+              EconomySeats: flight.EconomySeats,
+              BusinessSeats: flight.BusinessSeats,
+              FirstClassSeats: flight.FirstClassSeats,
+              ArrivalAirport: flight.ArrivalAirport,
+              DepartureAirport: flight.DepartureAirport,
+              isDeparture: flight.isDeparture,
+              Price: flight.Price,
+              TripDuration: flight.TripDuration,
+              EconomySeatsList: Economy,
+              BusinessSeatsList: Business,
+              FirstSeatsList: First,
+              BaggageAllowance: flight.BaggageAllowance,
+            },
+          }
+        ).catch((err) => res.status(400).json("Error:" + err));
+        
   Reservation.findByIdAndUpdate({ _id:req.body.BookingNumber},
     {
         DepCabinClass:CabinClass,
         totalPrice:PriceDifference,
-        NumberOfPassengers:NumberOfPassengers,
         NumberOfChildren:NumberOfChildren,
         NumberOfAdults:NumberOfAdults,
+        departureSeats:req.body.passengers,
     },function (err, docs) {
       if (err) {
          return res.json({
@@ -889,70 +1115,416 @@ const updateFlightReservation = async (req, res) => {
     });
   }
 };
-// const getFutureReservations = async (req, res) => {
-//   try {
-//     const valueOfId = req.payload.id;
-//     const userData = await User.findOne({ _id: valueOfId });
+const updateReturnFlightReservation  = async (req, res) =>{
+  try {
+    const reservation= await Reservation.findOne({_id:req.body.BookingNumber});
+    const valueOfId = req.payload.id;
+    const userData = await User.findOne({ _id: valueOfId });
+    const arrivalFlight = await Flights.findOne({FlightNumber: req.body.ArrivalFlightNumber});
+    const departureFlight = await Flights.findOne({FlightNumber: req.body.DepartureFlightNumber});
+    const DepCabinclass = req.body.DepCabinClass;
+    const ArrCabinclass = req.body.ArrCabinClass;
+    var basePrice = arrivalFlight.Price + departureFlight.Price;
+    const NumberOfChildren=req.body.NumberOfChildren;
+    const NumberOfAdults=req.body.NumberOfAdults;
+    basePrice=(NumberOfAdults*basePrice)+(NumberOfChildren*basePrice*0.5);
+    switch (DepCabinclass) {
+      case "Economy": {
+        basePrice = basePrice;
+        break;
+      }
+      case "First": {
+        basePrice *= 2;
+        break;
+      }
+      case "Business": {
+        basePrice *= 1.5;
+        break;
+      }
+      default: {
+        return res.json({
+          statusCode: 1,
+          error: "Not a valid class",
+        });
+      }
+    }
 
-//     // const userData=await User.findOne({ _id: "61a7780f866bf0ec6787692a"});
-//     var date = new Date();
-//     console.log(date, "dateeeee");
+    if (userData) {
+      userData.UserReservations.forEach((element) => {
+        if (element._id === req.body._id) {
+          var index = userData.UserReservations.indexOf(element);
+          if (index > -1) {
+            userData.UserReservations.splice(index, 1);
+          }
+        }
+      });
+      await User.findOneAndUpdate({ _id: userData._id }, userData, null).catch(
+        (err) => res.status(400).json("Error:" + err)
+      );
+      reservation.delete();
+      const reserve = await Reservation.create({
+        DepartureFlightNumber: departureFlight.FlightNumber,
+        ArrivalFlightNumber: arrivalFlight.FlightNumber,
+        DepCabinclass: DepCabinclass,
+        ArrCabinclass: ArrCabinclass,
+        NumberOfChildren:NumberOfChildren,
+        NumberOfAdults:NumberOfAdults,
+        departureSeats:req.body.depSeats,
+        returnSeats:req.body.arrSeats,
+        totalPrice: basePrice,
+        User: {
+          _id: userData._id,
+          FirstName: userData.FirstName,
+          LastName: userData.LastName,
+          Email: userData.Email,
+          Phone: userData.Phone,
+          PassportNumber: userData.PassportNumber,
+          Password: userData.Password,
+          Admin: userData.Admin,
+          UserReservations: userData.UserReservations,
+          Summaries: userData.Summaries,
+        },
+      });
+      const ReserveTobePushed = {
+        _id: reserve._id,
+        User: reserve.User,
+        DepartureFlightNumber: reserve.DepartureFlightNumber,
+        DepCabinclass: reserve.DepCabinclass,
+        ArrCabinclass: reserve.ArrCabinclass,
+        ArrivalFlightNumber: reserve.ArrivalFlightNumber,
+        NumberOfChildren: reserve.NumberOfChildren,
+        NumberOfAdults: reserve.NumberOfAdults,
+        departureSeats:req.body.depSeats,
+        returnSeats:req.body.arrSeats,
+        totalPrice: reserve.totalPrice,
+      };
+      userData.UserReservations.push(ReserveTobePushed);
+      const oldSeats = reservation.returnSeats;
+        const newSeats = req.body.arrSeats;
+        const cabin = reservation.ArrCabinClass;
+        const newCabin = req.body.ArrCabinClass;
+        const flightNumber = reservation.ArrivalFlightNumber;
+        var unreserve = [];
+        const flight = await Flights.find({ FlightNumber: flightNumber });
+        var a = [];
+        var Economy = flight[0].EconomySeatsList;
+        var Business = flight[0].BusinessSeatsList;
+        var First = flight[0].FirstSeatsList;
+        if (cabin === "Economy") {
+          a = Economy;
+          var i = 0;
+          for (i; i < a.length; i++) {
+            var j = 0;
+            for (j; j < oldSeats.length; j++) {
+              if (a[i].number === oldSeats[j].passengerSeat) {
+                unreserve.push({
+                  number: a[i].number,
+                  isReserved: false,
+                });
+                break;
+              }
+            }
+            if (j >= oldSeats.length) {
+              unreserve.push(a[i]);
+            }
+          }
+          Economy = unreserve;
+          if (newCabin === "Economy") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < Economy.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (Economy[i].number === newSeats[j].passengerSeat) {
+                  if (Economy[i].isReserved === false) {
+                    finalSeats.push({
+                      number: Economy[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(Economy[i]);
+              }
+            }
+            Economy = finalSeats;
+          }
+    
+          if (newCabin === "Business") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < Business.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (Business[i].number === newSeats[j].passengerSeat) {
+                  if (Business[i].isReserved === false) {
+                    finalSeats.push({
+                      number: Business[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(Business[i]);
+              }
+            }
+            Business = finalSeats;
+          }
+    
+          if (newCabin === "First") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < First.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (First[i].number === newSeats[j].passengerSeat) {
+                  if (First[i].isReserved === false) {
+                    finalSeats.push({
+                      number: First[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(First[i]);
+              }
+            }
+            First = finalSeats;
+          }
+        }
+    
+        if (cabin === "Business") {
+          a = Business;
+          var i = 0;
+          for (i; i < a.length; i++) {
+            var j = 0;
+            for (j; j < oldSeats.length; j++) {
+              if (a[i].number === oldSeats[j].passengerSeat) {
+                unreserve.push({
+                  number: a[i].number,
+                  isReserved: false,
+                });
+                break;
+              }
+            }
+            if (j >= oldSeats.length) {
+              unreserve.push(a[i]);
+            }
+          }
+          Business = unreserve;
+          if (newCabin === "Economy") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < Economy.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (Economy[i].number === newSeats[j].passengerSeat) {
+                  if (Economy[i].isReserved === false) {
+                    finalSeats.push({
+                      number: Economy[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(Economy[i]);
+              }
+            }
+            Economy = finalSeats;
+          }
+    
+          if (newCabin === "Business") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < Business.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (Business[i].number === newSeats[j].passengerSeat) {
+                  if (Business[i].isReserved === false) {
+                    finalSeats.push({
+                      number: Business[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(Business[i]);
+              }
+            }
+            Business = finalSeats;
+          }
+    
+          if (newCabin === "First") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < First.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (First[i].number === newSeats[j].passengerSeat) {
+                  if (First[i].isReserved === false) {
+                    finalSeats.push({
+                      number: First[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(First[i]);
+              }
+            }
+            First = finalSeats;
+          }
+        }
+    
+        if (cabin === "First") {
+          a = First;
+          var i = 0;
+          for (i; i < a.length; i++) {
+            var j = 0;
+            for (j; j < oldSeats.length; j++) {
+              if (a[i].number === oldSeats[j].passengerSeat) {
+                unreserve.push({
+                  number: a[i].number,
+                  isReserved: false,
+                });
+                break;
+              }
+            }
+            if (j >= oldSeats.length) {
+              unreserve.push(a[i]);
+            }
+          }
+          First = unreserve;
+          if (newCabin === "Economy") {
+            var i = 0;
+            finalSeats = [];
+            console.log(Economy, "ECONOMYY");
+            for (i; i < Economy.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (Economy[i].number === newSeats[j].passengerSeat) {
+                  if (Economy[i].isReserved === false) {
+                    finalSeats.push({
+                      number: Economy[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(Economy[i]);
+              }
+            }
+            Economy = finalSeats;
+            console.log(Economy, "ECONOMYY2");
+          }
+    
+          if (newCabin === "Business") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < Business.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (Business[i].number === newSeats[j].passengerSeat) {
+                  if (Business[i].isReserved === false) {
+                    finalSeats.push({
+                      number: Business[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(Business[i]);
+              }
+            }
+            Business = finalSeats;
+          }
+    
+          if (newCabin === "First") {
+            var i = 0;
+            finalSeats = [];
+            for (i; i < First.length; i++) {
+              var j = 0;
+              for (j; j < newSeats.length; j++) {
+                if (First[i].number === newSeats[j].passengerSeat) {
+                  if (First[i].isReserved === false) {
+                    finalSeats.push({
+                      number: First[i].number,
+                      isReserved: true,
+                    });
+                    break;
+                  }
+                }
+              }
+              if (j >= newSeats.length) {
+                finalSeats.push(First[i]);
+              }
+            }
+            First = finalSeats;
+          }
+        }
+    
+        Flights.updateOne(
+          { FlightNumber: reservation.DepartureFlightNumber },
+          {
+            $set: {
+              FlightNumber: flight.FlightNumber,
+              DepartureDate: flight.DepartureDate,
+              ArrivalDate: flight.ArrivalDate,
+              DepartureTime: flight.DepartureTime,
+              ArrivalTime: flight.ArrivalTime,
+              EconomySeats: flight.EconomySeats,
+              BusinessSeats: flight.BusinessSeats,
+              FirstClassSeats: flight.FirstClassSeats,
+              ArrivalAirport: flight.ArrivalAirport,
+              DepartureAirport: flight.DepartureAirport,
+              isDeparture: flight.isDeparture,
+              Price: flight.Price,
+              TripDuration: flight.TripDuration,
+              EconomySeatsList: Economy,
+              BusinessSeatsList: Business,
+              FirstSeatsList: First,
+              BaggageAllowance: flight.BaggageAllowance,
+            },
+          }
+        ).catch((err) => res.status(400).json("Error:" + err));
+      await User.findOneAndUpdate({ _id: userData._id }, userData, null).catch(
+        (err) => res.status(400).json("Error:" + err)
+      );
+    } else {
+      return res.json({
+        statusCode: 1,
+        error: "sign in please",
+      });
+    }
+    return res.json({
+      statusCode: 0,
+      message: "Success",
+    });
+  } catch (exception) {
+    console.log(exception);
+    return res.json({
+      statusCode: 1,
+      error: "exception",
+    });
+  }
 
-//     if (userData) {
-//       console.log(userData);
-//       let reservations = await Reservation.find({ User: userData });
-//       let result = [];
-//       var reservationresult;
-//       //console.log(reservations);
-//       const arr = reservations.map((res) => res.DepartureFlightNumber);
-//       console.log(arr);
-//       for (var i = 0; i < arr.length; i++) {
-//         var flight = await Flights.findOne({ FlightNumber: arr[i] });
-//         console.log(flight.DepartureDate);
-//         if (flight.DepartureDate > req.body.date) {
-//           reservationresult = await Reservation.find({
-//             User: userData,
-//             DepartureFlightNumber: flight.FlightNumber,
-//           });
-//           result.push(reservationresult);
-//           console.log("dakhal");
-//         }
-//       }
-
-//       console.log(result);
-
-//       return res.json({
-//         statusCode: 0,
-//         message: "Success",
-//         data: result,
-//       });
-//     } else {
-//       return res.json({
-//         statusCode: 1,
-//         error: "sign in please",
-//       });
-//     }
-//   } catch (exception) {
-//     console.log(exception);
-//     return res.json({
-//       statusCode: 1,
-//       error: "exception",
-//     });
-//   }
-// };
-// const sendEmail = (req, res) => {
-//   let userEmail = req.body.email;
-//   let emailSubject = req.body.emailSubject;
-//   let emailBody = req.body.emailBody;
-
-//   let transporter = nodemailer.createTransport({
-//     service: "outlook",
-//     auth: {
-//       user: "slamndamn@outlook.com",
-//       pass: "slamn123",
-//     },
-//   });
-
+}
 module.exports = {
   signIn,
   signUp,
@@ -968,5 +1540,6 @@ module.exports = {
   sendEmail,
   getFutureReservations,
   changePassword,
-  updateFlightReservation
+  updateDepartureFlightReservation,
+  updateReturnFlightReservation
 };

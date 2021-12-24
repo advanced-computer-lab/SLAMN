@@ -16,7 +16,7 @@ const useStyles = makeStyles({
   root: {
     background: " gainsboro",
     width: "100vw",
-    height: "49vw",
+    height: "100vw",
   },
   loginBlur: {
     backgroundColor: "white !important",
@@ -155,32 +155,6 @@ export default function Reservation() {
       });
   };
 
-  // useEffect(async () => {
-  //   var date = new Date();
-  //   var month = date.getUTCMonth() + 1; //months from 1-12
-  //   var day = date.getUTCDate();
-  //   var year = date.getUTCFullYear();
-
-  //   const newdate = day + "/" + month + "/" + year;
-
-  //   console.log(newdate, "datee");
-  //   await axios
-  //     .post(
-  //       "http://localhost:8000/users/getfutureReservation",
-  //       { date: newdate },
-  //       {
-  //         headers: {
-  //           auth: headers,
-  //         },
-  //       }
-  //     )
-  //     .then((res) => {
-  //       console.log(res.data.data, "elreservation");
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
   useEffect(async () => {
     var date = new Date();
     var month = date.getUTCMonth() + 1; //months from 1-12

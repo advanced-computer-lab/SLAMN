@@ -40,12 +40,21 @@ router
   );
 
   router
-  .route("/updateReservation")
+  .route("/updatedepartureReservation")
   .post(
-    UserValidation.validateUpdateReservation,
+    UserValidation.validateUpdateDepartureReservation,
     authentication.validateUser,
-    UserServices.updateFlightReservation
+    UserServices.updateDepartureFlightReservation
   );
+
+  router
+  .route("/updateReturnReservation")
+  .post(
+    UserValidation.validateupdateReturnReservation,
+    authentication.validateUser,
+    UserServices.updateReturnFlightReservation
+  );
+
 
 router
   .route("/displayaccount")
