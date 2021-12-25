@@ -6,10 +6,13 @@ import List from "../Componenets/AccountDetails/List";
 import AccountForm from "../Componenets/AccountDetails/AccountForm";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Card from "../Componenets/Reservation/Reservation";
+import Cards from "../Componenets/Reservation/DepartureFlights";
+import Card from "react-bootstrap/Card";
 import ListItem from "@mui/material/ListItem";
 import Button from "../Componenets/AccountDetails/Buttons";
 import PopupDelete from "../Componenets/General/PopUp";
+import Nav from "react-bootstrap/Nav";
+import Navigation from "../Componenets/Reservation/Navigation";
 
 const useStyles = makeStyles({
   display: { display: "flex", marginBottom: "2vw" },
@@ -50,6 +53,8 @@ const useStyles = makeStyles({
 
   form: {
     display: "flex",
+    background: " gainsboro",
+    height: "100vw",
   },
   accountform: {
     marginTop: "2vw",
@@ -58,6 +63,7 @@ const useStyles = makeStyles({
     flexDirection: "column",
   },
   side: {
+    background: " gainsboro",
     marginLeft: "6vw",
     marginTop: "2vw",
   },
@@ -196,37 +202,15 @@ export default function Reservation() {
         <div className={classes.side}>
           <List />
         </div>
-        <div className={classes.accountform}>
-          {error === true ? (
-            <div></div>
-          ) : (
-            flights.map((n) => (
-              <div className={classes.display}>
-                {console.log(n)}
-                <Card
-                  flight={{
-                    arrival: n[0].ArrivalFlightNumber,
-                    departure: n[0].DepartureFlightNumber,
-                    bookingnumber: n[0]._id,
-                  }}
-                />
+        <Navigation
+          flights={flights}
+          setDep={setDep}
+          setarr={setarr}
+          setDeleted={setDeleted}
+          error={error}
+          handleClickPopUpDelete={handleClickPopUpDelete}
+        />
 
-                <Button
-                  ClassName={classes.button}
-                  title={"Cancel"}
-                  onClick={() => {
-                    console.log(n, "nnnnnnnnnnnn");
-                    console.log(flights, "FLIGHTTTTTTT");
-                    setDep(n[0].DepartureFlightNumber);
-                    setarr(n[0].ArrivalFlightNumber);
-                    setDeleted(n[0]._id);
-                    handleClickPopUpDelete();
-                  }}
-                />
-              </div>
-            ))
-          )}
-        </div>
         <PopupDelete
           open={open2}
           handleOpen={handleOpen2}

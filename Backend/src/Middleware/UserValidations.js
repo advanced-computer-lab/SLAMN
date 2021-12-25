@@ -69,6 +69,25 @@ const validateSeats = (req, res, next) => {
   return next();
 };
 
+const validateChangeSeats = (req, res, next) => {
+  const schema = Joi.object({
+    FlightNumber: Joi.string().required(),
+    oldCabin: Joi.string().required(),
+    newCabin: Joi.string().required(),
+    oldSeats: Joi.array().required(),
+    newSeats: Joi.array().required(),
+  }).required();
+
+  const isValid = schema.validate(req.body);
+  if (isValid.error) {
+    return res.json({
+      statusCode: 1,
+      error: isValid.error.details[0].message,
+    });
+  }
+  return next();
+};
+
 const validateSelection = (req, res, next) => {
   const schema = Joi.object({
     FlightNumber: Joi.string().required(),
@@ -179,4 +198,5 @@ module.exports = {
   validateSeats,
   validateSelection,
   validatePassword,
+  validateChangeSeats,
 };
