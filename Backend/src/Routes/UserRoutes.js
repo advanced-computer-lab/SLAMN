@@ -31,7 +31,7 @@ router
     UserServices.createSummary
   );
 
-router.route("/getSummary").post(UserServices.getSummary);
+router.route("/getSummary").post(authentication.validateUser,UserServices.getSummary);
 
 router
   .route("/updateAccount")
@@ -40,6 +40,37 @@ router
     authentication.validateUser,
     UserServices.updateAccount
   );
+
+  router
+  .route("/updateSamedepartureReservation")
+  .post(
+    UserValidation.validateUpdateSameDepartureReservation,
+    authentication.validateUser,
+    UserServices.updateSameDepartureFlightReservation
+  );
+  router
+  .route("/updateSameArrivalReservation")
+  .post(
+    UserValidation.validateUpdateSameArrivalReservation,
+    authentication.validateUser,
+    UserServices.updateSameArrivalFlightReservation
+  );
+
+  router
+  .route("/updateDiffReturnReservation")
+  .post(
+    UserValidation.validateupdateDiffReturnReservation,
+    authentication.validateUser,
+    UserServices.updateDiffReturnFlightReservation
+  );
+  router
+  .route("/updateDiffDepartureReservation")
+  .post(
+    UserValidation.validateupdateDiffDepartureReservation,
+    authentication.validateUser,
+    UserServices.updateDiffDepartureFlightReservation
+  );
+
 
 router
   .route("/displayaccount")

@@ -16,6 +16,9 @@ const validateAddFlight = (req, res, next) => {
     Price: Joi.number().required(),
     TripDuration: Joi.string().required(),
     BaggageAllowance: Joi.number().required(),
+    isDeparture:Joi.boolean().required(),
+    Price:Joi.number().required(),
+    TripDuration:Joi.string().required()
   }).required();
 
   const isValid = schema.validate(req.body);
@@ -65,6 +68,7 @@ const validateSearchFlight = (req, res, next) => {
   }
   return next();
 };
+
 module.exports = {
   validateAddFlight,
   validateDeleteFlight,
