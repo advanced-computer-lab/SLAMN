@@ -5,7 +5,11 @@ import Button from "@mui/material/Button";
 export default function BasicButton(props) {
   return (
     <Stack spacing={2} direction="row">
-      <Button variant="outlined" onClick={props.onClick}>
+      <Button
+        variant="outlined"
+        onClick={props.onClick}
+        fullWidth={props.fullWidth}
+      >
         {props.title}
       </Button>
     </Stack>

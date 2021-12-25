@@ -13,7 +13,7 @@ const useStyles = makeStyles({
     marginLeft: "20vw",
     backgroundColor: "white",
     width: "50vw",
-    height: "20vw",
+    height: "23vw",
     padding: "0.5vw",
     borderRadius: "0.5vw !important",
     boxShadow: "1px 1.6px 1px #9E9E9E",
@@ -21,10 +21,10 @@ const useStyles = makeStyles({
   duration: {
     fontSize: "1vw",
     color: "gray",
-    fontWeight: "600",
-    marginTop: "0.7vw",
-    marginLeft: "6vw",
+    fontWeight: "500",
+    marginTop: "0.5vw",
   },
+
   block: {
     width: "51vw",
     marginLeft: "-0.5vw",
@@ -76,20 +76,20 @@ const useStyles = makeStyles({
   },
   tim2dep: {
     fontWeight: "600",
-    marginTop: "0.5vw",
+    marginTop: "0.2vw",
     marginLeft: "20vw",
     fontSize: "1.5vw",
   },
   tim2arrival: {
     fontWeight: "600",
-    marginTop: "0.4vw",
+    marginTop: "0.3vw",
     marginLeft: "20vw",
     fontSize: "1.5vw",
   },
   count2dep: {
     fontWeight: "600",
     marginLeft: "1vw",
-    marginTop: "0.5vw",
+    marginTop: "0.2vw",
     fontSize: "1.5vw",
   },
   count2arrival: {
@@ -102,6 +102,7 @@ const useStyles = makeStyles({
     color: "#666",
     fontSize: "0.9vw",
     marginLeft: "1vw",
+    fontWeight: "600",
   },
   arrival1info: {
     color: "#666",
@@ -113,6 +114,7 @@ const useStyles = makeStyles({
     color: "#666",
     fontSize: "0.9vw",
     marginLeft: "20vw",
+    fontWeight: "600",
   },
 
   arrival12info: {
@@ -135,35 +137,42 @@ const useStyles = makeStyles({
   },
   arrivalicon: { marginTop: "0.5vw", marginLeft: "1vw" },
 
-  button: {
-    width: "2vw !important",
-    height: "2vw  !important",
-    marginLeft: "20vw",
-  },
   priceandselect: {
     display: "flex",
     width: "50vw",
     justifyContent: "space-between",
   },
   price: {
-    fontWeight: "700",
+    fontWeight: "600",
+    fontSize: "1.3vw",
   },
   price2: {
-    marginLeft: "1vw",
+    marginLeft: "-0.2vw",
     marginTop: "0.5vw",
     color: "gray",
+    fontSize: "1vw",
+    fontWeight: "500",
   },
   baggage: {
     fontSize: "1.1vw",
-    fontWeight: "700",
+    fontWeight: "600",
     marginTop: "0.7vw",
   },
   baggageallowance: {
+    fontWeight: "500",
     fontSize: "1vw",
     color: "gray",
     fontWeight: "600",
-    marginTop: "0.7vw",
-    marginLeft: "8vw",
+    marginTop: "0.5vw",
+    marginLeft: "-0.1vw",
+  },
+  button: {
+    width: "15vw",
+    height: "0.5vw",
+    borderRadius: "50%",
+    color: "black",
+    marginLeft: "35vw",
+    marginTop: "1.5vw",
   },
 });
 
@@ -387,11 +396,15 @@ export default function Card(props) {
           <div className={classes.duration}>{props.flight.TripDuration}</div>
         </div>
       </div>
-      <Button
-        ClassName={classes.button}
-        title={"Select "}
-        onClick={handleClick}
-      />
+      <Divider className={classes.divider} />
+      <div className={classes.button}>
+        <Button
+          fullWidth="true"
+          title={"Select "}
+          onClick={handleClick}
+          style={{ borderRadius: "2vw", backgroundColor: "rgb(0, 93, 173)" }}
+        />
+      </div>
     </div>
   );
 }

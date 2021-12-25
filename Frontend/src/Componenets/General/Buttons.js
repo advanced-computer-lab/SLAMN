@@ -19,6 +19,8 @@ export default function Buttons(props) {
         onClick={props.onClick}
         variant="contained"
         size="small"
+        fullWidth={props.fullWidth}
+        style={props.style}
       >
         {props.title}
       </Button>

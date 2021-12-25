@@ -11,7 +11,7 @@ import { useState } from "react";
 const useStyles = makeStyles({
   root: {
     width: "100%vw",
-    height: "38vw",
+    height: "44vw",
   },
   display: {
     display: "flex",
@@ -24,12 +24,12 @@ const useStyles = makeStyles({
   h2: {
     marginTop: "3vw",
     fontWeight: "700",
-    marginLeft: "10.9vw",
+    marginLeft: "9vw",
   },
   h3: {
     marginTop: "3vw",
     fontWeight: "700",
-    marginLeft: "21.93vw",
+    marginLeft: "21vw",
   },
   t1: {
     marginTop: "2vw",
@@ -39,12 +39,12 @@ const useStyles = makeStyles({
   t2: {
     marginTop: "2vw",
     //fontWeight: "700",
-    marginLeft: "10vw",
+    marginLeft: "8vw",
   },
   t3: {
     marginTop: "2vw",
     //    / fontWeight: "700",
-    marginLeft: "9vw",
+    marginLeft: "7vw",
   },
   app: {
     height: "2.5vw",
@@ -270,7 +270,7 @@ export default function Resthome() {
         </div>
       </div>
       <div className={classes.dash}>
-        -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
       </div>
 
       <div className={classes.q1}>SLAMN</div>
@@ -306,7 +306,7 @@ export default function Resthome() {
       </div>
 
       <div className={classes.dash}>
-        -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+        ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
       </div>
 
       <div className={classes.logo}>

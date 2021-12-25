@@ -10,6 +10,8 @@ export default function TextBox(props) {
         onChange={props.onChange}
         value={props.value}
         placeholder={props.value}
+        style={props.style}
+        defaultValue={props.defaultValue}
       />
     </div>
   );

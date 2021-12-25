@@ -112,6 +112,21 @@ const useStyles = makeStyles({
     display: "flex",
     marginTop: "0.5vw",
   },
+  b1: {
+    width: "15.5vw",
+    marginTop: "0.8vw",
+    height: "2vw",
+    marginLeft: "0.3vw",
+  },
+  b2: {
+    width: "15.5vw",
+    marginTop: "0.8vw",
+    height: "2vw",
+    marginLeft: "-2vw",
+  },
+  display: {
+    display: "flex",
+  },
 });
 export default function AccountForm(props) {
   const classes = useStyles();
@@ -330,13 +345,16 @@ export default function AccountForm(props) {
       </div>
 
       <Divider />
-
-      <div className={classes.display2}>
-        <div>
-          <Button title="Update Profile" onClick={OnClickUpdate} />
+      <div className={classes.display}>
+        <div className={classes.b1}>
+          <Button
+            title="Update Profile"
+            onClick={OnClickUpdate}
+            fullWidth={"true"}
+          />
         </div>
-        <div>
-          <Button title="Back " onClick={OnClickBack} />
+        <div className={classes.b1}>
+          <Button title="Back " onClick={OnClickBack} fullWidth={"true"} />
         </div>
       </div>
     </div>

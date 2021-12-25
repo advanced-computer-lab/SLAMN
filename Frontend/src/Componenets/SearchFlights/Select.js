@@ -1,7 +1,7 @@
 import React from "react";
 import { IconButton } from "@material-ui/core";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
+import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
+import RemoveCircleOutlineRoundedIcon from "@mui/icons-material/RemoveCircleOutlineRounded";
 import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
 import Box from "@mui/material/Box";
@@ -9,51 +9,58 @@ import Box from "@mui/material/Box";
 const useStyles = makeStyles({
   root: {
     display: "flex",
+    background: "white",
+    // marginLeft: "2vw",
   },
   circlediv: {
     height: "3vw",
     width: "2vw",
   },
   first: {
-    marginLeft: "3vw",
+    marginLeft: "2.8vw",
     color: "grey",
   },
   first2: {
-    marginLeft: "1.6vw",
+    marginLeft: "3vw",
     color: "grey",
   },
   second: {
-    marginLeft: "0.9vw",
+    //  marginLeft: "0.9vw",
     color: "grey",
   },
   second2: {
-    marginLeft: "0.9~vw",
+    //marginLeft: "1.2vw",
     color: "grey",
   },
   children: {
     marginTop: "0.7vw",
-    marginLeft: "0.7vw",
-    fontSize: "1.1vw",
+    marginLeft: "0.2vw",
+    fontSize: "1vw",
     color: "grey",
+    fontWeight: "400",
   },
   adult: {
     marginTop: "0.7vw",
-    marginLeft: "0.7vw",
-    fontSize: "1.1vw",
+    marginLeft: "0.2vw",
+    fontSize: "1vw",
     color: "grey",
+    fontWeight: "400",
   },
 
   value1: {
     marginTop: "0.45vw",
     fontSize: "1.5vw",
-    marginLeft: "0.5vw",
+    marginLeft: "0.3vw",
     color: "grey",
+    marginLeft: "0.5vw",
+    marginRight: "0.8vw",
   },
   value2: {
-    marginTop: "0.45vw",
+    marginTop: "0.7vw",
     fontSize: "1.5vw",
-    marginLeft: "0.5vw",
+    marginLeft: "0.7vw",
     color: "grey",
+    marginRight: "0.7vw",
   },
 });
 
@@ -135,15 +142,33 @@ export default function Select(props) {
         <div className={classes.first}>
           {" "}
           <IconButton onClick={handleClickAddAdult}>
-            <AddIcon />
+            <AddCircleOutlineRoundedIcon
+              style={{
+                color: "rgb(0, 93, 173)",
+                fontSize: "2vw",
+              }}
+            />
           </IconButton>
         </div>
-        <div className={classes.value1}>{adultNumber}</div>
+        <div
+          className={classes.value1}
+          style={{
+            color: adultNumber === 0 ? "grey" : "rgb(0, 93, 173)",
+            fontWeight: "600",
+          }}
+        >
+          {adultNumber}
+        </div>
         <div className={classes.second}>
           {" "}
           <IconButton onClick={handleClickRemoveAdult}>
             {" "}
-            <RemoveIcon />
+            <RemoveCircleOutlineRoundedIcon
+              style={{
+                fontSize: "2vw",
+                color: adultNumber === 0 ? "grey" : "rgb(0, 93, 173)",
+              }}
+            />
           </IconButton>
         </div>
       </div>
@@ -153,15 +178,34 @@ export default function Select(props) {
           {" "}
           <IconButton onClick={handleClickAddChild}>
             {" "}
-            <AddIcon />{" "}
+            <AddCircleOutlineRoundedIcon
+              style={{
+                color: "rgb(0, 93, 173)",
+                fontSize: "2vw",
+              }}
+            />
           </IconButton>
         </div>
-        <div className={classes.value2}>{childNumber}</div>
+        <div
+          className={classes.value2}
+          style={{
+            color: childNumber === 0 ? "grey" : "rgb(0, 93, 173)",
+            fontWeight: "600",
+          }}
+        >
+          {childNumber}
+        </div>
         <div className={classes.second2}>
           {" "}
           <IconButton onClick={handleClickRemoveChild}>
             {" "}
-            <RemoveIcon />{" "}
+            <RemoveCircleOutlineRoundedIcon
+              style={{
+                color: childNumber === 0 ? "grey" : "rgb(0, 93, 173)",
+                fontSize: "2vw",
+                fontWeight: "600",
+              }}
+            />{" "}
           </IconButton>
         </div>
       </div>

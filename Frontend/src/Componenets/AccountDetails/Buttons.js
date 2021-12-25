@@ -9,7 +9,10 @@ export default function Buttons(props) {
         variant="contained"
         href="#contained-buttons"
         onClick={props.onClick}
+        fullWidth={props.fullWidth}
+        style={props.style}
       >
+        {" "}
         {props.title}
       </Button>
     </Stack>

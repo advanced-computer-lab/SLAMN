@@ -58,6 +58,18 @@ const useStyles = makeStyles({
     marginTop: "-6vw",
     marginLeft: "21vw",
   },
+  b1: {
+    width: "15.5vw",
+    marginTop: "0.8vw",
+    height: "2vw",
+    marginLeft: "0.3vw",
+  },
+  b2: {
+    width: "15.5vw",
+    marginTop: "0.8vw",
+    height: "2vw",
+    marginLeft: "-0.4vw",
+  },
 });
 
 export default function ChangePassword() {
@@ -168,11 +180,15 @@ export default function ChangePassword() {
         </div>
       </div>
       <div className={classes.display}>
-        <div>
-          <Button title="Change Password" onClick={onClickPassword} />{" "}
+        <div className={classes.b1}>
+          <Button
+            title="Change Password"
+            onClick={onClickPassword}
+            fullWidth={"true"}
+          />{" "}
         </div>
-        <div>
-          <Button title="Back" onClick={onClickBack} />
+        <div className={classes.b2}>
+          <Button title="Back" onClick={onClickBack} fullWidth={"true"} />
         </div>
       </div>
     </div>

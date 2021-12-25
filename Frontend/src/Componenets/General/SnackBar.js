@@ -35,7 +35,7 @@ export default function SnackBar(props) {
       >
         <Alert
           onClose={props.handleClose}
-          severity="error"
+          severity={props.severity}
           sx={{ width: "100%" }}
         >
           {props.error}

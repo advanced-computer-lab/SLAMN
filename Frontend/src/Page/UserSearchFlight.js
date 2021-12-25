@@ -18,6 +18,8 @@ import Snackbar from "@material-ui/core/Snackbar";
 import MuiAlert from "@material-ui/lab/Alert";
 import Select from "../Componenets/SearchFlights/Select";
 import Dropdown from "../Componenets/SearchFlights/Dropdown";
+import Buttons from "../Componenets/General/Buttons";
+import CompareArrowsRoundedIcon from "@mui/icons-material/CompareArrowsRounded";
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -30,12 +32,14 @@ const useStyles = makeStyles({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "white",
-    width: "80vw",
+    width: "85vw",
+    borderRadius: "0.5vw",
   },
   searchBar: {
     display: "flex",
     flexDirection: "row",
     marginTop: "1.5vw",
+    marginLeft: "2vw",
   },
   list: {
     display: "flex",
@@ -72,14 +76,45 @@ const useStyles = makeStyles({
     marginLeft: "17vw",
   },
   passengers: {
-    background: "#f2f2f2",
-    border: " 1px solid #ccc",
+    marginLeft: "1vw",
+    background: "white",
+    border: " 2px solid #ccc",
+    //borderColor: "rgb(0, 93, 173)",
     borderRadius: "0.5vw",
+    marginRight: "2vw",
+  },
+  button: {
+    marginTop: "1vw",
+    width: "18vw",
+    height: "0.5vw",
+    marginLeft: "62vw",
+    marginBottom: "6vw",
+  },
+  drop: {
+    marginLeft: "1vw",
+  },
+  arrow: {
+    backgroundColor: "rgb(0, 93, 173)",
+    marginLeft: "-1vw",
+    borderRadius: "50%",
+    width: "3vw",
+    height: "2vw",
+    border: "1px solid black",
+    marginTop: "0.5vw",
+    // position: "absolute",
+    top: "1",
+  },
+  arrow1: { marginLeft: "0.3vw" },
+
+  t2: {
+    marginLeft: "-0.6vw",
   },
 });
 
 export default function UserSearchFlight() {
   localStorage.setItem("returnParameters", JSON.stringify({}));
+
+  const admin = window.localStorage.getItem("admin");
 
   localStorage.removeItem("returnList");
   const classes = useStyles();
@@ -110,40 +145,64 @@ export default function UserSearchFlight() {
   };
 
   const handleClick = () => {
-    var obj = {};
-    if (departureDate.length !== 0) obj.DepartureDate = departureDate;
-    if (arrivalDate.length !== 0) obj.ArrivalDate = arrivalDate;
-    if (arrivalAirport.length !== 0) obj.ArrivalAirport = arrivalAirport;
-    if (departureAirport.length !== 0) obj.DepartureAirport = departureAirport;
-    if (flag === 2) obj.isDeparture = true;
-    if (flag === 1) obj.isDeparture = false;
+    const logged = window.localStorage.getItem("logged");
+    console.log(logged, "LOGGEDD");
 
-    console.log(obj);
-    axios
-      .post("http://localhost:8000/flights/getflights", obj, {})
-      .then((res) => {
-        console.log(res, "RESPONSEEEE");
-        localStorage.setItem("flightsArray", JSON.stringify(res.data.data));
-        localStorage.setItem("passengersList", JSON.stringify(passengerslist));
-        setFlights(res.data.data);
-        if (res.data.data.length != 0) {
-          if (passengers === "") {
-            setPopup({
-              message: "Please select passengers",
-              severity: "error",
-            });
-            setOpen1(true);
-          } else {
-            if (cabin === "") {
+    if (!(logged === "true")) {
+      console.log(logged, "LOGGEDD");
+      window.location = "/signin";
+    } else {
+      var obj = {};
+      if (departureDate.length !== 0) obj.DepartureDate = departureDate;
+      if (arrivalDate.length !== 0) obj.ArrivalDate = arrivalDate;
+      if (arrivalAirport.length !== 0) obj.ArrivalAirport = arrivalAirport;
+      if (departureAirport.length !== 0)
+        obj.DepartureAirport = departureAirport;
+      if (flag === 2) obj.isDeparture = true;
+      if (flag === 1) obj.isDeparture = false;
+
+      console.log(obj);
+      axios
+        .post("http://localhost:8000/flights/getflights", obj, {})
+        .then((res) => {
+          console.log(res, "RESPONSEEEE");
+          localStorage.setItem("flightsArray", JSON.stringify(res.data.data));
+          localStorage.setItem(
+            "passengersList",
+            JSON.stringify(passengerslist)
+          );
+          setFlights(res.data.data);
+          if (res.data.data.length != 0) {
+            if (passengers === "") {
               setPopup({
-                message: "Please select Cabin",
+                message: "Please select passengers",
                 severity: "error",
               });
+              console.log("error");
               setOpen1(true);
-            } else history("/viewallflights");
+            } else {
+              if (cabin === "") {
+                setPopup({
+                  message: "Please select Cabin",
+                  severity: "error",
+                });
+                console.log("error");
+
+                setOpen1(true);
+              } else {
+                console.log("SUCCC");
+                console.log(admin);
+                if (admin == "true") {
+                  history("/viewallflightsadmin");
+                }
+                if (admin == "false") {
+                  history("/viewallflights");
+                }
+              }
+            }
           }
-        }
-      });
+        });
+    }
   };
 
   const handleChange = (prop) => (event) => {
@@ -169,13 +228,27 @@ export default function UserSearchFlight() {
           margin="none"
           variant="outlined"
           onChange={handleChange("DepartureAirport")}
+          style={{
+            height: "3vw !important",
+          }}
         />
-        <TextField
-          placeholder=" Where to ?"
-          margin="none"
-          variant="outlined"
-          onChange={handleChange("ArrivalAirport")}
-        />
+        <div className={classes.arrow}>
+          <CompareArrowsRoundedIcon
+            style={{
+              color: "white",
+              fontSize: "2vw",
+            }}
+            className={classes.arrow1}
+          />
+        </div>
+        <div className={classes.t2}>
+          <TextField
+            placeholder=" Where to ?"
+            margin="none"
+            variant="outlined"
+            onChange={handleChange("ArrivalAirport")}
+          />
+        </div>
         <TextField
           placeholder="Departure date"
           margin="none"
@@ -188,17 +261,17 @@ export default function UserSearchFlight() {
           variant="outlined"
           onChange={handleChange("ArrivalDate")}
         />
-
-        <Dropdown
-          items={["Economy", "Business", "First"]}
-          placeholder={"Cabin"}
-          value={cabin}
-          setCabin={setCabin}
-          onChange={(e) => {
-            handleChangeCabin(e);
-          }}
-        />
-
+        <div className={classes.drop}>
+          <Dropdown
+            items={["Economy", "Business", "First"]}
+            placeholder={"Cabin"}
+            value={cabin}
+            setCabin={setCabin}
+            onChange={(e) => {
+              handleChangeCabin(e);
+            }}
+          />
+        </div>
         <div className={classes.passengers}>
           <Select
             setPassengers={setPassengers}
@@ -208,10 +281,20 @@ export default function UserSearchFlight() {
           />
         </div>
       </div>
-      <Button onClick={handleClick} variant="outlined">
-        {" "}
-        FIND FLIGHT
-      </Button>
+
+      <div className={classes.button}>
+        <Buttons
+          size="small"
+          fullWidth={"true"}
+          title="FIND FLIGHT"
+          onClick={handleClick}
+          style={{
+            borderRadius: "2vw",
+            backgroundColor: "rgb(0, 93, 173)",
+            fontSize: "1vw",
+          }}
+        />
+      </div>
       {/* <div className={classes.list}>
         {flights.map((n) => (
           <Card

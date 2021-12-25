@@ -21,6 +21,7 @@ import ViewBookings from "../src/Page/Reservation";
 import ReturnFlightBooking from "./Page/ReturnFlightBooking";
 import Summary from "./Componenets/Reservation/Summary";
 import DisplayAllFlights from "./Page/DisplayAllFlights";
+import DisplayAllFlightsAdmin from "../src/Page/DisplayFlightsAdmin";
 
 function App() {
   const [reservation, setReservation] = React.useState({
@@ -39,12 +40,12 @@ function App() {
           <Routes>
             <Route path="/updateflight" element={<Update />} />
             <Route path="/homeadmin" element={<AdminHome />} />
-            <Route path="/addflight" element={<CreateFlight />} />
+            <Route path="/createflight" element={<CreateFlight />} />
             <Route path="/deleteflight" element={<DeleteFlight />} />
             <Route path="/signin" element={<Signin />} />
             <Route path="/search" element={<UserSearchFlight />} />
             <Route path="/signup" element={<SignUp />} />
-            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Home />} />
             <Route path="/account" element={<AccountDetails />} />
             <Route path="/updateaccount" element={<UpdateAccountDeatils />} />
             <Route path="/bookflight" element={<Booking />} />
@@ -52,6 +53,10 @@ function App() {
             <Route path="/changepassword" element={<ChangePassword />} />
             <Route path="/createsummary" element={<Summary />} />
             <Route path="/viewallflights" element={<DisplayAllFlights />} />
+            <Route
+              path="/viewallflightsadmin"
+              element={<DisplayAllFlightsAdmin />}
+            />
             <Route
               path="/viewavailableseats"
               element={<ViewAvailableSeats />}

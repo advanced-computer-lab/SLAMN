@@ -95,6 +95,7 @@ export default function Signin() {
       x--;
     }
     if (x == 0) {
+      console.log("INNNNNNNNNNN");
       axios
         .post("http://localhost:8000/users/signin", {
           Email: email,
@@ -116,6 +117,7 @@ export default function Signin() {
               window.localStorage.setItem("admin", "true");
               window.localStorage.setItem("logged", "true");
               window.localStorage.setItem("email", email);
+
               window.location = "/homeadmin";
             }
             if (res.data.data == false) {

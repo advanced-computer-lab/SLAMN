@@ -300,24 +300,6 @@ export default function ViewAllFlights() {
         handleClose={handleClose1}
         handleOpenagree={handleClose1agree}
         setOpen={setOpen1}
-        flightnumber={setFlightNumberUp}
-        buisseats={setBusinessSeatsUp}
-        econseast={setEconomySeatsUp}
-        deptime={setDepartureTime}
-        arrivaltime={setArrivalTime}
-        depdate={setDepartureDateUp}
-        arrivaldate={setArrivalDateUp}
-        arrivalairport={setArrivalAirportUp}
-        departureairport={setDepartureAirportUp}
-        // arrivalAirport={arrivalAirportPopUp}
-        // arrivalDate={ArrivalDatePopUp}
-        flightno={FlightNumberPopUp}
-        // buisSeat={BusinessSeatsPopUp}
-        // depAirport={departureAirportPopUp}
-        // econSeat={EconomySeatsPopUp}
-        // depdate={DepartureDatePopUp}
-        // deptime={DepartureTimePopUp}
-        // arrivaltime={ArrivalTimePopUp}
       />
       <PopupDelete
         open={open2}

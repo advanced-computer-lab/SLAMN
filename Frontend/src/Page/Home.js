@@ -23,7 +23,7 @@ export default function Home() {
       <Search />
       <Card />
       <Divider />
-      <Signup className={classes.root} />
+      <Signup />
 
       <Deals />
       <Slider />

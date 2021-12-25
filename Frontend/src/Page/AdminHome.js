@@ -3,7 +3,15 @@ import Buttons from "../Componenets/General/Buttons";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { useNavigate } from "react-router-dom";
-import NavBar from "../Componenets/General/NavBar";
+import NavBar from "../Componenets/General/NavBar2";
+import Card from "../Componenets/Home.js/CardAll";
+import Signup from "../Componenets/Home.js/Signup";
+import Divider from "@mui/material/Divider";
+import Deals from "../Componenets/Home.js/DealsAll";
+import Search from "../Componenets/Home.js/Searchall";
+
+import Slider from "../Componenets/Home.js/Slider";
+import Rest from "../Componenets/Home.js/Resthome";
 
 const useStyles = makeStyles({
   // root: {
@@ -30,8 +38,14 @@ export default function AdminHome() {
   return (
     <div className={classes.root}>
       <NavBar />
-      <Buttons size="small" title="Search Flight" onClick={handleView} />
-      <Buttons size="small" title="Create Flight" onClick={handleCreate} />
+      <Search />
+      <Card />
+      <Divider />
+      <Signup />
+
+      <Deals />
+      <Slider />
+      <Rest />
     </div>
   );
 }

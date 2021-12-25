@@ -44,11 +44,11 @@ const useStyles = makeStyles({
   },
   c2: {
     marginTop: "2vw",
-    marginLeft: "21vw",
+    marginLeft: "23vw",
   },
   c3: {
     marginTop: "2vw",
-    marginLeft: "21vw",
+    marginLeft: "25vw",
   },
   t1: {
     marginTop: "0.5vw",
@@ -59,14 +59,14 @@ const useStyles = makeStyles({
   },
   t2: {
     marginTop: "0.5vw",
-    marginLeft: "10vw",
+    marginLeft: "13vw",
     color: "white",
     fontSize: "1.6vw",
     fontWeight: "600",
   },
   t3: {
     marginTop: "0.5vw",
-    marginLeft: "7vw",
+    marginLeft: "9vw",
     color: "white",
     fontSize: "1.6vw",
     fontWeight: "600",
@@ -88,7 +88,7 @@ const useStyles = makeStyles({
   h3: {
     fontWeight: "400",
     color: "white",
-    marginLeft: "7vw",
+    marginLeft: "5vw",
     textAlign: "center",
     marginTop: "1vw",
   },

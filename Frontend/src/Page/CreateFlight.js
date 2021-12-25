@@ -1,12 +1,14 @@
 import React from "react";
 import TextBox from "../Componenets/General/TextBox";
 import axios from "axios";
-import Button from "../Componenets/General/Buttons";
+import Button from "../Componenets/General/BasicButton";
 import { makeStyles } from "@material-ui/core/styles";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import SnackBar from "../Componenets/General/SnackBar";
-import NavBar from "../Componenets/General/NavBar";
+import NavBar from "../Componenets/General/NavBar2";
+import FlightOutlinedIcon from "@mui/icons-material/FlightOutlined";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles({
   space: {
@@ -20,32 +22,44 @@ const useStyles = makeStyles({
   root: {
     margin: "auto",
     position: "relative",
-    top: "3vw",
+    //top: "3vw",
     border: "1px solid grey",
     borderRadius: " 0.7vw",
     width: "40vw",
     textAlign: "center",
   },
   updatebutton: {
+    width: "42vw",
+    heigth: "1vw",
     textAlign: "-webkit-center",
-    marginTop: "4vw",
+    marginTop: "2vw",
+    marginLeft: "28.5vw",
+    marginBottom: "3vw",
   },
   title: {
     textAlign: "center",
     width: "30vw",
     height: "5vw",
     fontSize: "2vw",
-    border: "1px solid grey",
+    // border: "1px solid grey",
     borderRadius: " 1.3vw",
     position: "relative",
-    top: "2vw",
-    color: "slategray",
+    // top: "1vw",
+    color: "Black",
     textAlign: "center",
     lineHeight: "4vw",
     margin: "auto",
   },
   severalboxes: {
     display: "flex",
+  },
+  avatar: {
+    //margin: theme.spacing(1),
+    backgroundColor: "#005dad",
+    marginTop: "2vw",
+    marginLeft: "48vw",
+    width: "3vw",
+    height: "3vw",
   },
 });
 
@@ -71,26 +85,165 @@ export default function CreateFlight() {
   const handleOpen1 = () => {
     setOpen1(true);
   };
-
+  function validateDate(isoDate) {
+    if (isNaN(Date.parse(isoDate))) {
+      return false;
+    } else {
+      if (isoDate != new Date(isoDate).toISOString().substr(0, 10)) {
+        return false;
+      }
+    }
+    return true;
+  }
   const handleClose1 = () => {
     setOpen1(false);
   };
   const handleClick = async () => {
-    if (
-      FlightNumber === "" ||
-      DepartureDate.length === "" ||
-      ArrivalDate.length === "" ||
-      EconomySeats.length === -1 ||
-      BusinessSeats.length === -1 ||
-      Arrairport.length === "" ||
-      depariport.length === "" ||
-      arrivaltime.length === "" ||
-      deptime.length === ""
-    ) {
+    var x = 13;
+    if (FlightNumber === "") {
       seterror("Fields cannot be left empty");
       handleOpen1();
-      console.log(BusinessSeats);
+    } else if (!/^\d+$/.test(FlightNumber)) {
+      handleOpen1();
+      seterror("Flight number should only contain numbers ");
     } else {
+      x--;
+    }
+    if (baggage === "") {
+      seterror("Fields cannot be left empty");
+      handleOpen1();
+    } else if (!/^\d+$/.test(baggage)) {
+      handleOpen1();
+      seterror("Baggage number should only contain numbers ");
+    } else {
+      x--;
+    }
+    if (BusinessSeats === "") {
+      seterror("Fields cannot be left empty");
+      handleOpen1();
+    } else if (!/^\d+$/.test(BusinessSeats)) {
+      handleOpen1();
+      seterror("Buisness seats should only contain numbers ");
+    } else {
+      x--;
+    }
+    if (EconomySeats === "") {
+      seterror("Fields cannot be left empty");
+      handleOpen1();
+    } else if (!/^\d+$/.test(EconomySeats)) {
+      handleOpen1();
+      seterror("Economy seats should only contain numbers ");
+    } else {
+      x--;
+    }
+    if (FirstClassSeats === "") {
+      seterror("Fields cannot be left empty");
+      handleOpen1();
+    } else if (!/^\d+$/.test(FirstClassSeats)) {
+      handleOpen1();
+      seterror("First Class seats should only contain numbers ");
+    } else {
+      x--;
+    }
+    if (ArrivalDate === "") {
+      seterror("Fields cannot be left empty");
+
+      handleOpen1();
+    } else if (!validateDate(ArrivalDate)) {
+      handleOpen1();
+      seterror("Arrival Date should be in 'yy-mm-dd' format ");
+    } else if (new Date(ArrivalDate) < new Date()) {
+      handleOpen1();
+      seterror("Arrival Date should be greater than today's date ");
+    } else if (new Date(ArrivalDate) < new Date(DepartureDate)) {
+      if (new Date(ArrivalDate) === new Date(DepartureDate)) {
+      } else {
+        handleOpen1();
+        seterror(
+          "Arrival Date should be greater than or equal Deaprture date "
+        );
+      }
+    } else {
+      x--;
+    }
+    if (DepartureDate === "") {
+      seterror("Fields cannot be left empty");
+
+      handleOpen1();
+    } else if (!validateDate(DepartureDate)) {
+      handleOpen1();
+      seterror("Departure Date should be in 'yy-mm-dd' format ");
+    } else if (new Date(DepartureDate) < new Date()) {
+      handleOpen1();
+      seterror("Departure Date should be greater than or equal today's date ");
+    } else {
+      x--;
+    }
+    if (Price === "") {
+      seterror("Fields cannot be left empty");
+      handleOpen1();
+    } else if (!/^\d+$/.test(Price)) {
+      handleOpen1();
+      seterror("Price should only contain numbers ");
+    } else {
+      x--;
+    }
+    if (TripDuration === "") {
+      seterror("Fields cannot be left empty");
+      handleOpen1();
+    } else if (!/^\d+$/.test(TripDuration)) {
+      handleOpen1();
+      seterror("Trip Duration should only contain numbers ");
+    } else {
+      x--;
+    }
+    if (Arrairport === "") {
+      seterror("Fields cannot be left empty");
+
+      handleOpen1();
+    } else if (/^\d+$/.test(Arrairport)) {
+      handleOpen1();
+      seterror("Arrival Airport should be of type string ");
+    } else {
+      x--;
+    }
+    if (depariport === "") {
+      seterror("Fields cannot be left empty");
+
+      handleOpen1();
+    } else if (/^\d+$/.test(depariport)) {
+      handleOpen1();
+      seterror("Departure Airport should be of type string ");
+    } else {
+      x--;
+    }
+
+    if (arrivaltime === "") {
+      seterror("Fields cannot be left empty");
+
+      handleOpen1();
+    } else if (!(arrivaltime >= "00:00" && arrivaltime <= "23:59")) {
+      console.log("16:00" > "00:00");
+
+      handleOpen1();
+      seterror("Arrival Time should be in 'hh:mm' format ");
+    } else {
+      x--;
+    }
+    if (deptime === "") {
+      seterror("Fields cannot be left empty");
+
+      handleOpen1();
+    } else if (!(deptime >= "00:00" && deptime <= "23:59")) {
+      console.log("16:00" > "00:00");
+
+      handleOpen1();
+      seterror("Arrival Time should be in 'hh:mm' format ");
+    } else {
+      x--;
+    }
+
+    if (x === 0) {
       await axios
         .post(
           "http://localhost:8000/flights/",
@@ -120,6 +273,9 @@ export default function CreateFlight() {
   return (
     <div>
       <NavBar />
+      <Avatar className={classes.avatar}>
+        <FlightOutlinedIcon style={{ color: "#ffd633", fontSize: "2vw" }} />
+      </Avatar>
       <div className={classes.title}>CREATE FLIGHT</div>
 
       <div className={classes.root}>
@@ -225,7 +381,7 @@ export default function CreateFlight() {
         <div />
       </div>
       <div className={classes.updatebutton}>
-        <Button title="Add" onClick={handleClick} />
+        <Button title="Create" onClick={handleClick} fullWidth="true" />
       </div>
 
       <SnackBar
@@ -233,6 +389,7 @@ export default function CreateFlight() {
         handleOpen={handleOpen1}
         handleClose={handleClose1}
         error={error}
+        severity="error"
       />
     </div>
   );

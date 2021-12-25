@@ -16,6 +16,8 @@ import PersonIcon from "@mui/icons-material/Person";
 import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
 
+import axios from "axios";
+
 const useStyles = makeStyles({
   loginBlur: {
     backgroundColor: "white !important",
@@ -36,21 +38,51 @@ const useStyles = makeStyles({
 export default function PopUpNavBar(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [login, setLogin] = useState(false);
-
+  const logged = window.localStorage.getItem("logged");
+  const headers = window.localStorage.getItem("token");
   const classes = useStyles();
   const open = Boolean(anchorEl);
+
+  const handlelogout = async () => {
+    console.log("INNNNNNNNNN");
+    localStorage.clear();
+    console.log(logged, "SIGNOUTTT");
+    await axios
+      .post(
+        "http://localhost:8000/users/signout",
+        {},
+        {
+          headers: { token: headers },
+        }
+      )
+      .then((res) => {
+        window.location = "/";
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClickAccount = () => {
-    window.location = "/account";
+    console.log(logged, "LOGGGGGGG");
+    if (logged === "true") {
+      window.location = "/account";
+    } else {
+      window.location = "/signin";
+    }
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
 
   const handleClickBooking = () => {
-    window.location = "/viewbookings";
+    if (logged === "true") {
+      window.location = "/viewbookings";
+    } else {
+      window.location = "/signin";
+    }
   };
   return (
     <React.Fragment>
@@ -116,7 +148,7 @@ export default function PopUpNavBar(props) {
           Account Details
         </MenuItem>
         <Divider />
-        <MenuItem>
+        <MenuItem onClick={handlelogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

@@ -19,12 +19,12 @@ const useStyles = makeStyles({
     color: "white ",
     fontSize: "1.5vw",
     fontWeight: "600",
-    marginTop: "7vw",
-    marginLeft: "10vw",
+    marginTop: "5vw",
+    marginLeft: "5vw",
   },
   search1: {
     marginTop: "2vw",
-    marginLeft: "10vw",
+    marginLeft: "5vw",
   },
 });
 
