@@ -22,6 +22,7 @@ import ReturnFlightBooking from "./Page/ReturnFlightBooking";
 import Summary from "./Componenets/Reservation/Summary";
 import DisplayAllFlights from "./Page/DisplayAllFlights";
 import DisplayAllFlightsAdmin from "../src/Page/DisplayFlightsAdmin";
+import ChangeDepartureSeats from "./Page/ChangeDepartureSeats";
 
 function App() {
   const [reservation, setReservation] = React.useState({
@@ -63,6 +64,10 @@ function App() {
             />{" "}
             <Route path="/viewbookings" element={<ViewBookings />} />
             <Route path="/adminsearch" element={<AdminSearchFlight />} />
+            <Route
+              path="/changeDepartureSeats"
+              element={<ChangeDepartureSeats />}
+            />
           </Routes>
         </UserInfo.Provider>
       </BrowserRouter>

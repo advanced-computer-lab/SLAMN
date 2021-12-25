@@ -16,6 +16,22 @@ router
   );
 
 router
+  .route("/getflightdetails")
+  .post(
+    UserValidation.validategetFlightDetails,
+    authentication.validateUser,
+    UserServices.getFlightDetails
+  );
+
+router
+  .route("/changeseats")
+  .post(
+    UserValidation.validateChangeSeats,
+    authentication.validateUser,
+    UserServices.changeSeats
+  );
+
+router
   .route("/createReservation")
   .post(
     UserValidation.validateCreateReservation,

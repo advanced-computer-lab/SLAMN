@@ -1,15 +1,17 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Divider from "@mui/material/Divider";
-
+import "../../css/Reservation.css";
+import Logo from "../General/Logo";
 const useStyles = makeStyles({
   root: {
-    backgroundColor: "white",
-    width: "38vw",
-    height: "15vw",
-    padding: "0.5vw",
-    borderRadius: "0.5vw !important",
-    boxShadow: "1px 3px 1px #9E9E9E",
+    // backgroundColor: "white",
+    // width: "50vw",
+    // height: "100vw",
+    // padding: "0.5vw",
+    // borderRadius: "0.5vw !important",
+    // boxShadow: "1px 3px 1px #9E9E9E",
+    // marginBottom: "3vw",
   },
   title: {
     color: "black",
@@ -119,28 +121,47 @@ const useStyles = makeStyles({
 });
 export default function Reservation(props) {
   const classes = useStyles();
-  const [update, setupdate] = React.useState(false);
-  const [password, setPassword] = React.useState(false);
-
-  const handleClick = () => {
-    window.location = "/updateaccount";
-  };
-  const handleClickChange = () => {
-    window.location = "/changepassword";
-  };
   return (
     <div className={classes.root}>
-      <div className={classes.display}>
-        <div className={classes.title}>Booking Number: </div>
-        <div className={classes.title1}>{props.flight.bookingnumber}</div>
-      </div>
-      <div className={classes.display}>
-        <div className={classes.firstName}>Departure FlightNumber</div>
-        <div className={classes.firstNameValue}> {props.flight.departure}</div>
-      </div>
-      <div className={classes.display}>
-        <div className={classes.lastName}>Arrival FlightNumber</div>
-        <div className={classes.lastNamevalue}> {props.flight.arrival}</div>
+      <div class="ticket">
+        <header>
+          <div class="company-name">SLAMN Airlines</div>
+          <div class="gate">
+            <div>FlightNumber</div>
+            <div>{props.flight.departure}</div>
+          </div>
+        </header>
+        <section class="airports">
+          <div class="airport">
+            <div class="airport-name">Charlotte</div>
+            <div class="airport-code">CLT</div>
+            <div class="dep-arr-label">Departing</div>
+            <div class="time">7:45am</div>
+          </div>
+          <div class="airport">
+            <div class="airport-name">Tampa</div>
+            <div class="airport-code">TPA</div>
+            <div class="dep-arr-label">Arriving</div>
+            <div class="time">9:15am</div>
+          </div>
+        </section>
+        <section class="place">
+          <div class="place-block">
+            <div class="place-label">Group</div>
+            <div class="place-value">2</div>
+          </div>
+          <div class="place-block">
+            <div class="place-label">Seat</div>
+            <div class="place-value">2A</div>
+          </div>
+          <div class="place-block">
+            <div class="place-label">Term</div>
+            <div class="place-value">B</div>
+          </div>
+          <div class="qr">
+            <img src="http://www.classtools.net/QR/pics/qr.png" />
+          </div>
+        </section>
       </div>
     </div>
   );

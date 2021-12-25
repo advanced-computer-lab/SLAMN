@@ -71,6 +71,25 @@ const validateSeats = (req, res, next) => {
   return next();
 };
 
+const validateChangeSeats = (req, res, next) => {
+  const schema = Joi.object({
+    FlightNumber: Joi.string().required(),
+    oldCabin: Joi.string().required(),
+    newCabin: Joi.string().required(),
+    oldSeats: Joi.array().required(),
+    newSeats: Joi.array().required(),
+  }).required();
+
+  const isValid = schema.validate(req.body);
+  if (isValid.error) {
+    return res.json({
+      statusCode: 1,
+      error: isValid.error.details[0].message,
+    });
+  }
+  return next();
+};
+
 const validateSelection = (req, res, next) => {
   const schema = Joi.object({
     FlightNumber: Joi.string().required(),
@@ -146,11 +165,19 @@ const validateAddSummary = (req, res, next) => {
   }
   return next();
 };
-const validateDeselection = (req, res, next) => {
+const validategetFlightDetails = (req, res, next) => {
   const schema = Joi.object({
     FlightNumber: Joi.string().required(),
-    Cabin: Joi.string().required(),
   }).required();
+  const isValid = schema.validate(req.body);
+  if (isValid.error) {
+    return res.json({
+      statusCode: 1,
+
+      error: isValid.error.details[0].message,
+    });
+  }
+  return next();
 };
 
 const validateUpdateAccount = (req, res, next) => {
@@ -267,8 +294,13 @@ module.exports = {
   validateSeats,
   validateSelection,
   validatePassword,
+<<<<<<< HEAD
   validateUpdateSameDepartureReservation,
   validateUpdateSameArrivalReservation,
   validateupdateDiffReturnReservation,
   validateupdateDiffDepartureReservation
+=======
+  validateChangeSeats,
+  validategetFlightDetails,
+>>>>>>> f3c2a65b5a21a2adf5530ff2fa6275d485046f4d
 };
