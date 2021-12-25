@@ -28,6 +28,14 @@ const userSchema = new Schema({
     type: String,
     required: true,
   },
+  CountryCode: {
+    type: String,
+    required: true,
+  },
+  HomeAddress: {
+    type: String,
+    required: true,
+  },
   Admin: {
     type: Boolean,
     required: true,

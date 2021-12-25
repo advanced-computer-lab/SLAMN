@@ -24,6 +24,8 @@ const validateSignup = (req, res, next) => {
     LastName: Joi.string().required(),
     Email: Joi.string().required(),
     Phone: Joi.string().required(),
+    HomeAddress: Joi.string().required(),
+    CountryCode: Joi.string().required(),
     Password: Joi.string().required(),
     PassportNumber: Joi.string().required(),
   }).required();

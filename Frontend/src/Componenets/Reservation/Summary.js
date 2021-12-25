@@ -7,7 +7,9 @@ import AirplaneTicketIcon from "@mui/icons-material/AirplaneTicket";
 import axios from "axios";
 import NavBar from "../General/NavBar";
 import Buttons from "../General/Buttons";
+import StripeCheckout from "react-stripe-checkout";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
 
 const useStyles = makeStyles({
   root: {
@@ -148,6 +150,7 @@ export default function Summary() {
   const history = useNavigate();
   const departurelist = JSON.parse(localStorage.getItem("departureList"));
   const classes = useStyles();
+  // toast.configure();
   const [returnParameters, setParameters] = React.useState(
     JSON.parse(localStorage.getItem("returnParameters"))
   );
@@ -173,6 +176,7 @@ export default function Summary() {
         history("/home");
       });
   };
+
   useEffect(() => {
     console.log(returnParameters, "el returnn", departurelist);
     axios
@@ -198,6 +202,22 @@ export default function Summary() {
         setParameters(response.data.data);
       });
   }, []);
+
+  async function handleToken(token) {
+    console.log({ token });
+
+    const response = await axios.post("http://localhost:8000/users/pay", {
+      token,
+    });
+    const status = response.data;
+    console.log(response.data);
+    //   if (status === "success") {
+    //     toast("Success Check email for details  ", { type: "success" });
+    //   } else {
+    //     toast("Something went wrong", { type: "error" });
+    //   }
+  }
+
   return (
     <div>
       <NavBar />
@@ -317,10 +337,18 @@ export default function Summary() {
           {"Total price : " + returnParameters.Price}{" "}
         </div>
       </div>
-      <Buttons
+      {/* <Buttons
         ClassName={classes.button}
-        title={"Confirm Booking"}
+        title={"Confirm kkBooking"}
         onClick={handleConfirm}
+      /> */}
+      <StripeCheckout
+        token={handleToken}
+        stripeKey="pk_test_51KABAKIYMIwfTLe94JQks6taru3Wlb1jBUnMV4eR1Q6Q3OtYMS2ZvvSz6ScNA1PEx6HMBM5xnxclaUVIS6nTxWKs00juo2S8PL"
+        billingAddress
+        shippingAddress
+        amount={returnParameters.Price * 100}
+        name="SLAMN airline tickets"
       />
     </div>
   );

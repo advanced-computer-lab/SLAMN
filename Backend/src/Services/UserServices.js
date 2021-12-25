@@ -5,7 +5,53 @@ const nodemailer = require("nodemailer");
 const Flights = require("../Models/FlightModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const stripe = require("stripe")(
+  "sk_test_51KABAKIYMIwfTLe9BFM91jy4i0sgiQ5xm9n4frOuv664tpq32oS4SNvusi19OC9vkSrHClC9TyYNZ70qtiPnEzng00pBgVQdrL"
+);
 require("dotenv").config;
+
+const Pay = async (req, res) => {
+  let error;
+  let status;
+  try {
+    const { product, token } = req.body;
+    const customer = await stripe.customers.create({
+      email: token.email,
+      source: token.id,
+    });
+    const idempotency_key = uuid();
+    const charge = await stripe.charges.create(
+      {
+        amount: product.price * 100,
+        currency: "aed",
+        customer: customer.id,
+        receipt_email: token.email,
+        description: product.name,
+        shipping: {
+          name: token.card.name,
+          address: {
+            line1: token.card.address_line1,
+            line2: token.card.address_line2,
+            city: token.card.address_city,
+            country: token.card.address_country,
+            postal_code: token.card.address.zip,
+          },
+        },
+      },
+      {
+        idempotency_key,
+      }
+    );
+    console.log("Charge:", { charge });
+    status = "success";
+  } catch (exception) {
+    status = "failure";
+    return res.json({
+      statusCode: 1,
+      error: "failed",
+    });
+  }
+};
 
 const signIn = async (req, res) => {
   const email = req.body.Email;
@@ -81,6 +127,8 @@ const signUp = async (req, res) => {
         Email: user.Email,
         Phone: user.Phone,
         Password: user.Password,
+        HomeAddress: user.HomeAddress,
+        CountryCode: user.CountryCode,
         PassportNumber: user.PassportNumber,
         Admin: false,
         UserReservations: reservations,
@@ -850,4 +898,5 @@ module.exports = {
   sendEmail,
   getFutureReservations,
   changePassword,
+  Pay,
 };
