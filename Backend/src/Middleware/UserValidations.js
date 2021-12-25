@@ -93,6 +93,8 @@ const validateCreateReservation = (req, res, next) => {
     DepCabinClass: Joi.string().required(),
     ArrCabinClass: Joi.string().required(),
     NumberOfPassengers: Joi.number().required(),
+    depSeats:Joi.array().required(),
+    arrSeats:Joi.array().required()
   }).required();
 
   const isValid = schema.validate(req.body);
@@ -168,7 +170,7 @@ const validateUpdateAccount = (req, res, next) => {
   }
   return next();
 };
-const validateUpdateDepartureReservation = (req, res, next) => {
+const validateUpdateSameDepartureReservation = (req, res, next) => {
   const schema = Joi.object({
     BookingNumber: Joi.string().required(),
     CabinClass: Joi.string().required(),
@@ -187,7 +189,49 @@ const validateUpdateDepartureReservation = (req, res, next) => {
   }
   return next();
 };
-const validateupdateReturnReservation = (req, res, next) => {
+const validateUpdateSameArrivalReservation = (req, res, next) => {
+  const schema = Joi.object({
+    BookingNumber: Joi.string().required(),
+    CabinClass: Joi.string().required(),
+    NumberOfChildren: Joi.number().required(),
+    NumberOfAdults: Joi.number().required(),
+    Price: Joi.number().required(),
+    passengers:Joi.array().required()
+  }).required();
+
+  const isValid = schema.validate(req.body);
+  if (isValid.error) {
+    return res.json({
+      statusCode: 1,
+      error: isValid.error.details[0].message,
+    });
+  }
+  return next();
+};
+const validateupdateDiffReturnReservation = (req, res, next) => {
+  const schema = Joi.object({
+    BookingNumber: Joi.string().required(),
+    DepartureFlightNumber: Joi.number().required(),
+    ArrivalFlightNumber: Joi.number().required(),
+    DepCabinClass: Joi.string().required(),
+    ArrCabinClass: Joi.string().required(),
+    NumberOfChildren: Joi.number().required(),
+    NumberOfAdults: Joi.number().required(),
+    depSeats:Joi.array().required(),
+    arrSeats:Joi.array().required()
+  }).required();
+
+  const isValid = schema.validate(req.body);
+  if (isValid.error) {
+    return res.json({
+      statusCode: 1,
+
+      error: isValid.error.details[0].message,
+    });
+  }
+  return next();
+};
+const validateupdateDiffDepartureReservation = (req, res, next) => {
   const schema = Joi.object({
     BookingNumber: Joi.string().required(),
     DepartureFlightNumber: Joi.number().required(),
@@ -221,6 +265,8 @@ module.exports = {
   validateSeats,
   validateSelection,
   validatePassword,
-  validateUpdateDepartureReservation,
-  validateupdateReturnReservation
+  validateUpdateSameDepartureReservation,
+  validateUpdateSameArrivalReservation,
+  validateupdateDiffReturnReservation,
+  validateupdateDiffDepartureReservation
 };

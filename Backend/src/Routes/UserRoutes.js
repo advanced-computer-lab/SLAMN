@@ -40,19 +40,33 @@ router
   );
 
   router
-  .route("/updatedepartureReservation")
+  .route("/updateSamedepartureReservation")
   .post(
-    UserValidation.validateUpdateDepartureReservation,
+    UserValidation.validateUpdateSameDepartureReservation,
     authentication.validateUser,
-    UserServices.updateDepartureFlightReservation
+    UserServices.updateSameDepartureFlightReservation
+  );
+  router
+  .route("/updateSameArrivalReservation")
+  .post(
+    UserValidation.validateUpdateSameArrivalReservation,
+    authentication.validateUser,
+    UserServices.updateSameArrivalFlightReservation
   );
 
   router
-  .route("/updateReturnReservation")
+  .route("/updateDiffReturnReservation")
   .post(
-    UserValidation.validateupdateReturnReservation,
+    UserValidation.validateupdateDiffReturnReservation,
     authentication.validateUser,
-    UserServices.updateReturnFlightReservation
+    UserServices.updateDiffReturnFlightReservation
+  );
+  router
+  .route("/updateDiffDepartureReservation")
+  .post(
+    UserValidation.validateupdateDiffDepartureReservation,
+    authentication.validateUser,
+    UserServices.updateDiffDepartureFlightReservation
   );
 
 
