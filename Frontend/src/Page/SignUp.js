@@ -18,16 +18,16 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "2vw",
     marginLeft: "48vw",
   },
-  text2: {
-    marginLeft: "38vw",
-    marginTop: "1vw",
-    width: "23vw !important",
-  },
-  text1: {
-    marginLeft: "38vw",
-    marginTop: "1vw",
-    width: "23vw !important",
-  },
+  // text2: {
+  //   marginLeft: "38vw",
+  //   marginTop: "1vw",
+  //   width: "23vw !important",
+  // },
+  // text1: {
+  //   marginLeft: "38vw",
+  //   marginTop: "1vw",
+  //   width: "23vw !important",
+  // },
   name: {
     marginLeft: "38vw",
     marginTop: "1vw",
@@ -44,32 +44,32 @@ const useStyles = makeStyles((theme) => ({
   link: {
     marginLeft: "49vw",
   },
-  lastname: { marginLeft: "38vw", marginTop: "1vw", width: "23vw !important" },
-  phone: { marginLeft: "38vw", marginTop: "1vw", width: "23vw !important" },
-  passport: { marginLeft: "38vw", marginTop: "1vw", width: "23vw !important" },
-  confirm: { marginLeft: "38vw", marginTop: "1vw", width: "23vw !important" },
+  text: { marginLeft: "38vw", marginTop: "1vw", width: "23vw !important" },
+  // phone: { marginLeft: "38vw", marginTop: "1vw", width: "23vw !important" },
+  // passport: { marginLeft: "38vw", marginTop: "1vw", width: "23vw !important" },
+  // confirm: { marginLeft: "38vw", marginTop: "1vw", width: "23vw !important" },
 
-  emailicon: { marginTop: "2.35vw", marginLeft: "1vw" },
-  erroremailerror: { marginTop: "2.2vw", color: "crimson" },
-  emailwithout: { marginTop: "2vw", color: "white" },
-  errorfirst: { marginTop: "2.2vw", color: "crimson" },
-  firsticon: { marginTop: "2.35vw", marginLeft: "1vw" },
-  firstwithout: { marginTop: "2vw", color: "white" },
-  lasterror: { marginTop: "2.2vw", color: "crimson" },
-  lastwithout: { marginTop: "2vw", color: "white" },
-  lasticon: { marginTop: "2.35vw", marginLeft: "1vw" },
-  phoneerror: { marginTop: "2.2vw", color: "crimson" },
-  phonewithout: { marginTop: "2vw", color: "white" },
-  phoneicon: { marginTop: "2.35vw", marginLeft: "1vw" },
-  passporterror: { marginTop: "2.2vw", color: "crimson" },
-  passportwithout: { marginTop: "2vw", color: "white" },
-  passporticon: { marginTop: "2.35vw", marginLeft: "1vw" },
-  passworderrors: { marginTop: "2.2vw", color: "crimson" },
-  passwordicon: { marginTop: "2.35vw", marginLeft: "1vw" },
-  passwordwithout: { marginTop: "2vw", color: "white" },
-  conicon: { marginTop: "2.35vw", marginLeft: "1vw" },
-  conwithout: { marginTop: "2vw", color: "white" },
-  conerror: { marginTop: "2.2vw", color: "crimson" },
+  icon: { marginTop: "2.35vw", marginLeft: "1vw" },
+  error: { marginTop: "2.2vw", color: "crimson" },
+  without: { marginTop: "2vw", color: "white" },
+  // errorfirst: { marginTop: "2.2vw", color: "crimson" },
+  // firsticon: { marginTop: "2.35vw", marginLeft: "1vw" },
+  // firstwithout: { marginTop: "2vw", color: "white" },
+  // lasterror: { marginTop: "2.2vw", color: "crimson" },
+  // lastwithout: { marginTop: "2vw", color: "white" },
+  // lasticon: { marginTop: "2.35vw", marginLeft: "1vw" },
+  // phoneerror: { marginTop: "2.2vw", color: "crimson" },
+  // phonewithout: { marginTop: "2vw", color: "white" },
+  // phoneicon: { marginTop: "2.35vw", marginLeft: "1vw" },
+  // passporterror: { marginTop: "2.2vw", color: "crimson" },
+  // passportwithout: { marginTop: "2vw", color: "white" },
+  // passporticon: { marginTop: "2.35vw", marginLeft: "1vw" },
+  // passworderrors: { marginTop: "2.2vw", color: "crimson" },
+  // passwordicon: { marginTop: "2.35vw", marginLeft: "1vw" },
+  // passwordwithout: { marginTop: "2vw", color: "white" },
+  // conicon: { marginTop: "2.35vw", marginLeft: "1vw" },
+  // conwithout: { marginTop: "2vw", color: "white" },
+  // conerror: { marginTop: "2.2vw", color: "crimson" },
 }));
 
 export default function Signin() {
@@ -81,6 +81,9 @@ export default function Signin() {
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [passportNumber, setPassportNumber] = useState("");
+  const [address, setAddress] = useState("");
+  const [countryCode, setCountryCode] = useState("");
+
   const [passworderror, setpassworderror] = useState(false);
   const [passwordtext, setpasswordtext] = useState("");
   const [confirmpassworderror, setconfirmpassworderror] = useState(false);
@@ -95,6 +98,11 @@ export default function Signin() {
   const [phonetext, setphonetext] = useState("");
   const [passporterror, setpassporterror] = useState(false);
   const [passportext, setpassporttext] = useState("");
+  const [addresserror, setaddresserror] = useState(false);
+  const [addresstext, setaddresstext] = useState("");
+  const [countrycodetext, setcountrycodetext] = useState("");
+  const [countrycodeerror, setcountrycodeerror] = useState("");
+
   const validateEmail = (email) => {
     return String(email)
       .toLowerCase()
@@ -124,9 +132,15 @@ export default function Signin() {
   const onChangePassportNumber = (e) => {
     setPassportNumber(e.target.value);
   };
+  const onChangeAddress = (e) => {
+    setAddress(e.target.value);
+  };
+  const onChangeCountryCode = (e) => {
+    setCountryCode(e.target.value);
+  };
 
   const handleLogin = (e) => {
-    var x = 7;
+    var x = 9;
     if (firstName === "") {
       setfirsterror(true);
       setfirsttext("FirstName cannot be left empty ");
@@ -174,6 +188,19 @@ export default function Signin() {
       }
     }
 
+    if (address === "") {
+      setaddresserror(true);
+      setaddresstext("Address cannot be left empty");
+    } else {
+      if (/^\d+$/.test(address)) {
+        setaddresserror(true);
+        setaddresstext("Address should be of type string ");
+      } else {
+        setaddresserror(false);
+        x--;
+      }
+    }
+
     if (password === "") {
       console.log("innnnnnnn");
       setpassworderror(true);
@@ -205,6 +232,17 @@ export default function Signin() {
       setphoneerror(false);
       x--;
     }
+    if (countryCode === "") {
+      setcountrycodeerror(true);
+      setcountrycodetext("Country code  cannot be left empty ");
+    } else if (!(countryCode.match(/^[0-9]+$/) != null)) {
+      setcountrycodeerror(true);
+      setcountrycodetext("Country code should contain only numbers ");
+    } else {
+      setcountrycodeerror(false);
+      x--;
+    }
+
     if (x === 0) {
       console.log("INNNNNNNNNNN");
       axios
@@ -214,11 +252,13 @@ export default function Signin() {
           FirstName: firstName,
           LastName: lastName,
           Phone: phone,
+          CountryCode: countryCode,
+          HomeAddress: address,
           PassportNumber: passportNumber,
         })
         .then((res) => {
           console.log("in resss");
-          console.log(res.data.message, "messsss");
+          console.log(res, "messsss");
           setemailerror(false);
           if (res.data.message === "Your account successfully created") {
             setemailerror(false);
@@ -250,7 +290,7 @@ export default function Signin() {
         </Typography>
       </div>
       <div className={classes.display}>
-        <div className={classes.text1}>
+        <div className={classes.text}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -268,13 +308,9 @@ export default function Signin() {
         <CloseIcon
           style={emailerror ? { color: "crimson" } : { color: "white" }}
           fontSize="xsmall"
-          className={classes.emailicon}
+          className={classes.icon}
         />
-        <div
-          className={
-            emailerror ? classes.erroremailerror : classes.emailwithout
-          }
-        >
+        <div className={emailerror ? classes.error : classes.without}>
           {emailtext}
         </div>
       </div>
@@ -296,14 +332,14 @@ export default function Signin() {
         <CloseIcon
           style={firsterror ? { color: "crimson" } : { color: "white" }}
           fontSize="xsmall"
-          className={classes.firsticon}
+          className={classes.icon}
         />
-        <div className={firsterror ? classes.errorfirst : classes.firstwithout}>
+        <div className={firsterror ? classes.error : classes.without}>
           {firsttext}
         </div>
       </div>
       <div className={classes.display}>
-        <div className={classes.lastname}>
+        <div className={classes.text}>
           {" "}
           <TextField
             variant="outlined"
@@ -321,16 +357,14 @@ export default function Signin() {
         <CloseIcon
           style={lastnameerror ? { color: "crimson" } : { color: "white" }}
           fontSize="xsmall"
-          className={classes.lasticon}
+          className={classes.icon}
         />
-        <div
-          className={lastnameerror ? classes.lasterror : classes.lastwithout}
-        >
+        <div className={lastnameerror ? classes.error : classes.without}>
           {lasttext}
         </div>
       </div>
       <div className={classes.display}>
-        <div className={classes.phone}>
+        <div className={classes.text}>
           {" "}
           <TextField
             variant="outlined"
@@ -348,14 +382,14 @@ export default function Signin() {
         <CloseIcon
           style={phoneerror ? { color: "crimson" } : { color: "white" }}
           fontSize="xsmall"
-          className={classes.phoneicon}
+          className={classes.icon}
         />
-        <div className={phoneerror ? classes.phoneerror : classes.phonewithout}>
+        <div className={phoneerror ? classes.error : classes.without}>
           {phonetext}
         </div>
       </div>
       <div className={classes.display}>
-        <div className={classes.passport}>
+        <div className={classes.text}>
           {" "}
           <TextField
             variant="outlined"
@@ -372,18 +406,64 @@ export default function Signin() {
         <CloseIcon
           style={passporterror ? { color: "crimson" } : { color: "white" }}
           fontSize="xsmall"
-          className={classes.passporticon}
+          className={classes.icon}
         />
-        <div
-          className={
-            passporterror ? classes.passporterror : classes.passportwithout
-          }
-        >
+        <div className={passporterror ? classes.error : classes.without}>
           {passportext}
         </div>
       </div>
+
       <div className={classes.display}>
-        <div className={classes.text2}>
+        <div className={classes.text}>
+          {" "}
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="countryCode"
+            label="Country Code"
+            name="countryCode"
+            onChange={onChangeCountryCode}
+            error={countrycodeerror}
+          />
+        </div>
+        <CloseIcon
+          style={countrycodeerror ? { color: "crimson" } : { color: "white" }}
+          fontSize="xsmall"
+          className={classes.icon}
+        />
+        <div className={countrycodeerror ? classes.error : classes.without}>
+          {countrycodetext}
+        </div>
+      </div>
+
+      <div className={classes.display}>
+        <div className={classes.text}>
+          {" "}
+          <TextField
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            id="Address"
+            label="Address"
+            name="Address"
+            onChange={onChangeAddress}
+            error={addresserror}
+          />
+        </div>
+        <CloseIcon
+          style={addresserror ? { color: "crimson" } : { color: "white" }}
+          fontSize="xsmall"
+          className={classes.icon}
+        />
+        <div className={addresserror ? classes.error : classes.without}>
+          {addresstext}
+        </div>
+      </div>
+      <div className={classes.display}>
+        <div className={classes.text}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -400,18 +480,14 @@ export default function Signin() {
         <CloseIcon
           style={passworderror ? { color: "crimson" } : { color: "white" }}
           fontSize="xsmall"
-          className={classes.passwordicon}
+          className={classes.icon}
         />
-        <div
-          className={
-            passworderror ? classes.passworderrors : classes.passwordwithout
-          }
-        >
+        <div className={passworderror ? classes.error : classes.without}>
           {passwordtext}
         </div>
       </div>
       <div className={classes.display}>
-        <div className={classes.confirm}>
+        <div className={classes.text}>
           <TextField
             variant="outlined"
             margin="normal"
@@ -431,13 +507,9 @@ export default function Signin() {
             confirmpassworderror ? { color: "crimson" } : { color: "white" }
           }
           fontSize="xsmall"
-          className={classes.conicon}
+          className={classes.icon}
         />
-        <div
-          className={
-            confirmpassworderror ? classes.conerror : classes.conwithout
-          }
-        >
+        <div className={confirmpassworderror ? classes.error : classes.without}>
           {confirmpasswordtext}
         </div>
       </div>

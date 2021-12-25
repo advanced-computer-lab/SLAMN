@@ -127,6 +127,8 @@ const signUp = async (req, res) => {
         Email: user.Email,
         Phone: user.Phone,
         Password: user.Password,
+        HomeAddress: user.HomeAddress,
+        CountryCode: user.CountryCode,
         PassportNumber: user.PassportNumber,
         Admin: false,
         UserReservations: reservations,
