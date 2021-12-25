@@ -238,6 +238,7 @@ const selectSeats = async (req, res) => {
       .catch((err) => res.status(400).json("Error:" + err));
   } catch (exception) {}
 };
+
 const deselectSeats = async (req, res) => {
   try {
     const selectedSeat = req.body.seat;
@@ -1079,6 +1080,7 @@ const updateDepartureFlightReservation = async (req, res) => {
     });
   }
 };
+
 const createFlightReservation = async (req, res) => {
   try {
     console.log(req.body);
@@ -1489,6 +1491,7 @@ const displayaccount = async (req, res) => {
     });
   }
 };
+
 const changePassword = async (req, res) => {
   const valueOfId = req.payload.id;
   const password = req.body.Password;
@@ -1521,6 +1524,23 @@ const changePassword = async (req, res) => {
   }
 };
 
+const getFlightDetails = async (req, res) => {
+  try {
+    const FlightNumber = req.body.FlightNumber;
+    const flight = await Flights.findOne({ FlightNumber });
+    return res.json({
+      statusCode: 0,
+      message: "Success",
+      data: flight,
+    });
+  } catch (exception) {
+    return res.json({
+      statusCode: 1,
+      error: "Exception",
+    });
+  }
+};
+
 module.exports = {
   signIn,
   signUp,
@@ -1538,4 +1558,5 @@ module.exports = {
   changePassword,
   changeSeats,
   updateDepartureFlightReservation,
+  getFlightDetails,
 };

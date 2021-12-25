@@ -14,6 +14,14 @@ router
   );
 
 router
+  .route("/getflightdetails")
+  .post(
+    UserValidation.validategetFlightDetails,
+    authentication.validateUser,
+    UserServices.getFlightDetails
+  );
+
+router
   .route("/changeseats")
   .post(
     UserValidation.validateChangeSeats,

@@ -3,15 +3,9 @@ import React from "react";
 import NavBar from "../Componenets/General/NavBar";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "../Componenets/AccountDetails/List";
-import AccountForm from "../Componenets/AccountDetails/AccountForm";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import Cards from "../Componenets/Reservation/DepartureFlights";
-import Card from "react-bootstrap/Card";
-import ListItem from "@mui/material/ListItem";
-import Button from "../Componenets/AccountDetails/Buttons";
 import PopupDelete from "../Componenets/General/PopUp";
-import Nav from "react-bootstrap/Nav";
 import Navigation from "../Componenets/Reservation/Navigation";
 
 const useStyles = makeStyles({
@@ -71,10 +65,15 @@ const useStyles = makeStyles({
 
 export default function Reservation() {
   const classes = useStyles();
+
   const headers = window.localStorage.getItem("token");
+  var [departureFlights, setDepartureFlights] = React.useState([{}]);
+  var [returnFlights, setReturnFlights] = React.useState([{}]);
   const [deleted, setDeleted] = React.useState("");
   const name = window.localStorage.getItem("name");
-  const [flights, setFlights] = React.useState([]);
+  const [flights, setFlights] = React.useState(
+    JSON.parse(localStorage.getItem("Flights"))
+  );
   const [open2, setOpen2] = useState(false);
   const [del, setDelete] = useState(false);
   const [dep, setDep] = useState("");
@@ -85,15 +84,12 @@ export default function Reservation() {
   var length = 0;
 
   const emails = window.localStorage.getItem("email");
-
   const handleClickPopUpDelete = () => {
     setOpen2(true);
   };
-
   const handleOpen2 = () => {
     setOpen2(true);
   };
-
   const handleClose2 = () => {
     setOpen2(false);
   };
@@ -183,11 +179,55 @@ export default function Reservation() {
       .then((res) => {
         console.log(res);
         if (res.data.error) setError(true);
-        else setFlights(res.data.data);
+        else {
+          setFlights(res.data.data);
+          localStorage.setItem("Flights", JSON.stringify(res.data.data));
+        }
       })
       .catch((err) => {
         console.log(err);
       });
+
+    var i = 0;
+    for (i; i < flights.length; i++) {
+      await axios
+        .post(
+          "http://localhost:8000/users/getFlightDetails",
+          { FlightNumber: flights[i][0].DepartureFlightNumber },
+          {
+            headers: {
+              auth: headers,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          setDepartureFlights(departureFlights.push(res.data.data));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      await axios
+        .post(
+          "http://localhost:8000/users/getFlightDetails",
+          { FlightNumber: flights[i][0].ArrivalFlightNumber },
+          {
+            headers: {
+              auth: headers,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res);
+          setReturnFlights(returnFlights.push(res.data.data));
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    localStorage.setItem("DepartureFlights", JSON.stringify(departureFlights));
+    localStorage.setItem("ReturnFlights", JSON.stringify(returnFlights));
   }, []);
 
   return (
