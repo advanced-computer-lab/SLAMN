@@ -30,10 +30,15 @@ Standard and Camel Case
 Postman was used for backend tests to check the functionality of the code and frontend testing.
 
 ## How to Use
-The first thing is signup/signin then accordding to the authorization of your account the available actions change.
+The first thing is home page and you need to signup/signin then according to the authorization of your account the available actions change.
 If you are a admin you can access all flights and decide what to do with them(create, update ,delete or just view) but if you are a user you can view all your flights
 information, search specific flights, you can also reserve departure and arrival flights, view a summary of his bookings, update or delete his bookings and pay online 
 
+## Code Examples
+import  React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 ## Credits
 stackoverflow
