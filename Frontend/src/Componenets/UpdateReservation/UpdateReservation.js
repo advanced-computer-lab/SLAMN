@@ -88,35 +88,93 @@ export default function UpdateReservation(props) {
 
   const handleUpdate = () => {};
   const handleChangeSeats = async () => {
-    if (DepartureReservation.newCabin === DepartureReservation.oldCabin) {
-      const totalPassengers = NumberofAdults + NumberofChildren;
+    if (
+      DepartureReservation.DepartureAirport === DepartureAirport &&
+      DepartureReservation.ArrivalAirport === ArrivalAirport
+    ) {
+      if (DepartureReservation.newCabin === DepartureReservation.oldCabin) {
+        const totalPassengers = NumberofAdults + NumberofChildren;
 
-      if (DepartureReservation.oldSeats.length >= totalPassengers) {
-        const difference =
-          DepartureReservation.oldSeats.length - totalPassengers;
-        await axios
-          .post(
-            "http://localhost:8000/users/updateSamereservation",
-            {
-              BookingNumber: DepartureReservation.BookingNumber,
-              NumberOfChildren: NumberofChildren,
-              NumberOfAdults: NumberofAdults,
-              Price: DepartureReservation.price,
-              passengers: DepartureReservation.oldSeats.splice(
-                totalPassengers,
-                difference
-              ),
-            },
-            {
-              headers: {
-                auth: headers,
+        if (DepartureReservation.oldSeats.length >= totalPassengers) {
+          const difference =
+            DepartureReservation.oldSeats.length - totalPassengers;
+          await axios
+            .post(
+              "http://localhost:8000/users/updateSamereservation",
+              {
+                BookingNumber: DepartureReservation.BookingNumber,
+                NumberOfChildren: NumberofChildren,
+                NumberOfAdults: NumberofAdults,
+                Price: DepartureReservation.price,
+                passengers: DepartureReservation.oldSeats.splice(
+                  totalPassengers,
+                  difference
+                ),
               },
-            }
-          )
-          .then((res) => {})
-          .catch((err) => {
-            console.log(err);
-          });
+              {
+                headers: {
+                  auth: headers,
+                },
+              }
+            )
+            .then((res) => {})
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          var i = 0;
+          for (i; i < DepartureReservation.oldSeats; i++) {
+            await axios
+              .post(
+                "http://localhost:8000/users/deselectSeats",
+                {
+                  FlightNumber: DepartureReservation.FlightNumber,
+                  seat: DepartureReservation.oldSeats[i],
+                  Cabin: DepartureReservation.oldCabin,
+                },
+                {
+                  headers: {
+                    auth: headers,
+                  },
+                }
+              )
+              .then((res) => {})
+              .catch((err) => {
+                console.log(err);
+              });
+          }
+          var obj = {};
+          if (DepartureDate.length !== 0) obj.DepartureDate = DepartureDate;
+          if (ArrivalDate.length !== 0) obj.ArrivalDate = ArrivalDate;
+          if (DepartureTime.length !== 0) obj.DepartureTime = DepartureTime;
+          if (ArrivalTime.length !== 0) obj.ArrivalTime = ArrivalTime;
+          if (DepartureReservation.ArrivalAirport !== 0)
+            obj.ArrivalAirport = DepartureReservation.ArrivalAirport;
+          if (DepartureReservation.DepartureAirport !== 0)
+            obj.DepartureAirport = DepartureReservation.DepartureAirport;
+          await axios
+            .post(
+              "http://localhost:8000/flights/searchFlight",
+              {
+                obj,
+              },
+              {
+                headers: {
+                  auth: headers,
+                },
+              }
+            )
+            .then((res) => {
+              if (res.data.data.length !== 0) {
+                history("/changeDepartureSeats");
+              } else {
+                //popup message no enough seats
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
       } else {
         var i = 0;
         for (i; i < DepartureReservation.oldSeats; i++) {
@@ -172,64 +230,18 @@ export default function UpdateReservation(props) {
           });
       }
     } else {
-      var i = 0;
-      for (i; i < DepartureReservation.oldSeats; i++) {
-        await axios
-          .post(
-            "http://localhost:8000/users/deselectSeats",
-            {
-              FlightNumber: DepartureReservation.FlightNumber,
-              seat: DepartureReservation.oldSeats[i],
-              Cabin: DepartureReservation.oldCabin,
-            },
-            {
-              headers: {
-                auth: headers,
-              },
-            }
-          )
-          .then((res) => {})
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-      var obj = {};
-      if (DepartureDate.length !== 0) obj.DepartureDate = DepartureDate;
-      if (ArrivalDate.length !== 0) obj.ArrivalDate = ArrivalDate;
-      if (DepartureTime.length !== 0) obj.DepartureTime = DepartureTime;
-      if (ArrivalTime.length !== 0) obj.ArrivalTime = ArrivalTime;
-      if (DepartureReservation.ArrivalAirport !== 0)
-        obj.ArrivalAirport = DepartureReservation.ArrivalAirport;
-      if (DepartureReservation.DepartureAirport !== 0)
-        obj.DepartureAirport = DepartureReservation.DepartureAirport;
-      await axios
-        .post(
-          "http://localhost:8000/flights/searchFlight",
-          {
-            obj,
-          },
-          {
-            headers: {
-              auth: headers,
-            },
-          }
-        )
-        .then((res) => {
-          if (res.data.data.length !== 0) {
-            history("/changeDepartureSeats");
-          } else {
-            //popup message no enough seats
-          }
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      handleUpdate();
     }
   };
-
   useEffect(() => {
     if (props.open) console.log("DepartureReservation", DepartureReservation);
   }, [props.open]);
+
+  const changeDepartureAirport = (e) => {
+    setDepartureAirport(e.target.value);
+    localStorage.setItem("DepartureReservation", JSON.stringify({}));
+  };
+
   return (
     <div className={classes.bigdiv}>
       <Dialog
